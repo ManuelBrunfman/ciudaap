@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "BancaApp",
-    "slug": "BancaApp",
+    "name": "Bancapp",
+    "slug": "Bancapp",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -13,16 +13,30 @@
       "backgroundColor": "#ffffff"
     },
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.labancaria.bancapp"
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "package": "com.labancaria.bancapp"
     },
     "web": {
       "favicon": "./assets/favicon.png"
+    },
+    "plugins": [
+      "expo-font",
+      "expo-asset"
+    ],
+    "extra": {
+      "EXPO_PUBLIC_FIREBASE_API_KEY": "REEMPLAZAR_CON_TU_API_KEY",
+      "EXPO_PUBLIC_FIREBASE_AUTH_DOMAIN": "REEMPLAZAR_CON_TU_AUTH_DOMAIN",
+      "EXPO_PUBLIC_FIREBASE_PROJECT_ID": "REEMPLAZAR_CON_TU_PROJECT_ID",
+      "EXPO_PUBLIC_FIREBASE_STORAGE_BUCKET": "REEMPLAZAR_CON_TU_STORAGE_BUCKET",
+      "EXPO_PUBLIC_FIREBASE_MESSAGING_SENDER_ID": "REEMPLAZAR_CON_TU_MESSAGING_SENDER_ID",
+      "EXPO_PUBLIC_FIREBASE_APP_ID": "REEMPLAZAR_CON_TU_APP_ID"
     }
   }
 }
