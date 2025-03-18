@@ -1,0 +1,996 @@
+[
+  {
+    "titulo": "Megatlon. Convenio para afiliadas y afiliados",
+    "link": "#",
+    "imagen_url": "https://labancaria.org/wp-content/uploads/2024/06/megatlon-3.webp",
+    "categoria": "deportes",
+    "provincia": "desconocida"
+  },
+  {
+    "titulo": "Megatlon. Convenio para afiliadas y afiliados",
+    "link": "https://labancaria.org/beneficios/megatlon-convenio-para-afiliadas-y-afiliados/",
+    "imagen_url": "https://labancaria.org/wp-content/uploads/2024/06/megatlon-3.webp",
+    "categoria": "deportes",
+    "provincia": "desconocida"
+  },
+  {
+    "titulo": "¿Tenés pensando jubilarte? Te asesoramos",
+    "link": "https://labancaria.org/beneficios/tenes-pensando-jubilarte-te-asesoramos/",
+    "imagen_url": "https://labancaria.org/wp-content/uploads/2025/01/jubilados.webp",
+    "categoria": "jubilados",
+    "provincia": "desconocida"
+  },
+  {
+    "titulo": "Cuando te jubiles REAFILIATE",
+    "link": "https://labancaria.org/beneficios/cuando-te-jubiles-reafiliate/",
+    "imagen_url": "https://labancaria.org/wp-content/uploads/2025/01/jubi1.webp",
+    "categoria": "jubilados",
+    "provincia": "desconocida"
+  },
+  {
+    "titulo": "Diarco",
+    "link": "https://labancaria.org/beneficios/diarco/",
+    "imagen_url": "https://labancaria.org/wp-content/uploads/2024/11/diario.webp",
+    "categoria": "compras",
+    "provincia": "desconocida"
+  },
+  {
+    "titulo": "Hertz",
+    "link": "https://labancaria.org/beneficios/hertz/",
+    "imagen_url": "https://labancaria.org/wp-content/uploads/2024/11/hertz.webp",
+    "categoria": "transporte",
+    "provincia": "desconocida"
+  },
+  {
+    "titulo": "Rutatlántica, Micro larga distancia",
+    "link": "https://labancaria.org/beneficios/rutatlantica-micro-larga-distancia/",
+    "imagen_url": "https://labancaria.org/wp-content/uploads/2024/05/rutatlantica.webp",
+    "categoria": "transporte",
+    "provincia": "desconocida"
+  },
+  {
+    "titulo": "Always rent car",
+    "link": "https://labancaria.org/beneficios/always-rent-car/",
+    "imagen_url": "https://labancaria.org/wp-content/uploads/2024/11/always.webp",
+    "categoria": "transporte",
+    "provincia": "desconocida"
+  },
+  {
+    "titulo": "Avis, alquiler de autos",
+    "link": "https://labancaria.org/beneficios/avis-alquiler-de-autos/",
+    "imagen_url": "https://labancaria.org/wp-content/uploads/2024/07/Avis-jpeg.webp",
+    "categoria": "transporte",
+    "provincia": "desconocida"
+  },
+  {
+    "titulo": "Chevalier",
+    "link": "https://labancaria.org/beneficios/chevalier/",
+    "imagen_url": "https://labancaria.org/wp-content/uploads/2022/02/chevalier-1.jpg",
+    "categoria": "transporte",
+    "provincia": "desconocida"
+  },
+  {
+    "titulo": "Crucero del Norte",
+    "link": "https://labancaria.org/beneficios/crucero-del-norte/",
+    "imagen_url": "https://labancaria.org/wp-content/uploads/2024/11/crucero-del-norte.webp",
+    "categoria": "transporte",
+    "provincia": "desconocida"
+  },
+  {
+    "titulo": "Viaje de bodas",
+    "link": "https://labancaria.org/beneficios/viaje-de-bodas/",
+    "imagen_url": "https://labancaria.org/wp-content/uploads/2022/02/viaje-de-bodas.jpg",
+    "categoria": "turismo",
+    "provincia": "desconocida"
+  },
+  {
+    "titulo": "Beneficio Obra Social Bancaria",
+    "link": "https://labancaria.org/beneficios/beneficio-obra-social-bancaria/",
+    "imagen_url": "https://labancaria.org/wp-content/uploads/2022/03/obra-social.jpg",
+    "categoria": "obra social",
+    "provincia": "desconocida"
+  },
+  {
+    "titulo": "Cobertura de sepelio gratuito",
+    "link": "https://labancaria.org/beneficios/compania-de-seguros-el-surco/",
+    "imagen_url": "https://labancaria.org/wp-content/uploads/2022/02/Seguro-02.jpg",
+    "categoria": "obra social",
+    "provincia": "desconocida"
+  },
+  {
+    "titulo": "Hotel La Bancaria. CABA-Buenos Aires",
+    "link": "https://labancaria.org/beneficios/hotel-la-bancaria-caba-buenos-aires/",
+    "imagen_url": "https://labancaria.org/wp-content/uploads/2025/02/hotel-buenos-aires.webp",
+    "categoria": "hospedaje",
+    "provincia": "buenos aires"
+  },
+  {
+    "titulo": "Ayba Hotel. Salta",
+    "link": "https://labancaria.org/beneficios/ayba-hotel-salta/",
+    "imagen_url": "https://labancaria.org/wp-content/uploads/2025/01/aybal.webp",
+    "categoria": "hospedaje",
+    "provincia": "salta"
+  },
+  {
+    "titulo": "Howard Johnson. Chascomús-Buenos Aires",
+    "link": "https://labancaria.org/beneficios/howard-johnson-chascomus-buenos-aires/",
+    "imagen_url": "https://labancaria.org/wp-content/uploads/2025/01/howard-chascomus.webp",
+    "categoria": "hospedaje",
+    "provincia": "buenos aires"
+  },
+  {
+    "titulo": "La Loma Apart Hotel. Federación-Entre Ríos",
+    "link": "https://labancaria.org/beneficios/la-loma-apart-hotel-federacion-entre-rios-2/",
+    "imagen_url": "https://labancaria.org/wp-content/uploads/2025/01/la-loma.webp",
+    "categoria": "hospedaje",
+    "provincia": "entre rios"
+  },
+  {
+    "titulo": "Los Buhos casa de campo. San José-Entre Ríos",
+    "link": "https://labancaria.org/beneficios/los-buhos-casa-de-campo-san-jose-entre-rios-2/",
+    "imagen_url": "https://labancaria.org/wp-content/uploads/2025/01/los-buhos.webp",
+    "categoria": "hospedaje",
+    "provincia": "entre rios"
+  },
+  {
+    "titulo": "Maiten Escondido. Villa La Angostura-Neuquén",
+    "link": "https://labancaria.org/beneficios/maiten-escondido-villa-la-angostura-neuquen/",
+    "imagen_url": "https://labancaria.org/wp-content/uploads/2025/01/maiten-escondido.webp",
+    "categoria": "hospedaje",
+    "provincia": "neuquen"
+  },
+  {
+    "titulo": "Complejo turístico Potrero de Garay-Córdoba",
+    "link": "https://labancaria.org/beneficios/complejo-turistico-potrero-de-garay-cordoba/",
+    "imagen_url": "https://labancaria.org/wp-content/uploads/2025/01/potrero-de-garay.webp",
+    "categoria": "hospedaje",
+    "provincia": "cordoba"
+  },
+  {
+    "titulo": "Tierra Mora. San Rafael-Mendoza",
+    "link": "https://labancaria.org/beneficios/tierra-mora-san-rafael-mendoza-2/",
+    "imagen_url": "https://labancaria.org/wp-content/uploads/2025/01/tierra-mora.webp",
+    "categoria": "hospedaje",
+    "provincia": "mendoza"
+  },
+  {
+    "titulo": "Terrazas del Rincón. Merlo-San Luis",
+    "link": "https://labancaria.org/beneficios/terrazas-del-rincon-merlo-san-luis-2/",
+    "imagen_url": "https://labancaria.org/wp-content/uploads/2025/01/terrazas-del-rincon-1.webp",
+    "categoria": "hospedaje",
+    "provincia": "san luis"
+  },
+  {
+    "titulo": "Fiesta Nacional de la Vendimia. Mendoza",
+    "link": "https://labancaria.org/beneficios/fiesta-nacional-de-la-vendimia-mendoza-2/",
+    "imagen_url": "https://labancaria.org/wp-content/uploads/2025/01/vendimia1.webp",
+    "categoria": "turismo",
+    "provincia": "mendoza"
+  },
+  {
+    "titulo": "Fiesta Nacional de la Vendimia. Mendoza",
+    "link": "https://labancaria.org/beneficios/fiesta-nacional-de-la-vendimia-mendoza/",
+    "imagen_url": "https://labancaria.org/wp-content/uploads/2025/01/vendimia.webp",
+    "categoria": "turismo",
+    "provincia": "mendoza"
+  },
+  {
+    "titulo": "Balneario Amarelo carpas. Villa Gesell-Buenos Aires",
+    "link": "https://labancaria.org/beneficios/balneario-amarelo-carpas-villa-gesell-buenos-aires/",
+    "imagen_url": "https://labancaria.org/wp-content/uploads/2025/01/amarelo.webp",
+    "categoria": "turismo",
+    "provincia": "buenos aires"
+  },
+  {
+    "titulo": "El Descanso. Colón-Entre Ríos",
+    "link": "https://labancaria.org/beneficios/el-descanso-colon-entre-rios/",
+    "imagen_url": "https://labancaria.org/wp-content/uploads/2025/01/eldescanso.webp",
+    "categoria": "hospedaje",
+    "provincia": "entre rios"
+  },
+  {
+    "titulo": "Alta Catamarca. Faimbala, Antofagasta, Tinogasta",
+    "link": "https://labancaria.org/beneficios/alta-catamarca-faimbala-antofagasta-tinogasta/",
+    "imagen_url": "https://labancaria.org/wp-content/uploads/2025/01/alta-catamarca.webp",
+    "categoria": "turismo",
+    "provincia": "catamarca"
+  },
+  {
+    "titulo": "Urbana Class. Mendoza",
+    "link": "https://labancaria.org/beneficios/urbana-class-mendoza/",
+    "imagen_url": "https://labancaria.org/wp-content/uploads/2025/01/urbana-mendoza.webp",
+    "categoria": "hospedaje",
+    "provincia": "mendoza"
+  },
+  {
+    "titulo": "Premium Tower. Mendoza",
+    "link": "https://labancaria.org/beneficios/premium-tower-mendoza/",
+    "imagen_url": "https://labancaria.org/wp-content/uploads/2025/01/mendoza-capital.webp",
+    "categoria": "hospedaje",
+    "provincia": "mendoza"
+  },
+  {
+    "titulo": "Apart Lumi Atalá. Villa Elisa-Entre Ríos",
+    "link": "https://labancaria.org/beneficios/apart-lumi-atala-villa-elisa-entre-rios/",
+    "imagen_url": "https://labancaria.org/wp-content/uploads/2025/01/villa-elisa-entre-rios.webp",
+    "categoria": "hospedaje",
+    "provincia": "entre rios"
+  },
+  {
+    "titulo": "Termas Villa Elisa. Entre Ríos",
+    "link": "https://labancaria.org/beneficios/termas-villa-elisa-entre-rios/",
+    "imagen_url": "https://labancaria.org/wp-content/uploads/2025/01/termas-villa-elisa.webp",
+    "categoria": "turismo",
+    "provincia": "entre rios"
+  },
+  {
+    "titulo": "Plaza Apart & Hostería. La Cumbre-Córdoba",
+    "link": "https://labancaria.org/beneficios/plaza-apart-hosteria-la-cumbre-cordoba/",
+    "imagen_url": "https://labancaria.org/wp-content/uploads/2025/01/la-cumbre-plaza.webp",
+    "categoria": "hospedaje",
+    "provincia": "cordoba"
+  },
+  {
+    "titulo": "Hotel Sunset. Bariloche-Río Negro",
+    "link": "https://labancaria.org/beneficios/hotel-sunset-bariloche-rio-negro/",
+    "imagen_url": "https://labancaria.org/wp-content/uploads/2025/01/Bariloche-sunset.webp",
+    "categoria": "hospedaje",
+    "provincia": "rio negro"
+  },
+  {
+    "titulo": "Sí Turismo. Río Negro-Bariloche",
+    "link": "https://labancaria.org/beneficios/si-turismo-rio-negro-bariloche/",
+    "imagen_url": "https://labancaria.org/wp-content/uploads/2024/12/Bariloche-Rio-Negro.webp",
+    "categoria": "turismo",
+    "provincia": "rio negro"
+  },
+  {
+    "titulo": "Cosquin 2025. Festival Nacional de Folklore. Córdoba",
+    "link": "https://labancaria.org/beneficios/cosquin-2025-festival-nacional-de-folklore-cordoba/",
+    "imagen_url": "https://labancaria.org/wp-content/uploads/2024/12/Cosquin.webp",
+    "categoria": "turismo",
+    "provincia": "cordoba"
+  },
+  {
+    "titulo": "Tierra Mora. San Rafael-Mendoza",
+    "link": "https://labancaria.org/beneficios/tierra-mora-san-rafael-mendoza/",
+    "imagen_url": "https://labancaria.org/wp-content/uploads/2024/12/Tierra-Mora-San-Rafael.webp",
+    "categoria": "hospedaje",
+    "provincia": "mendoza"
+  },
+  {
+    "titulo": "Estrella de Mar. Villa Carlos Paz-Córdoba",
+    "link": "https://labancaria.org/beneficios/estrella-de-mar-villa-carlos-paz-cordoba/",
+    "imagen_url": "https://labancaria.org/wp-content/uploads/2024/12/Estrella-de-mar-Villa-carlos-paz.webp",
+    "categoria": "hospedaje",
+    "provincia": "cordoba"
+  },
+  {
+    "titulo": "Ananda complejo turístico. Potrero de Garay-Córdoba",
+    "link": "https://labancaria.org/beneficios/ananda-complejo-turistico-potrero-de-garay-cordoba-2/",
+    "imagen_url": "https://labancaria.org/wp-content/uploads/2024/12/Complejo-turistico-Cordoba.webp",
+    "categoria": "hospedaje",
+    "provincia": "cordoba"
+  },
+  {
+    "titulo": "Aybal Hotel. Salta",
+    "link": "https://labancaria.org/beneficios/aybal-hotel-salta/",
+    "imagen_url": "https://labancaria.org/wp-content/uploads/2024/12/Aybal-Salta.webp",
+    "categoria": "hospedaje",
+    "provincia": "salta"
+  },
+  {
+    "titulo": "La Loma Apart Hotel. Federación-Entre Ríos",
+    "link": "https://labancaria.org/beneficios/la-loma-apart-hotel-federacion-entre-rios/",
+    "imagen_url": "https://labancaria.org/wp-content/uploads/2024/11/La-Loma-Federacion.webp",
+    "categoria": "hospedaje",
+    "provincia": "entre rios"
+  },
+  {
+    "titulo": "Tower. San Rafael – Mendoza",
+    "link": "https://labancaria.org/beneficios/tower-san-rafael-mendoza/",
+    "imagen_url": "https://labancaria.org/wp-content/uploads/2024/12/San-Rafael-Mendoza.webp",
+    "categoria": "hospedaje",
+    "provincia": "mendoza"
+  },
+  {
+    "titulo": "Hostería las Nieves. Villa la Angostura – Neuquén",
+    "link": "https://labancaria.org/beneficios/hosteria-las-nieves-villa-la-angostura-neuquen/",
+    "imagen_url": "https://labancaria.org/wp-content/uploads/2024/12/Villa-angostura-Neuquen.webp",
+    "categoria": "hospedaje",
+    "provincia": "neuquen"
+  },
+  {
+    "titulo": "Mendoza clásica",
+    "link": "https://labancaria.org/beneficios/mendoza-clasica/",
+    "imagen_url": "https://labancaria.org/wp-content/uploads/2024/12/Mendoza-clasica.webp",
+    "categoria": "turismo",
+    "provincia": "mendoza"
+  },
+  {
+    "titulo": "Alquiler de carpas y sombrillas. Mar del Plata",
+    "link": "https://labancaria.org/beneficios/alquiler-de-carpas-y-sombrillas-mar-del-plata/",
+    "imagen_url": "https://labancaria.org/wp-content/uploads/2024/12/Mar-del-plata.webp",
+    "categoria": "turismo",
+    "provincia": "buenos aires"
+  },
+  {
+    "titulo": "Alquiler de carpas. Mar del Plata – Punta Mogotes",
+    "link": "https://labancaria.org/beneficios/alquiler-de-carpas-mar-del-plata-punta-mogotes/",
+    "imagen_url": "https://labancaria.org/wp-content/uploads/2024/12/Mar-del-Plata-punta-Mogotes.webp",
+    "categoria": "turismo",
+    "provincia": "buenos aires"
+  },
+  {
+    "titulo": "Cabañas Cielo Azul. San Lorenzo – Salta",
+    "link": "https://labancaria.org/beneficios/cabanas-cielo-azul-san-lorenzo-salta/",
+    "imagen_url": "https://labancaria.org/wp-content/uploads/2024/12/San-Lorenzo-Salta.webp",
+    "categoria": "hospedaje",
+    "provincia": "salta"
+  },
+  {
+    "titulo": "Howard Johnson. Formosa",
+    "link": "https://labancaria.org/beneficios/howard-johnson-formosa/",
+    "imagen_url": "https://labancaria.org/wp-content/uploads/2024/12/Formosa-Capital-2.webp",
+    "categoria": "hospedaje",
+    "provincia": "formosa"
+  },
+  {
+    "titulo": "Che Roga. Formosa",
+    "link": "https://labancaria.org/beneficios/che-roga-formosa/",
+    "imagen_url": "https://labancaria.org/wp-content/uploads/2024/12/Formosa-Capital.webp",
+    "categoria": "hospedaje",
+    "provincia": "formosa"
+  },
+  {
+    "titulo": "Hotel Malargüe. Mendoza",
+    "link": "https://labancaria.org/beneficios/hotel-malargue-mendoza/",
+    "imagen_url": "https://labancaria.org/wp-content/uploads/2024/12/Malargue-mendoza.webp",
+    "categoria": "hospedaje",
+    "provincia": "mendoza"
+  },
+  {
+    "titulo": "La Reserva. Iguazú-Misiones",
+    "link": "https://labancaria.org/beneficios/la-reserva-iguazu-misiones-2/",
+    "imagen_url": "https://labancaria.org/wp-content/uploads/2024/12/Iguazu-Misiones.webp",
+    "categoria": "hospedaje",
+    "provincia": "misiones"
+  },
+  {
+    "titulo": "Departamentos Limay. Río Negro",
+    "link": "https://labancaria.org/beneficios/departametos-limay-rio-negro/",
+    "imagen_url": "https://labancaria.org/wp-content/uploads/2024/12/Dina-Huapi.webp",
+    "categoria": "hospedaje",
+    "provincia": "rio negro"
+  },
+  {
+    "titulo": "Terra Malal. Neuquén",
+    "link": "https://labancaria.org/beneficios/terra-malal-neuquen/",
+    "imagen_url": "https://labancaria.org/wp-content/uploads/2024/12/Chos-malal.webp",
+    "categoria": "hospedaje",
+    "provincia": "neuquen"
+  },
+  {
+    "titulo": "Dina Huapi. Río Negro",
+    "link": "https://labancaria.org/beneficios/dina-huapi-rio-negro/",
+    "imagen_url": "https://labancaria.org/wp-content/uploads/2024/12/Dina-huapi-rio-negro.webp",
+    "categoria": "hospedaje",
+    "provincia": "rio negro"
+  },
+  {
+    "titulo": "Termas Tapalqué. Tapalqué-Buenos Aires",
+    "link": "https://labancaria.org/beneficios/termas-tapalque-tapalque-buenos-aires-2/",
+    "imagen_url": "https://labancaria.org/wp-content/uploads/2024/12/termas-tapalque.webp",
+    "categoria": "turismo",
+    "provincia": "buenos aires"
+  },
+  {
+    "titulo": "Pekos. Multiparque. Carlos Paz-Córdoba",
+    "link": "https://labancaria.org/beneficios/pekos-multiparque-carlos-paz-cordoba/",
+    "imagen_url": "https://labancaria.org/wp-content/uploads/2024/12/pekos.webp",
+    "categoria": "turismo",
+    "provincia": "cordoba"
+  },
+  {
+    "titulo": "Wave Zone. Carlos Paz-Córdoba",
+    "link": "https://labancaria.org/beneficios/wave-zone-carlos-paz-cordoba/",
+    "imagen_url": "https://labancaria.org/wp-content/uploads/2024/12/wawe-zona.webp",
+    "categoria": "turismo",
+    "provincia": "cordoba"
+  },
+  {
+    "titulo": "Mundo Marino. San Clemente-Buenos Aires",
+    "link": "https://labancaria.org/beneficios/mundo-marino-san-clemente-buenos-aires/",
+    "imagen_url": "https://labancaria.org/wp-content/uploads/2024/12/mundo-marino.webp",
+    "categoria": "turismo",
+    "provincia": "buenos aires"
+  },
+  {
+    "titulo": "Hotel La Posada del Tiempo. Merlo-San Luis",
+    "link": "https://labancaria.org/beneficios/hotel-la-posada-del-tiempo-merlo-san-luis/",
+    "imagen_url": "https://labancaria.org/wp-content/uploads/2024/11/merlo.webp",
+    "categoria": "hospedaje",
+    "provincia": "san luis"
+  },
+  {
+    "titulo": "Termas San José. San José-Entre Ríos",
+    "link": "https://labancaria.org/beneficios/termas-san-jose-san-jose-entre-rios/",
+    "imagen_url": "https://labancaria.org/wp-content/uploads/2024/11/termas-san-jose.webp",
+    "categoria": "turismo",
+    "provincia": "entre rios"
+  },
+  {
+    "titulo": "Romance de Luna Bungalows. San José-Entre Ríos",
+    "link": "https://labancaria.org/beneficios/romance-de-luna-bungalows-san-jose-entre-rios/",
+    "imagen_url": "https://labancaria.org/wp-content/uploads/2024/11/san-jose-entre-rios.webp",
+    "categoria": "hospedaje",
+    "provincia": "entre rios"
+  },
+  {
+    "titulo": "Hotel Mar del Plata. Mar del Plata-Buenos Aires",
+    "link": "https://labancaria.org/beneficios/hotel-mar-del-plata-mar-del-plata-buenos-aires/",
+    "imagen_url": "https://labancaria.org/wp-content/uploads/2024/10/mar-del-plata-jpg.webp",
+    "categoria": "hospedaje",
+    "provincia": "buenos aires"
+  },
+  {
+    "titulo": "Ananda complejo turístico. Potrero de Garay-Córdoba",
+    "link": "https://labancaria.org/beneficios/ananda-complejo-turistico-potrero-de-garay-cordoba/",
+    "imagen_url": "https://labancaria.org/wp-content/uploads/2024/11/ananda.webp",
+    "categoria": "hospedaje",
+    "provincia": "cordoba"
+  },
+  {
+    "titulo": "Howard Johnson Resort. San Pedro-Buenos Aires",
+    "link": "https://labancaria.org/beneficios/howard-johnson-resort-san-pedro-buenos-aires/",
+    "imagen_url": "https://labancaria.org/wp-content/uploads/2024/11/howard-johnson-san-pedroresort.webp",
+    "categoria": "hospedaje",
+    "provincia": "buenos aires"
+  },
+  {
+    "titulo": "Howard Johnson Hotel & Spa. San Pedro-Buenos Aires",
+    "link": "https://labancaria.org/beneficios/howard-johnson-hotel-spa-san-pedro-buenos-aires/",
+    "imagen_url": "https://labancaria.org/wp-content/uploads/2024/11/howard-johnson-san-pedro.webp",
+    "categoria": "hospedaje",
+    "provincia": "buenos aires"
+  },
+  {
+    "titulo": "Mendoza full",
+    "link": "https://labancaria.org/beneficios/mendoza-full-2/",
+    "imagen_url": "https://labancaria.org/wp-content/uploads/2024/11/mendoza4noches.webp",
+    "categoria": "turismo",
+    "provincia": "mendoza"
+  },
+  {
+    "titulo": "Mendoza & Spa",
+    "link": "https://labancaria.org/beneficios/mendoza-spa/",
+    "imagen_url": "https://labancaria.org/wp-content/uploads/2024/11/mendoza3-noches.webp",
+    "categoria": "turismo",
+    "provincia": "mendoza"
+  },
+  {
+    "titulo": "Mendoza Express",
+    "link": "https://labancaria.org/beneficios/mendoza-express-2/",
+    "imagen_url": "https://labancaria.org/wp-content/uploads/2024/11/mendozaexpress.webp",
+    "categoria": "turismo",
+    "provincia": "mendoza"
+  },
+  {
+    "titulo": "Mendoza en avión",
+    "link": "https://labancaria.org/beneficios/mendoza-en-avion-2/",
+    "imagen_url": "https://labancaria.org/wp-content/uploads/2024/11/mendozaenavion.webp",
+    "categoria": "turismo",
+    "provincia": "mendoza"
+  },
+  {
+    "titulo": "Del Bono Central. San Juan",
+    "link": "https://labancaria.org/beneficios/del-bono-central-san-juan/",
+    "imagen_url": "https://labancaria.org/wp-content/uploads/2024/11/sanjuan.webp",
+    "categoria": "hospedaje",
+    "provincia": "san juan"
+  },
+  {
+    "titulo": "Del Bono Park. San Juan",
+    "link": "https://labancaria.org/beneficios/del-bono-park-san-juan/",
+    "imagen_url": "https://labancaria.org/wp-content/uploads/2024/11/delbonopark.webp",
+    "categoria": "hospedaje",
+    "provincia": "san juan"
+  },
+  {
+    "titulo": "Cabañas Patagonialiv. Bariloche – Río Negro",
+    "link": "https://labancaria.org/beneficios/cabanas-patagonialiv-bariloche-rio-negro/",
+    "imagen_url": "https://labancaria.org/wp-content/uploads/2024/11/patagonialiv.webp",
+    "categoria": "hospedaje",
+    "provincia": "rio negro"
+  },
+  {
+    "titulo": "Maiten Escondido. Villa La Angostura-Neuquén",
+    "link": "https://labancaria.org/beneficios/maiten-escondido-villa-la-angostura-neuquen-2/",
+    "imagen_url": "https://labancaria.org/wp-content/uploads/2024/11/maiten-escondido-jpg.webp",
+    "categoria": "hospedaje",
+    "provincia": "neuquen"
+  },
+  {
+    "titulo": "Don Remo Hotel de montaña. Villa Unión-La Rioja",
+    "link": "https://labancaria.org/beneficios/don-remo-hotel-de-montana-villa-union-la-rioja/",
+    "imagen_url": "https://labancaria.org/wp-content/uploads/2024/11/don-remo-jpg.webp",
+    "categoria": "hospedaje",
+    "provincia": "la rioja"
+  },
+  {
+    "titulo": "Terrazas del Rincón. Merlo-San Luis",
+    "link": "https://labancaria.org/beneficios/terrazas-del-rincon-merlo-san-luis/",
+    "imagen_url": "https://labancaria.org/wp-content/uploads/2024/11/Terrazas-del-rincon-san-luis.webp",
+    "categoria": "hospedaje",
+    "provincia": "san luis"
+  },
+  {
+    "titulo": "Yrigoyen 111. Córdoba Capital",
+    "link": "https://labancaria.org/beneficios/yrigoyen-111-cordoba-capital/",
+    "imagen_url": "https://labancaria.org/wp-content/uploads/2024/11/yrigoyen111-jpg.webp",
+    "categoria": "hospedaje",
+    "provincia": "cordoba"
+  },
+  {
+    "titulo": "Casa Grande Hotel. Tilcara-Jujuy",
+    "link": "https://labancaria.org/beneficios/casa-grande-hotel-tilcara-jujuy/",
+    "imagen_url": "https://labancaria.org/wp-content/uploads/2024/11/casa-grande-jpg.webp",
+    "categoria": "hospedaje",
+    "provincia": "jujuy"
+  },
+  {
+    "titulo": "Estrella de Mar departamentos. Villa Carlos Paz-Córdoba",
+    "link": "https://labancaria.org/beneficios/estrella-de-mar-departamentos-villa-carlos-paz-cordoba/",
+    "imagen_url": "https://labancaria.org/wp-content/uploads/2024/10/estrella-de-mar_1-jpg.webp",
+    "categoria": "hospedaje",
+    "provincia": "cordoba"
+  },
+  {
+    "titulo": "Hotel Tronador. Mar del Plata-Buenos Aires",
+    "link": "https://labancaria.org/beneficios/hotel-tronador-mar-del-plata-buenos-aires/",
+    "imagen_url": "https://labancaria.org/wp-content/uploads/2024/10/tronador-jpg.webp",
+    "categoria": "hospedaje",
+    "provincia": "buenos aires"
+  },
+  {
+    "titulo": "Hotel La Bancaria. Villa Gesell-Mar del Plata",
+    "link": "https://labancaria.org/beneficios/hotel-la-bancaria-villa-gesell-mar-del-plata/",
+    "imagen_url": "https://labancaria.org/wp-content/uploads/2024/10/villa-gesell-jpg.webp",
+    "categoria": "hospedaje",
+    "provincia": "buenos aires"
+  },
+  {
+    "titulo": "Torre Colón cabañas. Colón-Entre Ríos",
+    "link": "https://labancaria.org/beneficios/torre-colon-cabanas-colon-entre-rios/",
+    "imagen_url": "https://labancaria.org/wp-content/uploads/2024/10/Torre-Colon-jpg.webp",
+    "categoria": "hospedaje",
+    "provincia": "entre rios"
+  },
+  {
+    "titulo": "Hotel Sunset. Bariloche-Río Negro",
+    "link": "https://labancaria.org/beneficios/__trashed-3/",
+    "imagen_url": "https://labancaria.org/wp-content/uploads/2024/10/sunset-jpg.webp",
+    "categoria": "hospedaje",
+    "provincia": "rio negro"
+  },
+  {
+    "titulo": "Los Buhos casa de campo. San José-Entre Ríos",
+    "link": "https://labancaria.org/beneficios/los-buhos-casa-de-campo-san-jose-entre-rios/",
+    "imagen_url": "https://labancaria.org/wp-content/uploads/2024/10/los-buhos-jpg.webp",
+    "categoria": "hospedaje",
+    "provincia": "entre rios"
+  },
+  {
+    "titulo": "Howard Johnson Plaza Jujuy. San Salvador de Jujuy",
+    "link": "https://labancaria.org/beneficios/howard-johnson-plaza-jujuy-san-salvador-de-jujuy-2/",
+    "imagen_url": "https://labancaria.org/wp-content/uploads/2024/10/howard-johnson-jujuy-jpg.webp",
+    "categoria": "hospedaje",
+    "provincia": "jujuy"
+  },
+  {
+    "titulo": "Turismo Hotel Casino. Corrientes-Corrientes",
+    "link": "https://labancaria.org/beneficios/turismo-hotel-casino-corrientes-corrientes/",
+    "imagen_url": "https://labancaria.org/wp-content/uploads/2024/10/turismo-hotel-casino-jpg.webp",
+    "categoria": "hospedaje",
+    "provincia": "corrientes"
+  },
+  {
+    "titulo": "Del Pomar hotel boutique. Resistencia-Chaco",
+    "link": "https://labancaria.org/beneficios/del-pomar-hotel-boutique-resistencia-chaco/",
+    "imagen_url": "https://labancaria.org/wp-content/uploads/2024/10/del-pomar-jpg.webp",
+    "categoria": "hospedaje",
+    "provincia": "chaco"
+  },
+  {
+    "titulo": "Hipocampus hotel & spa. Villa Carlos Paz-Córdoba",
+    "link": "https://labancaria.org/beneficios/hipocampus-hotel-spa-villa-carlos-paz-cordoba/",
+    "imagen_url": "https://labancaria.org/wp-content/uploads/2024/10/hipocampo-jpg.webp",
+    "categoria": "hospedaje",
+    "provincia": "cordoba"
+  },
+  {
+    "titulo": "Cumbres Blancas hostería. Esquel-Chubut",
+    "link": "https://labancaria.org/beneficios/cumbres-blancas-hosteria-esquel-chubut/",
+    "imagen_url": "https://labancaria.org/wp-content/uploads/2024/10/cumbres-blancas-jpg.webp",
+    "categoria": "hospedaje",
+    "provincia": "chubut"
+  },
+  {
+    "titulo": "Camberland Resort & Spa. Ramallo Buenos Aires",
+    "link": "https://labancaria.org/beneficios/camberland-resort-spa-ramallo-buenos-aires/",
+    "imagen_url": "https://labancaria.org/wp-content/uploads/2024/10/ramallo-jpg.webp",
+    "categoria": "hospedaje",
+    "provincia": "buenos aires"
+  },
+  {
+    "titulo": "El Chaltén. Santa Cruz",
+    "link": "https://labancaria.org/beneficios/el-chalten-santa-cruz/",
+    "imagen_url": "https://labancaria.org/wp-content/uploads/2024/10/el-chalten-1-jpg.webp",
+    "categoria": "turismo",
+    "provincia": "santa cruz"
+  },
+  {
+    "titulo": "Tehuelche. Esquel-Chubut",
+    "link": "https://labancaria.org/beneficios/tehuelche-esquel-chubut/",
+    "imagen_url": "https://labancaria.org/wp-content/uploads/2024/09/tehuelche-jpg.webp",
+    "categoria": "hospedaje",
+    "provincia": "chubut"
+  },
+  {
+    "titulo": "Mell Mell en la sierra. Tandil-Buenos Aires",
+    "link": "https://labancaria.org/beneficios/mell-mell-en-la-sierra-tandil-buenos-aires/",
+    "imagen_url": "https://labancaria.org/wp-content/uploads/2024/09/tandil-jpg.webp",
+    "categoria": "hospedaje",
+    "provincia": "buenos aires"
+  },
+  {
+    "titulo": "Plaza apart&hostería. La Cumbre-Córdoba",
+    "link": "https://labancaria.org/beneficios/plaza-aparthosteria-la-cumbre-cordoba/",
+    "imagen_url": "https://labancaria.org/wp-content/uploads/2024/09/la-cumbre-jpg.webp",
+    "categoria": "hospedaje",
+    "provincia": "cordoba"
+  },
+  {
+    "titulo": "Aguada hotel. Trelew-Chubut",
+    "link": "https://labancaria.org/beneficios/aguada-hotel-trelew-chubut/",
+    "imagen_url": "https://labancaria.org/wp-content/uploads/2024/09/aguada-jpg.webp",
+    "categoria": "hospedaje",
+    "provincia": "chubut"
+  },
+  {
+    "titulo": "Departamentos temporarios. Puerto Madryn-Chubut",
+    "link": "https://labancaria.org/beneficios/departamentos-temporarios-puerto-madryn-chubut-2/",
+    "imagen_url": "https://labancaria.org/wp-content/uploads/2024/09/puerto-madryn-jpg.webp",
+    "categoria": "hospedaje",
+    "provincia": "chubut"
+  },
+  {
+    "titulo": "Departamentos temporarios. Puerto Madryn-Chubut",
+    "link": "https://labancaria.org/beneficios/departamentos-temporarios-puerto-madryn-chubut/",
+    "imagen_url": "https://labancaria.org/wp-content/uploads/2024/09/puerto-madryn1-jpg.webp",
+    "categoria": "hospedaje",
+    "provincia": "chubut"
+  },
+  {
+    "titulo": "Hospedaje Tía Úrsula. Exaltación de la Cruz-Buenos Aires",
+    "link": "https://labancaria.org/beneficios/hospedaje-tia-ursula-exaltacion-de-la-cruz-buenos-aires/",
+    "imagen_url": "https://labancaria.org/wp-content/uploads/2024/09/exaltacion-jpg.webp",
+    "categoria": "hospedaje",
+    "provincia": "buenos aires"
+  },
+  {
+    "titulo": "La Reserva. Iguazú-Misiones",
+    "link": "https://labancaria.org/beneficios/la-reserva-iguazu-misiones/",
+    "imagen_url": "https://labancaria.org/wp-content/uploads/2024/09/lareserva-jpg.webp",
+    "categoria": "hospedaje",
+    "provincia": "misiones"
+  },
+  {
+    "titulo": "Paseo fluvial Iguazú. Iguazú-Misiones",
+    "link": "https://labancaria.org/beneficios/paseo-fluvial-iguazu-iguazu-misiones/",
+    "imagen_url": "https://labancaria.org/wp-content/uploads/2024/09/paseo-fluvial-jpg.webp",
+    "categoria": "turismo",
+    "provincia": "misiones"
+  },
+  {
+    "titulo": "Termas Concepción. Concepción del Uruguay-Entre Ríos",
+    "link": "https://labancaria.org/beneficios/termas-concepcion-concepcion-del-uruguay-entre-rios/",
+    "imagen_url": "https://labancaria.org/wp-content/uploads/2024/08/termas-concepcion-jpg.webp",
+    "categoria": "turismo",
+    "provincia": "entre rios"
+  },
+  {
+    "titulo": "Gran Hotel Santa Teresita. Mar del Plata-Buenos Aires",
+    "link": "https://labancaria.org/beneficios/gran-hotel-santa-teresita-mar-del-plata-buenos-aires/",
+    "imagen_url": "https://labancaria.org/wp-content/uploads/2024/08/santateresita-jpg.webp",
+    "categoria": "hospedaje",
+    "provincia": "buenos aires"
+  },
+  {
+    "titulo": "Carpincho Indumentaria",
+    "link": "https://labancaria.org/beneficios/carpincho-indumentaria/",
+    "imagen_url": "https://labancaria.org/wp-content/uploads/2024/07/Indumentaria-carpincho-jpeg.webp",
+    "categoria": "compras",
+    "provincia": "desconocida"
+  },
+  {
+    "titulo": "Cachalote, cerveza artesanal. Mar del Plata-Buenos Aires",
+    "link": "https://labancaria.org/beneficios/cachalote-cerveza-artesanal-mar-del-plata-buenos-aires/",
+    "imagen_url": "https://labancaria.org/wp-content/uploads/2024/07/cachalote-mar-dle-plata-jpeg.webp",
+    "categoria": "gastronomia",
+    "provincia": "buenos aires"
+  },
+  {
+    "titulo": "Aquarium. Mar del Plata-Buenos Aires",
+    "link": "https://labancaria.org/beneficios/aquarium-mar-del-plata-buenos-aires/",
+    "imagen_url": "https://labancaria.org/wp-content/uploads/2024/07/Aquarium-jpeg.webp",
+    "categoria": "turismo",
+    "provincia": "buenos aires"
+  },
+  {
+    "titulo": "Be departamentos boutique. Villa General Belgrano-Córdoba",
+    "link": "https://labancaria.org/beneficios/be-departamentos-boutique-villa-general-belgrano-cordoba/",
+    "imagen_url": "https://labancaria.org/wp-content/uploads/2024/04/be-jpg.webp",
+    "categoria": "hospedaje",
+    "provincia": "cordoba"
+  },
+  {
+    "titulo": "Hotel Valeria. Valeria del Mar-Buenos Aires",
+    "link": "https://labancaria.org/beneficios/hotel-valeria-valeria-del-mar-buenos-aires/",
+    "imagen_url": "https://labancaria.org/wp-content/uploads/2024/04/valeria-jpg.webp",
+    "categoria": "hospedaje",
+    "provincia": "buenos aires"
+  },
+  {
+    "titulo": "Termas Tapalqué. Tapalqué-Buenos Aires",
+    "link": "https://labancaria.org/beneficios/termas-tapalque-tapalque-buenos-aires/",
+    "imagen_url": "https://labancaria.org/wp-content/uploads/2024/04/TERMAS-TAPALQUE-jpg.webp",
+    "categoria": "turismo",
+    "provincia": "buenos aires"
+  },
+  {
+    "titulo": "Paseo La Playa entre 116 y 117",
+    "link": "https://labancaria.org/beneficios/paseo-la-playa-entre-116-y-117/",
+    "imagen_url": "https://labancaria.org/wp-content/uploads/2024/01/paseolaplaya-1-jpg.webp",
+    "categoria": "turismo",
+    "provincia": "buenos aires"
+  },
+  {
+    "titulo": "Río Tur Catamaranes. Tigre-Buenos Aires",
+    "link": "https://labancaria.org/beneficios/rio-tur-catamaranes-tigre-buenos-aires/",
+    "imagen_url": "https://labancaria.org/wp-content/uploads/2023/12/riotur-jpg.webp",
+    "categoria": "turismo",
+    "provincia": "buenos aires"
+  },
+  {
+    "titulo": "Turismo Hotel Casino. Corrientes",
+    "link": "https://labancaria.org/beneficios/turismo-hotel-casino-corrientes/",
+    "imagen_url": "https://labancaria.org/wp-content/uploads/2023/11/corrientes-jpg.webp",
+    "categoria": "hospedaje",
+    "provincia": "corrientes"
+  },
+  {
+    "titulo": "Apart hotel El Choconcito. Ushuaia-Tierra del Fuego",
+    "link": "https://labancaria.org/beneficios/apart-hotel-el-choconcito-ushuaia-tierra-del-fuego/",
+    "imagen_url": "https://labancaria.org/wp-content/uploads/2023/11/choconcito-jpg.webp",
+    "categoria": "hospedaje",
+    "provincia": "tierra del fuego"
+  },
+  {
+    "titulo": "Ayres del Pinamar (duplex). Pinamar",
+    "link": "https://labancaria.org/beneficios/ayres-del-pinar-duplex-pinamar/",
+    "imagen_url": "https://labancaria.org/wp-content/uploads/2023/05/ayres-de-pinamar-jpg.webp",
+    "categoria": "hospedaje",
+    "provincia": "buenos aires"
+  },
+  {
+    "titulo": "Delicias de la Patagonia",
+    "link": "https://labancaria.org/beneficios/delicias-de-la-patagonia/",
+    "imagen_url": "https://labancaria.org/wp-content/uploads/2023/06/delicias-jpg.webp",
+    "categoria": "gastronomia",
+    "provincia": "desconocida"
+  },
+  {
+    "titulo": "Ayres de Merlo Aparts. Merlo-San Luis",
+    "link": "https://labancaria.org/beneficios/ayres-de-merlo-aparts-merlo-san-luis/",
+    "imagen_url": "https://labancaria.org/wp-content/uploads/2023/05/Ayres-de-merlo-jpg.webp",
+    "categoria": "hospedaje",
+    "provincia": "san luis"
+  },
+  {
+    "titulo": "Flores Azules. Cabañas Olta-La Rioja",
+    "link": "https://labancaria.org/beneficios/flores-azules-cabanas-olta-la-rioja/",
+    "imagen_url": "https://labancaria.org/wp-content/uploads/2023/05/Flores-Azules-2023-2-jpg.webp",
+    "categoria": "hospedaje",
+    "provincia": "la rioja"
+  },
+  {
+    "titulo": "Altos del Sol-Spa & Resort. Merlo-San Luis",
+    "link": "https://labancaria.org/beneficios/altos-del-sol-spa-resort-merlo-san-luis/",
+    "imagen_url": "https://labancaria.org/wp-content/uploads/2023/05/altos-del-sol-1-jpg.webp",
+    "categoria": "hospedaje",
+    "provincia": "san luis"
+  },
+  {
+    "titulo": "Hotel Emperatriz. Río Hondo-Santiago del Estero",
+    "link": "https://labancaria.org/beneficios/hotel-emperatriz-rio-hondo-santiago-del-estero/",
+    "imagen_url": "https://labancaria.org/wp-content/uploads/2023/05/hotel-Emperatriz-Misiones-1-jpg.webp",
+    "categoria": "hospedaje",
+    "provincia": "santiago del estero"
+  },
+  {
+    "titulo": "El Altillo. Parrilla-restaurant. Villa Gessell",
+    "link": "https://labancaria.org/beneficios/el-altillo-parrilla-restaurant-villa-gessell/",
+    "imagen_url": "https://labancaria.org/wp-content/uploads/2022/12/el-altillo.jpg",
+    "categoria": "gastronomia",
+    "provincia": "buenos aires"
+  },
+  {
+    "titulo": "Hotel Alcor Mendoza Capital",
+    "link": "https://labancaria.org/beneficios/hotel-alcor-mendoza-capital/",
+    "imagen_url": "https://labancaria.org/wp-content/uploads/2023/01/alcor.png",
+    "categoria": "hospedaje",
+    "provincia": "mendoza"
+  },
+  {
+    "titulo": "Delta del Tigre",
+    "link": "https://labancaria.org/beneficios/delta-del-tigre/",
+    "imagen_url": "https://labancaria.org/wp-content/uploads/2022/12/delta.jpg",
+    "categoria": "turismo",
+    "provincia": "buenos aires"
+  },
+  {
+    "titulo": "La Cantina, parrilla-restaurant. Carlos Paz-Córdoba",
+    "link": "https://labancaria.org/beneficios/la-cantina-parrilla-restaurant-carlos-paz-cordoba/",
+    "imagen_url": "https://labancaria.org/wp-content/uploads/2022/12/carlos-paz-la-cantina.jpg",
+    "categoria": "gastronomia",
+    "provincia": "cordoba"
+  },
+  {
+    "titulo": "La Cocina de Mamá. Mar del Plata-Buenos Aires",
+    "link": "https://labancaria.org/beneficios/15-de-descuento-en-la-cocina-de-mama/",
+    "imagen_url": "https://labancaria.org/wp-content/uploads/2022/02/La-cocina-de-mama-jpeg.webp",
+    "categoria": "gastronomia",
+    "provincia": "buenos aires"
+  },
+  {
+    "titulo": "Turismo Hotel Casino Corrientes",
+    "link": "https://labancaria.org/beneficios/turismo-hotel-casino-corrientes-2/",
+    "imagen_url": "https://labancaria.org/wp-content/uploads/2022/10/hotel-Casino-2023.jpg",
+    "categoria": "hospedaje",
+    "provincia": "corrientes"
+  },
+  {
+    "titulo": "Hotel Bagu. Foz de Iguazú-Brasil",
+    "link": "https://labancaria.org/beneficios/hotel-bagu-foz-de-iguazu-brasil/",
+    "imagen_url": "https://labancaria.org/wp-content/uploads/2022/08/bagu-foz-de-iguazu.jpg",
+    "categoria": "hospedaje",
+    "provincia": "brasil"
+  },
+  {
+    "titulo": "Bagú Ushuaia Hotel",
+    "link": "https://labancaria.org/beneficios/bagu-ushuaia-hotel-2/",
+    "imagen_url": "https://labancaria.org/wp-content/uploads/2022/08/Bagu-Hotel-2023.jpg",
+    "categoria": "hospedaje",
+    "provincia": "tierra del fuego"
+  },
+  {
+    "titulo": "Hotel Bagu Gran Crucero Posadas-Misiones",
+    "link": "https://labancaria.org/beneficios/hotel-bagu-gran-crucero-posadas-misiones/",
+    "imagen_url": "https://labancaria.org/wp-content/uploads/2022/02/bagu-misiones.jpg",
+    "categoria": "hospedaje",
+    "provincia": "misiones"
+  },
+  {
+    "titulo": "Disfrutá Exaltación de la Cruz",
+    "link": "https://labancaria.org/beneficios/disfruta-exaltacion-de-la-cruz/",
+    "imagen_url": "https://labancaria.org/wp-content/uploads/2022/08/exalta.jpg",
+    "categoria": "turismo",
+    "provincia": "buenos aires"
+  },
+  {
+    "titulo": "Disfrutá Ushuaia todo el año",
+    "link": "https://labancaria.org/beneficios/disfruta-ushuaia-todo-el-ano/",
+    "imagen_url": "https://labancaria.org/wp-content/uploads/2022/07/ushuaia.jpg",
+    "categoria": "turismo",
+    "provincia": "tierra del fuego"
+  },
+  {
+    "titulo": "Disfrutá Esquel-Chubut",
+    "link": "https://labancaria.org/beneficios/disfruta-esquel-chubut/",
+    "imagen_url": "https://labancaria.org/wp-content/uploads/2022/07/esquel.jpg",
+    "categoria": "turismo",
+    "provincia": "chubut"
+  },
+  {
+    "titulo": "Disfrutá Chaco",
+    "link": "https://labancaria.org/beneficios/disfruta-chaco/",
+    "imagen_url": "https://labancaria.org/wp-content/uploads/2022/06/chaco2.jpg",
+    "categoria": "turismo",
+    "provincia": "chaco"
+  },
+  {
+    "titulo": "Disfrutá Rosario-Santa Fe",
+    "link": "https://labancaria.org/beneficios/disfruta-rosario-santa-fe/",
+    "imagen_url": "https://labancaria.org/wp-content/uploads/2022/02/Disfruta-Rosario.jpg",
+    "categoria": "turismo",
+    "provincia": "santa fe"
+  },
+  {
+    "titulo": "Disfrutá en Esquina Corrientes",
+    "link": "https://labancaria.org/beneficios/disfruta-en-esquina-corrientes/",
+    "imagen_url": "https://labancaria.org/wp-content/uploads/2022/02/Disfruta-es-Esquina-Corrientes.jpg",
+    "categoria": "turismo",
+    "provincia": "corrientes"
+  },
+  {
+    "titulo": "Disfrutá Córdoba.- Villa General Belgrano",
+    "link": "https://labancaria.org/beneficios/disfruta-cordoba-villa-general-belgrano/",
+    "imagen_url": "https://labancaria.org/wp-content/uploads/2022/08/Villa-G-Belgrano.jpg",
+    "categoria": "turismo",
+    "provincia": "cordoba"
+  },
+  {
+    "titulo": "Disfrutá Buenos Aires",
+    "link": "https://labancaria.org/beneficios/disfruta-buenos-aires/",
+    "imagen_url": "https://labancaria.org/wp-content/uploads/2022/02/buenos-aires-scaled.jpg",
+    "categoria": "turismo",
+    "provincia": "buenos aires"
+  },
+  {
+    "titulo": "Disfrutá Carlos Paz",
+    "link": "https://labancaria.org/beneficios/disfruta-carlos-paz/",
+    "imagen_url": "https://labancaria.org/wp-content/uploads/2022/02/Carlos-Paz.jpg",
+    "categoria": "turismo",
+    "provincia": "cordoba"
+  },
+  {
+    "titulo": "Disfrutá Chubut",
+    "link": "https://labancaria.org/beneficios/disfruta-chubut/",
+    "imagen_url": "https://labancaria.org/wp-content/uploads/2022/02/chubut-scaled.jpg",
+    "categoria": "turismo",
+    "provincia": "chubut"
+  },
+  {
+    "titulo": "Disfrutá Mar Azul",
+    "link": "https://labancaria.org/beneficios/disfruta-mar-azul/",
+    "imagen_url": "https://labancaria.org/wp-content/uploads/2022/02/mar-azul-scaled.jpg",
+    "categoria": "turismo",
+    "provincia": "buenos aires"
+  },
+  {
+    "titulo": "Disfrutá Mar del Plata",
+    "link": "https://labancaria.org/beneficios/8009/",
+    "imagen_url": "https://labancaria.org/wp-content/uploads/2022/02/mar-del-plata.jpg",
+    "categoria": "turismo",
+    "provincia": "buenos aires"
+  },
+  {
+    "titulo": "Disfrutá Santiago del Estero",
+    "link": "https://labancaria.org/beneficios/8005/",
+    "imagen_url": "https://labancaria.org/wp-content/uploads/2022/02/santiago-scaled.jpg",
+    "categoria": "turismo",
+    "provincia": "santiago del estero"
+  },
+  {
+    "titulo": "Disfrutá Mendoza",
+    "link": "https://labancaria.org/beneficios/disfruta-mendoza/",
+    "imagen_url": "https://labancaria.org/wp-content/uploads/2022/02/mendoza-scaled.jpg",
+    "categoria": "turismo",
+    "provincia": "mendoza"
+  },
+  {
+    "titulo": "Disfrutá Ushuaia",
+    "link": "https://labancaria.org/beneficios/disfruta-ushuaia/",
+    "imagen_url": "https://labancaria.org/wp-content/uploads/2022/02/misiones.jpg",
+    "categoria": "turismo",
+    "provincia": "tierra del fuego"
+  },
+  {
+    "titulo": "Disfrutá Villa Gesell",
+    "link": "https://labancaria.org/beneficios/disfruta-villa-gesell/",
+    "imagen_url": "https://labancaria.org/wp-content/uploads/2022/02/villa-gesell.jpg",
+    "categoria": "turismo",
+    "provincia": "buenos aires"
+  }
+]
