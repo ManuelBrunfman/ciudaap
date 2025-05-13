@@ -6,7 +6,7 @@ export default {
     orientation: "portrait",
     icon: "./assets/icon.png",
     userInterfaceStyle: "light",
-    newArchEnabled: true,
+    newArchEnabled: false, // Deshabilitado para evitar problemas con TurboModules
     splash: {
       image: "./assets/splash-icon.png",
       resizeMode: "contain",
