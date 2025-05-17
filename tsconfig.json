@@ -22,7 +22,7 @@
 
     "noImplicitAny": false,
 
-    "moduleResolution": "node",
+     "moduleResolution": "bundler",
 
 "types": ["react", "react-native", "firebase"]
 ,
