@@ -4,8 +4,8 @@
   "main": "index.ts",
   "scripts": {
     "start": "node -r dotenv/config node_modules/expo/bin/cli.js start",
-    "android": "expo start --android",
-    "ios": "expo start --ios",
+    "android": "expo run:android",
+    "ios": "expo run:ios",
     "web": "expo start --web"
   },
   "dependencies": {
@@ -25,7 +25,6 @@
     "expo-font": "~13.3.1",
     "expo-linear-gradient": "~14.1.4",
     "expo-status-bar": "~2.2.3",
-    "firebase": "^11.7.3",
     "lucide-react": "^0.477.0",
     "react": "19.0.0",
     "react-dom": "19.0.0",

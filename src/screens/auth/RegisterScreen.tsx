@@ -1,11 +1,15 @@
 // src/screens/auth/RegisterScreen.tsx
-
 import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert } from 'react-native';
-import { useAuth } from '../../context/AuthContext';
+import {
+  View,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  StyleSheet,
+  Alert,
+} from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import { createUserWithEmailAndPassword, updateProfile } from 'firebase/auth';
-import { auth } from '../../../config/firebaseConfig';
+import auth from '@react-native-firebase/auth';
 
 const RegisterScreen: React.FC = () => {
   const navigation = useNavigation();
@@ -17,33 +21,32 @@ const RegisterScreen: React.FC = () => {
 
   const handleRegister = async () => {
     try {
-      // Crear usuario en Firebase Authentication
-      const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-      const user = userCredential.user;
-
-      // Actualizar el perfil del usuario con el displayName
-      if (user) {
-        await updateProfile(user, { displayName });
-      }
+      const cred = await auth().createUserWithEmailAndPassword(
+        email.trim(),
+        password
+      );
+      await cred.user.updateProfile({ displayName });
 
       Alert.alert('Registro exitoso', 'Ahora puedes iniciar sesión.');
-      navigation.navigate('Login' as never);
-    } catch (error) {
-      console.error("Error en el registro:", error);
-      Alert.alert('Error', 'No se pudo registrar el usuario.');
+      // @ts-ignore
+      navigation.navigate('Login');
+    } catch (err: any) {
+      console.error(err);
+      Alert.alert('Error', err.message ?? 'No se pudo registrar.');
     }
   };
 
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Crear Cuenta</Text>
+      {/* …inputs… */}
       <TextInput
         style={styles.input}
         placeholder="Correo electrónico"
         value={email}
         onChangeText={setEmail}
-        autoCapitalize="none"
         keyboardType="email-address"
+        autoCapitalize="none"
       />
       <TextInput
         style={styles.input}
@@ -71,6 +74,7 @@ const RegisterScreen: React.FC = () => {
         value={province}
         onChangeText={setProvince}
       />
+
       <TouchableOpacity style={styles.button} onPress={handleRegister}>
         <Text style={styles.buttonText}>Registrarse</Text>
       </TouchableOpacity>
@@ -83,7 +87,18 @@ export default RegisterScreen;
 const styles = StyleSheet.create({
   container: { flex: 1, padding: 16, justifyContent: 'center' },
   title: { fontSize: 22, marginBottom: 12, textAlign: 'center' },
-  input: { borderWidth: 1, borderColor: '#ccc', padding: 10, marginVertical: 6, borderRadius: 8 },
-  button: { backgroundColor: '#2196F3', padding: 12, borderRadius: 8, marginTop: 12 },
-  buttonText: { color: '#fff', fontSize: 16, textAlign: 'center' }
+  input: {
+    borderWidth: 1,
+    borderColor: '#ccc',
+    padding: 10,
+    marginVertical: 6,
+    borderRadius: 8,
+  },
+  button: {
+    backgroundColor: '#2196F3',
+    padding: 12,
+    borderRadius: 8,
+    marginTop: 12,
+  },
+  buttonText: { color: '#fff', fontSize: 16, textAlign: 'center' },
 });

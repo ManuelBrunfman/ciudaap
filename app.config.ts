@@ -5,17 +5,17 @@ export default {
     // ────────────────────────────────────────────────
     // Básicos
     // ────────────────────────────────────────────────
-    name: 'Bancapp',                // Nombre que verá el usuario
-    slug: 'bancapp',                // Usado por Expo (minúsculas, sin espacios)
-    version: '1.0.0',               // SemVer de tu app
+    name: 'Bancapp',
+    slug: 'bancapp',
+    version: '1.0.0',
     orientation: 'portrait',
     userInterfaceStyle: 'light',
 
     // ────────────────────────────────────────────────
     // Expo SDK
     // ────────────────────────────────────────────────
-    sdkVersion: '53.0.0',           // Forzado para asegurar compatibilidad
-    newArchEnabled: true,           // Habilita la New Architecture (Hermes + Turbo)
+    sdkVersion: '53.0.0',
+    newArchEnabled: true,
 
     // ────────────────────────────────────────────────
     // Iconos y Splash
@@ -35,14 +35,18 @@ export default {
     // ────────────────────────────────────────────────
     ios: {
       supportsTablet: true,
-      bundleIdentifier: 'com.labancaria.bancapp'
+      bundleIdentifier: 'com.labancaria.bancapp',
+      // Cuando vayas a configurar iOS, también necesitarás la línea para GoogleService-Info.plist aquí
+      // googleServicesFile: "./GoogleService-Info.plist"
     },
     android: {
       package: 'com.labancaria.bancapp',
       adaptiveIcon: {
         foregroundImage: './assets/adaptive-icon.png',
         backgroundColor: '#ffffff'
-      }
+      },
+      // ¡ESTO ES LO QUE FALTA PARA ANDROID!
+      googleServicesFile: "./google-services.json" // Ruta al archivo google-services.json en la raíz
     },
 
     // ────────────────────────────────────────────────
@@ -50,7 +54,9 @@ export default {
     // ────────────────────────────────────────────────
     plugins: [
       'expo-font',
-      'expo-asset'
+      'expo-asset',
+      // ¡ESTO ES LO QUE FALTA PARA FIREBASE!
+      "@react-native-firebase/app"
     ],
 
     // ────────────────────────────────────────────────

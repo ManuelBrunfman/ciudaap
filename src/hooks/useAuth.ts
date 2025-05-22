@@ -1,20 +1,19 @@
-import { useState, useEffect } from 'react';
-import { onAuthStateChanged } from 'firebase/auth';
-import { auth } from '../../config/firebaseConfig';
-
-const useAuth = () => {
-  const [user, setUser] = useState<any>(null);
-  const [loading, setLoading] = useState<boolean>(true);
-
-  useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
-      setUser(currentUser);
-      setLoading(false);
-    });
-    return () => unsubscribe();
-  }, []);
-
-  return { user, loading };
-};
-
-export default useAuth;
+// src/hooks/useAuth.ts
+import { useContext } from 'react';
+import auth from '@react-native-firebase/auth';
+import { AuthContext } from '../context/AuthContext';
+
+/**
+ * Hook que expone el usuario actual y helpers de autenticación.
+ */
+export const useAuth = () => {
+  const ctx = useContext(AuthContext);
+
+  /** Ejemplo extra: cambiar displayName */
+  const updateDisplayName = async (displayName: string) => {
+    const current = auth().currentUser;
+    if (current) await current.updateProfile({ displayName });
+  };
+
+  return { ...ctx, updateDisplayName } as const;
+};
