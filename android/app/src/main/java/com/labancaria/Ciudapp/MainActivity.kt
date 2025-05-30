@@ -1,4 +1,4 @@
-package com.labancaria.bancapp
+package com.labancaria.Ciudapp
 
 import android.os.Build
 import android.os.Bundle

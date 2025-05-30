@@ -37,3 +37,4 @@ yarn-error.*
 
 scripts/serviceAccountKey.json
 scripts/serviceAccountKey.json
+google-services.json
