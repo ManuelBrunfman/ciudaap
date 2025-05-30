@@ -37,12 +37,12 @@ export default {
     // ────────────────────────────────────────────────
     ios: {
       supportsTablet: true,
-      bundleIdentifier: 'com.labancaria.bancapp',
+      bundleIdentifier: 'com.labancaria.Ciudapp',
       // Cuando vayas a configurar iOS, también necesitarás la línea para GoogleService-Info.plist aquí
       // googleServicesFile: "./GoogleService-Info.plist"
     },
     android: {
-      package: 'com.labancaria.bancapp',
+      package: 'com.labancaria.Ciudapp',
       adaptiveIcon: {
         foregroundImage: './assets/adaptive-icon.png',
         backgroundColor: '#ffffff'
