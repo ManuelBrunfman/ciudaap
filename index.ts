@@ -1,9 +1,12 @@
-// index.ts (completo)
-import 'react-native-gesture-handler';  // <-- Importar primero
+// index.ts
+// ──────────────────────────────────────────────
+// ¡IMPORTS QUE DEBEN IR PRIMERO!
+import 'react-native-gesture-handler'; // gestos nativos (Drawer, Stack, etc.)
+import 'react-native-reanimated';      // reanimated (debe cargarse antes de RN)
+
+// ─── Expo bootstrap ───────────────────────────
 import { registerRootComponent } from 'expo';
 import App from './App';
 
-// registerRootComponent calls AppRegistry.registerComponent('main', () => App);
-// It also ensures that whether you load the app in Expo Go or in a native build,
-// the environment is set up appropriately.
+// Registra el componente raíz de la aplicación
 registerRootComponent(App);
