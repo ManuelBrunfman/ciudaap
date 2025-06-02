@@ -1,6 +1,5 @@
-// app.config.ts
 import 'dotenv/config';
-import { ExpoConfig, ConfigContext } from '@expo/config'; // tipado seguro
+import { ExpoConfig, ConfigContext } from '@expo/config';
 
 export default (_: ConfigContext): ExpoConfig => ({
   /* ─── Básicos ─────────────────────────────── */
@@ -15,7 +14,7 @@ export default (_: ConfigContext): ExpoConfig => ({
 
   /* ─── Expo / React Native ─────────────────── */
   sdkVersion: '53.0.0',
-  newArchEnabled: true,
+  newArchEnabled: false, // RN Firebase aún no soporta la New Architecture
 
   /* ─── Icono & Splash ─────────────────────── */
   icon: './assets/icon.png',
@@ -30,7 +29,7 @@ export default (_: ConfigContext): ExpoConfig => ({
   ios: {
     supportsTablet: true,
     bundleIdentifier: 'com.labancaria.Ciudapp',
-    // googleServicesFile: './GoogleService-Info.plist', // cuando lo tengas
+    // googleServicesFile: './GoogleService-Info.plist', // Descomenta cuando lo tengas
   },
   android: {
     package: 'com.labancaria.Ciudapp',
