@@ -49,3 +49,4 @@ GoogleService-Info.plist      # ← Firebase iOS (cuando lo uses)
 scripts/serviceAccountKey.json
 
 # ---- eliminá el duplicado (estaba dos veces) ------------
+proyecto.json
