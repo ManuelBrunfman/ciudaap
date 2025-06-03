@@ -1,38 +1,45 @@
-// Top-level build file where you can add configuration options common to all sub-projects/modules.
+// Top‑level build file where you can add configuration options common
+// to all sub‑projects/modules.
 
 buildscript {
-  repositories {
-    google()
-    mavenCentral()
-  }
-  dependencies {
+    repositories {
+        google()
+        mavenCentral()
+    }
+    dependencies {
+        // Google Services plugin – mantiene 4.4.1 (compatible con AGP 8.x)
         classpath 'com.google.gms:google-services:4.4.1'
-    classpath('com.android.tools.build:gradle')
-    classpath('com.facebook.react:react-native-gradle-plugin')
-    classpath('org.jetbrains.kotlin:kotlin-gradle-plugin')
-  }
+
+        // 🔐 Fijamos explícitamente Android Gradle Plugin a 8.5.0,
+        // la versión que Expo SDK 53 y React Native 0.79 esperan.
+        classpath 'com.android.tools.build:gradle:8.5.0'
+
+        // React Native Gradle plugin
+        classpath 'com.facebook.react:react-native-gradle-plugin'
+
+        // Kotlin 2.0.21 – misma versión que usa la imagen de build de Expo 53
+        classpath 'org.jetbrains.kotlin:kotlin-gradle-plugin:2.0.21'
+    }
 }
 
+// Ruta al código nativo de React Native instalado vía npm
 def reactNativeAndroidDir = new File(
-  providers.exec {
-    workingDir(rootDir)
-    commandLine("node", "--print", "require.resolve('react-native/package.json')")
-  }.standardOutput.asText.get().trim(),
-  "../android"
+    providers.exec {
+        workingDir(rootDir)
+        commandLine('node', '--print', "require.resolve('react-native/package.json')")
+    }.standardOutput.asText.get().trim(),
+    '../android'
 )
 
 allprojects {
-  repositories {
-    maven {
-      // All of React Native (JS, Obj-C sources, Android binaries) is installed from npm
-      url(reactNativeAndroidDir)
+    repositories {
+        // Todas las libs de React Native instaladas desde npm
+        maven { url reactNativeAndroidDir }
+        google()
+        mavenCentral()
+        maven { url 'https://www.jitpack.io' }
     }
-
-    google()
-    mavenCentral()
-    maven { url 'https://www.jitpack.io' }
-  }
 }
 
-apply plugin: "expo-root-project"
-apply plugin: "com.facebook.react.rootproject"
+apply plugin: 'expo-root-project'
+apply plugin: 'com.facebook.react.rootproject'
