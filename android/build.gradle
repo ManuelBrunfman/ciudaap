@@ -1,5 +1,6 @@
-// Top‑level build file where you can add configuration options common
-// to all sub‑projects/modules.
+// RUTA: android/build.gradle
+// Top-level build file where you can add configuration options common
+// to all sub-projects/modules.
 
 buildscript {
     repositories {
@@ -7,34 +8,31 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        // Google Services plugin – mantiene 4.4.1 (compatible con AGP 8.x)
+        // Google Services plugin (Firebase)
         classpath 'com.google.gms:google-services:4.4.1'
 
-        // 🔐 Fijamos explícitamente Android Gradle Plugin a 8.5.0,
-        // la versión que Expo SDK 53 y React Native 0.79 esperan.
+        // 🔒 Android Gradle Plugin compatible con Expo SDK 53
         classpath 'com.android.tools.build:gradle:8.5.0'
 
-        // React Native Gradle plugin
+        // React Native
         classpath 'com.facebook.react:react-native-gradle-plugin'
 
-        // Kotlin 2.0.21 – misma versión que usa la imagen de build de Expo 53
+        // Kotlin
         classpath 'org.jetbrains.kotlin:kotlin-gradle-plugin:2.0.21'
     }
 }
 
-// Ruta al código nativo de React Native instalado vía npm
 def reactNativeAndroidDir = new File(
-    providers.exec {
-        workingDir(rootDir)
-        commandLine('node', '--print', "require.resolve('react-native/package.json')")
-    }.standardOutput.asText.get().trim(),
-    '../android'
+        providers.exec {
+            workingDir(rootDir)
+            commandLine("node", "--print", "require.resolve('react-native/package.json')")
+        }.standardOutput.asText.get().trim(),
+        "../android"
 )
 
 allprojects {
     repositories {
-        // Todas las libs de React Native instaladas desde npm
-        maven { url reactNativeAndroidDir }
+        maven { url(reactNativeAndroidDir) }   // RN AARs desde npm
         google()
         mavenCentral()
         maven { url 'https://www.jitpack.io' }
