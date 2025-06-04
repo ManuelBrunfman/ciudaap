@@ -1,27 +1,14 @@
 // RUTA: android/settings.gradle
-// -----------------------------------------------------------------------------
-// Incluye todos los módulos del proyecto y habilita Kotlin DSL para que
-// los gradle scripts *.kts* usados por Expo Autolinking compilen sin errores
-// con Gradle 8.5 + AGP 8.5.0.
-// -----------------------------------------------------------------------------
 
 pluginManagement {
     repositories {
-        // Repos por defecto
         gradlePluginPortal()
         google()
         mavenCentral()
     }
     plugins {
-        // Kotlin DSL plugin (versión compatible con Gradle 8.5)
         id("org.gradle.kotlin.kotlin-dsl") version "4.0.5"
     }
 }
 
-// Módulo principal de la app React Native
-include(":app")
-
-// Si algún paquete nativo necesita un proyecto separado, podés incluirlo aquí.
-// Ejemplo:
-// include(":react-native-reanimated")
-// project(":react-native-reanimated").projectDir = new File(rootDir, "../node_modules/react-native-reanimated/android")
+include ':app'
