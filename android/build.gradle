@@ -8,19 +8,15 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        // Google Services plugin (Firebase)
         classpath 'com.google.gms:google-services:4.4.1'
-
-        // 🔒 Android Gradle Plugin compatible con Expo SDK 53
-        classpath 'com.android.tools.build:gradle:8.5.0'
-
-        // React Native
+        classpath 'com.android.tools.build:gradle:8.5.0'          // AGP 8.5
         classpath 'com.facebook.react:react-native-gradle-plugin'
 
-        // Kotlin
-        classpath 'org.jetbrains.kotlin:kotlin-gradle-plugin:2.0.21'
+        // 🔄  Kotlin 1.9.24  ← compatible con Expo 53
+        classpath 'org.jetbrains.kotlin:kotlin-gradle-plugin:1.9.24'
     }
 }
+
 
 def reactNativeAndroidDir = new File(
         providers.exec {
