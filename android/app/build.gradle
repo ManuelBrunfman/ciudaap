@@ -26,9 +26,9 @@ android {
     buildToolsVersion rootProject.ext.buildToolsVersion
     compileSdk rootProject.ext.compileSdkVersion
 
-    namespace 'com.manuelbrunfman.ciudaapp'         // <--- CAMBIADO
+    namespace 'com.manuelbrunfman.ciudaapp'
     defaultConfig {
-        applicationId 'com.manuelbrunfman.ciudaapp' // <--- CAMBIADO
+        applicationId 'com.manuelbrunfman.ciudaapp'
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1
