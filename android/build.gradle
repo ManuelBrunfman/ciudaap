@@ -13,7 +13,7 @@ buildscript {
         classpath 'org.jetbrains.kotlin:kotlin-gradle-plugin:1.9.24'
 
         // usa la versión que viene dentro de node_modules/react-native
-        classpath 'com.facebook.react:react-native-gradle-plugin'
+        classpath "com.facebook.react:react-native-gradle-plugin:+"
     }
 }
 
