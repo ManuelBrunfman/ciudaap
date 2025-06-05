@@ -50,3 +50,6 @@ scripts/serviceAccountKey.json
 
 # ---- eliminá el duplicado (estaba dos veces) ------------
 proyecto.json
+
+node_modules/
+
