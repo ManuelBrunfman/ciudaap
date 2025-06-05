@@ -1,44 +1,39 @@
 // RUTA: android/build.gradle
+// Top-level build file where you can add configuration options common
+// to all sub-projects/modules.
 
 buildscript {
     repositories {
-        // 1️⃣ Repos oficiales primero
+        // Repos oficiales
         google()
         mavenCentral()
-
-        // 2️⃣ Repos locales de React Native
-        maven { url("$rootDir/../node_modules/react-native/packages/react-native-gradle-plugin") }
-        maven { url("$rootDir/../node_modules/react-native/android") }
-
-        // 3️⃣ (Opcional) tu Artifactory interno, si lo necesitás
+        // (⬇️ Si en tu equipo o CI realmente necesitás Artifactory, descomenta:)
         // maven { url "http://10.4.0.201:8081/artifactory/libs-release" }
     }
     dependencies {
         classpath "com.google.gms:google-services:4.4.1"
         classpath "com.android.tools.build:gradle:8.5.0"
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:1.9.24"
-
-        // usa la versión publicada junto a React Native 0.79.2
-        classpath "com.facebook.react:react-native-gradle-plugin:0.79.2"
+        // 🔸 NO hace falta react-native-gradle-plugin aquí
     }
 }
 
 def reactNativeAndroidDir = new File(
         providers.exec {
             workingDir(rootDir)
-            commandLine("node", "--print", "require.resolve(\"react-native/package.json\")")
+            commandLine("node", "--print", "require.resolve('react-native/package.json')")
         }.standardOutput.asText.get().trim(),
         "../android"
 )
 
 allprojects {
     repositories {
-        maven { url(reactNativeAndroidDir) }   // RN AARs
+        maven { url(reactNativeAndroidDir) }   // AARs de React Native
         google()
         mavenCentral()
-        maven { url 'https://www.jitpack.io' }
+        maven { url "https://www.jitpack.io" }
     }
 }
 
-apply plugin: 'expo-root-project'
-apply plugin: 'com.facebook.react.rootproject'
+apply plugin: "expo-root-project"
+apply plugin: "com.facebook.react.rootproject"
