@@ -1,6 +1,8 @@
+// RUTA: android/build.gradle
+
 buildscript {
     repositories {
-        maven { url("$rootDir/../node_modules/expo/android/maven") }   // ← ESTA LÍNEA, NO LA ANTERIOR
+        maven { url("$rootDir/../node_modules/expo/android/maven") }
         google()
         mavenCentral()
     }
@@ -12,16 +14,16 @@ buildscript {
 }
 
 def reactNativeAndroidDir = new File(
-        providers.exec {
-            workingDir(rootDir)
-            commandLine("node", "--print", "require.resolve('react-native/package.json')")
-        }.standardOutput.asText.get().trim(),
-        "../android"
+    providers.exec {
+        workingDir(rootDir)
+        commandLine("node", "--print", "require.resolve('react-native/package.json')")
+    }.standardOutput.asText.get().trim(),
+    "../android"
 )
 
 allprojects {
     repositories {
-        maven { url("$rootDir/../node_modules/expo/android/maven") }   // ← ESTA LÍNEA, NO LA ANTERIOR
+        maven { url("$rootDir/../node_modules/expo/android/maven") }
         maven { url(reactNativeAndroidDir) }
         google()
         mavenCentral()
