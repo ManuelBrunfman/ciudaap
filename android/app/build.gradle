@@ -2,32 +2,26 @@
 
 apply plugin: "com.android.application"
 
-def projectRoot = rootDir.getAbsoluteFile().getParentFile().getAbsolutePath()
-
 android {
     ndkVersion rootProject.ext.ndkVersion
     buildToolsVersion rootProject.ext.buildToolsVersion
     compileSdkVersion rootProject.ext.compileSdkVersion
 
-defaultConfig {
-    applicationId "com.labancaria.Ciudapp"
-    minSdkVersion rootProject.ext.minSdkVersion
-    targetSdkVersion rootProject.ext.targetSdkVersion
-    versionCode 1
-    versionName "1.0.0"
-}
-
-
-    // Acá va el resto de la configuración (signingConfigs, buildTypes, etc)
-    // Si tenés dudas, subí tu archivo entero y te lo completo exacto.
+    defaultConfig {
+        applicationId "com.labancaria.Ciudapp"   // <--- Tu package
+        minSdkVersion rootProject.ext.minSdkVersion
+        targetSdkVersion rootProject.ext.targetSdkVersion
+        versionCode 1
+        versionName "1.0.0"
+    }
+    // ... tu config (signingConfigs, buildTypes, etc.)
 }
 
 dependencies {
     implementation("com.facebook.react:react-android")
-
-    // Agregá el resto de tus dependencias como corresponda (Fresco, Hermes, etc.)
+    // ... el resto de tus dependencias de RN
 }
 
-// PONÉ ESTO AL FINAL (no arriba)
+// ESTO SÓLO ABAJO DE TODO
 apply plugin: "com.facebook.react"
 apply plugin: "com.google.gms.google-services"
