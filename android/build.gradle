@@ -1,3 +1,5 @@
+// RUTA: android/build.gradle
+
 buildscript {
     repositories {
         google()
@@ -5,9 +7,18 @@ buildscript {
     }
     dependencies {
         classpath "com.google.gms:google-services:4.4.1"
-        classpath "com.android.tools.build:gradle:8.5.0"
+        classpath "com.android.tools.build:gradle:8.7.0"
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:1.9.24"
     }
+}
+
+// Versiones globales
+ext {
+    buildToolsVersion = "35.0.0"
+    minSdkVersion = 24
+    compileSdkVersion = 35
+    targetSdkVersion = 35
+    ndkVersion = "27.1.12297006"
 }
 
 def reactNativeAndroidDir = new File(
