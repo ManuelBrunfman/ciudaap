@@ -1,8 +1,5 @@
-// RUTA: android/build.gradle
-
 buildscript {
     repositories {
-        maven { url("$rootDir/../node_modules/expo/android/maven") }
         google()
         mavenCentral()
     }
@@ -23,13 +20,9 @@ def reactNativeAndroidDir = new File(
 
 allprojects {
     repositories {
-        maven { url("$rootDir/../node_modules/expo/android/maven") }
         maven { url(reactNativeAndroidDir) }
         google()
         mavenCentral()
         maven { url "https://www.jitpack.io" }
     }
 }
-
-apply plugin: "expo-root-project"
-apply plugin: "com.facebook.react.rootproject"
