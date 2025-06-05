@@ -1,6 +1,6 @@
 buildscript {
     repositories {
-        maven { url("$rootDir/../node_modules/expo/package/dist/maven") }  // <-- AGREGADO
+        maven { url("$rootDir/../node_modules/expo/android/maven") }   // ← ESTA LÍNEA, NO LA ANTERIOR
         google()
         mavenCentral()
     }
@@ -21,7 +21,7 @@ def reactNativeAndroidDir = new File(
 
 allprojects {
     repositories {
-        maven { url("$rootDir/../node_modules/expo/package/dist/maven") }  // <-- AGREGADO
+        maven { url("$rootDir/../node_modules/expo/android/maven") }   // ← ESTA LÍNEA, NO LA ANTERIOR
         maven { url(reactNativeAndroidDir) }
         google()
         mavenCentral()
