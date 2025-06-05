@@ -3,26 +3,31 @@ buildscript {
     repositories {
         google()
         mavenCentral()
+
+        // 👉 repositorio local con todos los artefactos de React Native, incluido el plugin
+        maven { url("$rootDir/../node_modules/react-native/android") }
     }
     dependencies {
         classpath 'com.google.gms:google-services:4.4.1'
         classpath 'com.android.tools.build:gradle:8.5.0'
-        classpath 'com.facebook.react:react-native-gradle-plugin:0.79.2'
         classpath 'org.jetbrains.kotlin:kotlin-gradle-plugin:1.9.24'
+
+        // usa la versión que viene dentro de node_modules/react-native
+        classpath 'com.facebook.react:react-native-gradle-plugin'
     }
 }
 
 def reactNativeAndroidDir = new File(
         providers.exec {
             workingDir(rootDir)
-            commandLine("node", "--print", "require.resolve('react-native/package.json')")
+            commandLine("node", "--print", "require.resolve(\"react-native/package.json\")")
         }.standardOutput.asText.get().trim(),
         "../android"
 )
 
 allprojects {
     repositories {
-        maven { url(reactNativeAndroidDir) }
+        maven { url(reactNativeAndroidDir) }   // RN AARs
         google()
         mavenCentral()
         maven { url 'https://www.jitpack.io' }
