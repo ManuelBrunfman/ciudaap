@@ -2,13 +2,23 @@
 
 buildscript {
     repositories {
+        // 1️⃣ Repos oficiales primero
         google()
         mavenCentral()
+
+        // 2️⃣ Repos locales de React Native
+        maven { url("$rootDir/../node_modules/react-native/packages/react-native-gradle-plugin") }
+        maven { url("$rootDir/../node_modules/react-native/android") }
+
+        // 3️⃣ (Opcional) tu Artifactory interno, si lo necesitás
+        // maven { url "http://10.4.0.201:8081/artifactory/libs-release" }
     }
     dependencies {
         classpath "com.google.gms:google-services:4.4.1"
         classpath "com.android.tools.build:gradle:8.5.0"
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:1.9.24"
+
+        // usa la versión publicada junto a React Native 0.79.2
         classpath "com.facebook.react:react-native-gradle-plugin:0.79.2"
     }
 }
