@@ -1,15 +1,16 @@
 {
   "project_info": {
     "project_number": "81378678746",
+    "firebase_url": "https://la-bancaria-web-default-rtdb.firebaseio.com",
     "project_id": "la-bancaria-web",
     "storage_bucket": "la-bancaria-web.firebasestorage.app"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:81378678746:android:f51780685ee6be2ad112e3",
+        "mobilesdk_app_id": "1:81378678746:android:d2351855019e0b33d112e3",
         "android_client_info": {
-          "package_name": "com.labancaria.Ciudapp"
+          "package_name": "com.labancaria.bancapp"
         }
       },
       "oauth_client": [

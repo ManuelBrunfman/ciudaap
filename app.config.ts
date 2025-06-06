@@ -1,20 +1,20 @@
+// app.config.ts
 import 'dotenv/config';
 import { ExpoConfig, ConfigContext } from '@expo/config';
 
 export default (_: ConfigContext): ExpoConfig => ({
   /* ─── Básicos ─────────────────────────────── */
-  name: 'Ciudaapp',
+  name: 'BancApp',
   slug: 'ciudaapp',
   owner: 'manubrunfman',
   description:
-    'Una aplicación para gestionar beneficios bancarios y servicios de la banca ciudadana.',
+    'Una aplicación de lxs trabajadorxs del Banco Ciudad.',
   version: '1.0.0',
   orientation: 'portrait',
   userInterfaceStyle: 'light',
 
   /* ─── Expo / React Native ─────────────────── */
-  sdkVersion: '53.0.0',
-  newArchEnabled: false, // RN Firebase aún no soporta la New Architecture
+  newArchEnabled: false,
 
   /* ─── Icono & Splash ─────────────────────── */
   icon: './assets/icon.png',
@@ -28,11 +28,11 @@ export default (_: ConfigContext): ExpoConfig => ({
   /* ─── iOS & Android ───────────────────────── */
   ios: {
     supportsTablet: true,
-    bundleIdentifier: 'com.labancaria.Ciudapp',
-    // googleServicesFile: './GoogleService-Info.plist', // Descomenta cuando lo tengas
+    bundleIdentifier: 'com.labancaria.bancapp',
+    // googleServicesFile: './GoogleService-Info.plist',
   },
   android: {
-    package: 'com.labancaria.Ciudapp',
+    package: 'com.labancaria.bancapp',
     adaptiveIcon: {
       foregroundImage: './assets/adaptive-icon.png',
       backgroundColor: '#ffffff',
@@ -52,7 +52,8 @@ export default (_: ConfigContext): ExpoConfig => ({
     EXPO_PUBLIC_FIREBASE_API_KEY: process.env.EXPO_PUBLIC_FIREBASE_API_KEY,
     EXPO_PUBLIC_FIREBASE_AUTH_DOMAIN: process.env.EXPO_PUBLIC_FIREBASE_AUTH_DOMAIN,
     EXPO_PUBLIC_FIREBASE_PROJECT_ID: process.env.EXPO_PUBLIC_FIREBASE_PROJECT_ID,
-    EXPO_PUBLIC_FIREBASE_STORAGE_BUCKET: process.env.EXPO_PUBLIC_FIREBASE_STORAGE_BUCKET,
+    EXPO_PUBLIC_FIREBASE_STORAGE_BUCKET:
+      process.env.EXPO_PUBLIC_FIREBASE_STORAGE_BUCKET,
     EXPO_PUBLIC_FIREBASE_MESSAGING_SENDER_ID:
       process.env.EXPO_PUBLIC_FIREBASE_MESSAGING_SENDER_ID,
     EXPO_PUBLIC_FIREBASE_APP_ID: process.env.EXPO_PUBLIC_FIREBASE_APP_ID,
