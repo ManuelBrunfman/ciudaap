@@ -1,18 +1,25 @@
-# --- EXISTENTE + ajustes ---------------------------------
-
-# dependencias
+# Dependencias JS
 node_modules/
+package-lock.json
+yarn.lock
 
 # Expo
 .expo/
+.expo-shared/
 dist/
 web-build/
 expo-env.d.ts
 
-# Directorios y caches nativos
+# Carpetas nativas (Prebuild / EAS)
+android/
+ios/
+
+# Cachés de Android/iOS
 android/.gradle/
 android/app/build/
 ios/build/
+ios/Pods/
+ios/Podfile.lock
 
 # Claves y binarios sensibles
 *.orig.*
@@ -31,25 +38,21 @@ npm-debug.*
 yarn-debug.*
 yarn-error.*
 
-# macOS
+# macOS y otros temporales
 .DS_Store
 *.pem
 
 # Variables de entorno
 .env
 *.env
-.env*.local
-google-services.json          # ← Firebase Android
-GoogleService-Info.plist      # ← Firebase iOS (cuando lo uses)
+.env.*.local
+google-services.json
+GoogleService-Info.plist
 
 # TypeScript
 *.tsbuildinfo
 
-# Service accounts
+# Service accounts (Backend)
 scripts/serviceAccountKey.json
 
-# ---- eliminá el duplicado (estaba dos veces) ------------
 proyecto.json
-
-node_modules/
-
