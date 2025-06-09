@@ -11,12 +11,11 @@ import {
   TextInput,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import firestore from '@react-native-firebase/firestore';
+import { getFirestore, collection, getDocs } from '@react-native-firebase/firestore';
 import { useNavigation } from '@react-navigation/native';
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import type { RootStackParamList } from '../../navigation/RootStackParamList';
+import type { RootStackParamList } from '../../types/RootStackParamList';
 
-// Definición de la interfaz para un Beneficio
 interface Beneficio {
   titulo: string;
   link: string;
@@ -25,35 +24,32 @@ interface Beneficio {
   provincia?: string;
 }
 
+type NavProp = NativeStackNavigationProp<RootStackParamList, 'BenefitDetail'>;
+
 const BenefitsListScreen: React.FC = () => {
-  // Estados para los datos y el manejo de la UI
-  const [beneficios, setBeneficios] = useState<Beneficio[]>([]); // Todos los beneficios cargados
-  const [filteredBeneficios, setFilteredBeneficios] = useState<Beneficio[]>([]); // Beneficios después de aplicar filtros
-  const [loading, setLoading] = useState(true); // Indica si los datos están cargando
-  const [error, setError] = useState<string | null>(null); // Mensaje de error si la carga falla
+  const [beneficios, setBeneficios] = useState<Beneficio[]>([]);
+  const [filteredBeneficios, setFilteredBeneficios] = useState<Beneficio[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
-  // Estados para los criterios de búsqueda y filtro
-  const [search, setSearch] = useState(''); // Texto de búsqueda
-  const [selectedCategoria, setSelectedCategoria] = useState<string | null>(null); // Categoría seleccionada para filtrar
-  const [selectedProvincia, setSelectedProvincia] = useState<string | null>(null); // Provincia seleccionada para filtrar
+  const [search, setSearch] = useState('');
+  const [selectedCategoria, setSelectedCategoria] = useState<string | null>(null);
+  const [selectedProvincia, setSelectedProvincia] = useState<string | null>(null);
 
-  // Estados para las listas únicas de categorías y provincias (para los botones de filtro)
   const [categorias, setCategorias] = useState<string[]>([]);
   const [provincias, setProvincias] = useState<string[]>([]);
 
-  // Hook de navegación de React Navigation
-  const navigation =
-    useNavigation<NativeStackNavigationProp<RootStackParamList, 'BenefitsList'>>();
+  const navigation = useNavigation<NavProp>();
 
-  // Efecto para cargar los beneficios desde Firestore al inicio
   useEffect(() => {
     const loadBeneficios = async () => {
+      setLoading(true);
       try {
-        const snap = await firestore().collection('beneficios').get();
+        const db = getFirestore();
+        const snap = await getDocs(collection(db, 'beneficios'));
         const data = snap.docs.map(d => d.data() as Beneficio);
         setBeneficios(data);
 
-        // Extrae categorías y provincias únicas y las ordena
         setCategorias(
           Array.from(new Set(data.map(i => i.categoria).filter(Boolean) as string[])).sort()
         );
@@ -61,40 +57,26 @@ const BenefitsListScreen: React.FC = () => {
           Array.from(new Set(data.map(i => i.provincia).filter(Boolean) as string[])).sort()
         );
       } catch (e) {
-        // Manejo de errores en la carga
-        console.error("Error al cargar beneficios:", e);
-        setError('No se pudieron cargar los beneficios. Por favor, inténtalo de nuevo más tarde.');
+        console.error('Error al cargar beneficios:', e);
+        setError('No se pudieron cargar los beneficios. Intenta más tarde.');
       } finally {
-        setLoading(false); // Finaliza el estado de carga
+        setLoading(false);
       }
     };
     loadBeneficios();
-  }, []); // Se ejecuta solo una vez al montar el componente
+  }, []);
 
-  // Efecto para aplicar los filtros cada vez que cambian los criterios de búsqueda o los beneficios originales
   useEffect(() => {
-    let result = [...beneficios]; // Copia los beneficios originales para aplicar filtros
-
-    // Aplica filtro por texto de búsqueda (sin distinción de mayúsculas/minúsculas)
+    let result = [...beneficios];
     if (search.trim()) {
-      const lowerCaseSearch = search.toLowerCase();
-      result = result.filter(i => i.titulo.toLowerCase().includes(lowerCaseSearch));
+      const ql = search.toLowerCase();
+      result = result.filter(i => i.titulo.toLowerCase().includes(ql));
     }
+    if (selectedCategoria) result = result.filter(i => i.categoria === selectedCategoria);
+    if (selectedProvincia) result = result.filter(i => i.provincia === selectedProvincia);
+    setFilteredBeneficios(result);
+  }, [search, selectedCategoria, selectedProvincia, beneficios]);
 
-    // Aplica filtro por categoría seleccionada
-    if (selectedCategoria) {
-      result = result.filter(i => i.categoria === selectedCategoria);
-    }
-
-    // Aplica filtro por provincia seleccionada
-    if (selectedProvincia) {
-      result = result.filter(i => i.provincia === selectedProvincia);
-    }
-
-    setFilteredBeneficios(result); // Actualiza la lista de beneficios filtrados
-  }, [search, selectedCategoria, selectedProvincia, beneficios]); // Dependencias del efecto
-
-  // Función para renderizar cada elemento en la FlatList
   const renderItem = ({ item }: { item: Beneficio }) => (
     <TouchableOpacity
       style={styles.card}
@@ -107,7 +89,6 @@ const BenefitsListScreen: React.FC = () => {
     </TouchableOpacity>
   );
 
-  // Muestra un indicador de carga si los datos están cargando
   if (loading) {
     return (
       <SafeAreaView style={styles.loadingContainer}>
@@ -117,7 +98,6 @@ const BenefitsListScreen: React.FC = () => {
     );
   }
 
-  // Muestra un mensaje de error si la carga falló
   if (error) {
     return (
       <SafeAreaView style={styles.loadingContainer}>
@@ -126,10 +106,9 @@ const BenefitsListScreen: React.FC = () => {
     );
   }
 
-  // Renderiza la interfaz principal del componente
   return (
     <SafeAreaView style={styles.container}>
-      {/* Sección de búsqueda */}
+      {/* Búsqueda */}
       <View style={styles.searchContainer}>
         <TextInput
           style={styles.searchInput}
@@ -140,7 +119,7 @@ const BenefitsListScreen: React.FC = () => {
         />
       </View>
 
-      {/* Sección de filtros por Categoría */}
+      {/* Filtros por Categoría */}
       <View style={styles.filterSection}>
         <Text style={styles.filterTitle}>Categoría:</Text>
         <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.filterScroll}>
@@ -162,7 +141,7 @@ const BenefitsListScreen: React.FC = () => {
         </ScrollView>
       </View>
 
-      {/* Sección de filtros por Provincia */}
+      {/* Filtros por Provincia */}
       <View style={styles.filterSection}>
         <Text style={styles.filterTitle}>Provincia:</Text>
         <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.filterScroll}>
@@ -184,18 +163,17 @@ const BenefitsListScreen: React.FC = () => {
         </ScrollView>
       </View>
 
-      {/* Mensaje si no hay beneficios filtrados */}
+      {/* Mensaje si no hay resultados */}
       {filteredBeneficios.length === 0 && !loading && !error && (
         <View style={styles.noResultsContainer}>
           <Text style={styles.noResultsText}>No se encontraron beneficios con los filtros aplicados.</Text>
         </View>
       )}
 
-      {/* Lista de beneficios filtrados */}
+      {/* Lista */}
       <FlatList
         data={filteredBeneficios}
         renderItem={renderItem}
-        // Se recomienda usar un ID único si está disponible, si no, el índice con el título puede servir
         keyExtractor={(item, idx) => `${item.titulo}-${idx}-${item.link}`}
         contentContainerStyle={styles.list}
       />
@@ -205,12 +183,11 @@ const BenefitsListScreen: React.FC = () => {
 
 export default BenefitsListScreen;
 
-// Estilos del componente
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 12,
-    backgroundColor: '#f0f2f5', // Un color de fondo suave
+    backgroundColor: '#f0f2f5',
   },
   loadingContainer: {
     flex: 1,
@@ -251,7 +228,7 @@ const styles = StyleSheet.create({
     color: '#333',
   },
   filterScroll: {
-    paddingVertical: 4, // Espacio vertical para los botones
+    paddingVertical: 4,
   },
   filterButton: {
     paddingVertical: 8,
@@ -285,26 +262,26 @@ const styles = StyleSheet.create({
     marginVertical: 6,
     borderRadius: 10,
     overflow: 'hidden',
-    elevation: 3, // Sombra para Android
-    shadowColor: '#000', // Sombra para iOS
+    elevation: 3,
+    shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
     shadowRadius: 3,
   },
   cardImage: {
-    width: 100, // Ajustado ligeramente para mejor visualización
-    height: 100, // Ajustado ligeramente para mejor visualización
-    borderRadius: 10, // Bordes redondeados para la imagen
+    width: 100,
+    height: 100,
+    borderRadius: 10,
     overflow: 'hidden',
   },
   cardContent: {
     flex: 1,
     padding: 12,
-    justifyContent: 'center', // Centra el contenido verticalmente
+    justifyContent: 'center',
   },
   cardTitle: {
-    fontSize: 17, // Ligeramente más grande
-    fontWeight: '700', // Más negrita
+    fontSize: 17,
+    fontWeight: '700',
     color: '#333',
   },
   noResultsContainer: {

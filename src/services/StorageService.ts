@@ -1,20 +1,46 @@
-// CAMBIO: import correcto para Storage en React Native Firebase
-import storage from '@react-native-firebase/storage';
+// src/services/StorageService.ts
+
+/**
+ * Servicio de almacenamiento usando la API modular de React Native Firebase Storage.
+ */
+
+import {
+  getStorage,
+  ref,
+  uploadBytes,
+  getDownloadURL,
+} from '@react-native-firebase/storage';
 
 class StorageService {
-  // Sube un archivo y devuelve la URL de descarga
-  async uploadFile(path: string, file: any) {
-    const ref = storage().ref(path);
-    await ref.putFile(file.uri);
-    return await ref.getDownloadURL();
+  /**
+   * Sube un archivo local (URI) a Firebase Storage y devuelve la URL de descarga.
+   * @param path Ruta en el bucket donde guardar el archivo.
+   * @param file Objeto con propiedad `uri` apuntando al archivo local.
+   */
+  async uploadFile(path: string, file: { uri: string }) {
+    const storage = getStorage();
+    const storageRef = ref(storage, path);
+
+    // fetch convierte URI en Blob para uploadBytes
+    const response = await fetch(file.uri);
+    const blob = await response.blob();
+
+    // Subimos el blob
+    await uploadBytes(storageRef, blob);
+
+    // Devolvemos la URL pública
+    return getDownloadURL(storageRef);
   }
 
-  // Devuelve la URL de descarga de un archivo existente
+  /**
+   * Obtiene la URL de descarga de un archivo ya existente en Firebase Storage.
+   * @param path Ruta en el bucket (misma que usaste en upload).
+   */
   async getFileUrl(path: string) {
-    return await storage().ref(path).getDownloadURL();
+    const storage = getStorage();
+    const storageRef = ref(storage, path);
+    return getDownloadURL(storageRef);
   }
-
-  // Otros métodos relacionados a storage pueden agregarse aquí
 }
 
 export default new StorageService();

@@ -1,17 +1,25 @@
-// CAMBIO: import correcto para Firestore en React Native Firebase
-import firestore from '@react-native-firebase/firestore';
+// src/services/BenefitsService.ts
+
+// 👉 Importamos la API modular de Firestore
+import { getFirestore, collection, getDocs } from '@react-native-firebase/firestore';
 
 class BenefitsService {
-  // Devuelve todos los beneficios de la colección 'benefits'
+  /**
+   * Obtiene la lista completa de beneficios desde Firestore
+   */
   async getBenefits() {
-    const snapshot = await firestore().collection('benefits').get();
+    const db = getFirestore();
+    const benefitsCol = collection(db, 'benefits');
+
+    // Ejecutamos la query modular
+    const snapshot = await getDocs(benefitsCol);
+
+    // Mapeamos los documentos a un array de beneficios
     return snapshot.docs.map(doc => ({
       id: doc.id,
       ...doc.data(),
     }));
   }
-
-  // Otros métodos relacionados a beneficios podrían agregarse aquí
 }
 
 export default new BenefitsService();
