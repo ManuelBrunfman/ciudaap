@@ -1,42 +1,36 @@
 const fs = require('fs');
 const path = require('path');
 
-function projectToJson(projectPath, ignoreDirs = ['node_modules', '.git', 'build', 'dist']) {
-  const result = { files: {} };
-  
-  function processDir(dirPath, currentObj) {
-    const items = fs.readdirSync(dirPath);
-    
-    for (const item of items) {
-      const itemPath = path.join(dirPath, item);
-      const stats = fs.statSync(itemPath);
-      const relativePath = path.relative(projectPath, itemPath);
-      
-      if (stats.isDirectory()) {
-        if (ignoreDirs.includes(item)) continue;
-        
-        currentObj[item] = { files: {} };
-        processDir(itemPath, currentObj[item].files);
-      } else {
-        try {
-          // Solo incluir archivos de código y configuración
-          const ext = path.extname(item).toLowerCase();
-          if (['.js', '.jsx', '.ts', '.tsx', '.json', '.css', '.scss', '.html'].includes(ext)) {
-            const content = fs.readFileSync(itemPath, 'utf8');
-            currentObj[item] = content;
-          }
-        } catch (error) {
-          console.error(`Error reading file ${itemPath}:`, error);
-        }
-      }
+function recorrerDirectorio(dir) {
+  const resultado = [];
+  const items = fs.readdirSync(dir);
+  for (const item of items) {
+    const fullPath = path.join(dir, item);
+    const stats = fs.statSync(fullPath);
+    if (stats.isDirectory()) {
+      resultado.push({
+        name: item,
+        type: 'directory',
+        contents: recorrerDirectorio(fullPath),
+      });
+    } else {
+      resultado.push({
+        name: item,
+        type: 'file',
+        content: fs.readFileSync(fullPath, 'utf8'),
+      });
     }
   }
-  
-  processDir(projectPath, result.files);
-  return result;
+  return resultado;
 }
 
-// Uso
-const projectPath = '.';
-const projectJson = projectToJson(projectPath);
-fs.writeFileSync('proyecto.json', JSON.stringify(projectJson, null, 2));
+// Cambiá './' por la ruta raíz de tu proyecto si querés
+const estructura = {
+  name: 'mi_proyecto',
+  type: 'directory',
+  contents: recorrerDirectorio('./'),
+};
+
+fs.writeFileSync('proyecto_completo.json', JSON.stringify(estructura, null, 2), 'utf8');
+
+console.log('¡Listo! Proyecto convertido a JSON completo.');

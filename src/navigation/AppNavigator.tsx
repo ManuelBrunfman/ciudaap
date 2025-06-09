@@ -1,31 +1,18 @@
+// src/navigation/AppNavigator.tsx
+
 import React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
 import TabNavigator from './TabNavigator';
 import BenefitDetailScreen from '../screens/benefits/BenefitDetailScreen';
 import NewsDetailScreen from '../screens/news/NewsDetailScreen';
-import { View, Text } from 'react-native'; // Import Text and View
+import { View, Text } from 'react-native';
 
-// Ejemplo de interfaz para la noticia
-export interface NewsItem {
-  id: string;
-  title: string;
-  content: string;
-  img?: string;
-  link?: string; // Propiedad agregada para la URL de la noticia
-  createdAt: any;
-}
-
-// Definimos el stack con los parámetros
-export type RootStackParamList = {
-  // En Main vive tu TabNavigator (pantallas principales)
-  Main: undefined;
-
-  // BenefitDetail recibe un 'url' para la WebView
-  BenefitDetail: { url: string };
-
-  // NewsDetail recibe un objeto newsItem
-  NewsDetail: { newsItem: NewsItem };
-};
+// ✅ Import centralizado del tipo RootStackParamList
+// Si moviste el archivo a types:
+// import { RootStackParamList } from '../types/RootStackParamList';
+// Si lo dejaste en navigation:
+// import { RootStackParamList } from './RootStackParamList';
+import { RootStackParamList } from '../types/RootStackParamList'; // AJUSTÁ SEGÚN TU ESTRUCTURA
 
 const Stack = createStackNavigator<RootStackParamList>();
 
@@ -51,3 +38,7 @@ const AppNavigator: React.FC = () => {
 };
 
 export default AppNavigator;
+
+/**
+ * Si usás RootStackParamList en otros navegadores, siempre importalo de la misma fuente.
+ */
