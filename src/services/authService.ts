@@ -1,31 +1,55 @@
-// CAMBIO: imports correctos para Auth y Firestore en React Native Firebase
-import auth from '@react-native-firebase/auth';
-import firestore from '@react-native-firebase/firestore';
+// src/services/authService.ts
+
+/**
+ * Servicio de autenticación usando la API modular de React Native Firebase.
+ * Migrado desde auth().signInWith… y firestore().collection().
+ */
+
+import {
+  getAuth,
+  signInWithEmailAndPassword,
+  createUserWithEmailAndPassword,
+  signOut as firebaseSignOut,
+} from '@react-native-firebase/auth';
+import {
+  getFirestore,
+  doc,
+  setDoc,
+} from '@react-native-firebase/firestore';
 
 class AuthService {
-  // Iniciar sesión
-  signIn(email: string, password: string) {
-    return auth().signInWithEmailAndPassword(email, password);
+  /**
+   * Inicia sesión con email y contraseña.
+   */
+  async signIn(email: string, password: string) {
+    const auth = getAuth();
+    return signInWithEmailAndPassword(auth, email, password);
   }
 
-  // Registro de usuario + creación en Firestore
-  async signUp(email: string, password: string, additionalData?: any) {
-    const userCredential = await auth().createUserWithEmailAndPassword(email, password);
-    if (userCredential.user && additionalData) {
-      await firestore()
-        .collection('users')
-        .doc(userCredential.user.uid)
-        .set(additionalData);
+  /**
+   * Crea un nuevo usuario y, si se proporciona additionalData, lo guarda en Firestore.
+   */
+  async signUp(email: string, password: string, additionalData?: Record<string, any>) {
+    const auth = getAuth();
+    const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+
+    // Si recibimos datos adicionales, los guardamos en Firestore
+    if (additionalData && userCredential.user) {
+      const db = getFirestore();
+      const userDoc = doc(db, 'users', userCredential.user.uid);
+      await setDoc(userDoc, additionalData);
     }
+
     return userCredential;
   }
 
-  // Cerrar sesión
-  signOut() {
-    return auth().signOut();
+  /**
+   * Cierra la sesión del usuario actual.
+   */
+  async signOut() {
+    const auth = getAuth();
+    return firebaseSignOut(auth);
   }
-
-  // Otros métodos de auth pueden agregarse aquí
 }
 
 export default new AuthService();

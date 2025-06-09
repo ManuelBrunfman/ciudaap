@@ -1,20 +1,32 @@
-// CAMBIO: import correcto para Firestore en React Native Firebase
-import firestore from '@react-native-firebase/firestore';
+// src/services/NewsService.ts
+
+// 👉 Importación de la API modular de Firestore
+import {
+  getFirestore,
+  collection,
+  query,
+  orderBy,
+  getDocs,
+} from '@react-native-firebase/firestore';
 
 class NewsService {
-  // Devuelve todas las noticias, ordenadas por fecha de creación descendente
+  /**
+   * Obtiene todas las noticias ordenadas por fecha de creación descendente.
+   */
   async getAllNews() {
-    const snapshot = await firestore()
-      .collection('news')
-      .orderBy('createdAt', 'desc')
-      .get();
+    const db = getFirestore();
+    // Referencia a la colección “news”
+    const newsCol = collection(db, 'news');
+    // Creamos la query modular con orderBy
+    const q = query(newsCol, orderBy('createdAt', 'desc'));
+    // Ejecutamos la query
+    const snapshot = await getDocs(q);
+    // Mapear cada documento a un objeto JS
     return snapshot.docs.map(doc => ({
       id: doc.id,
       ...doc.data(),
     }));
   }
-
-  // Otros métodos relacionados a noticias pueden agregarse aquí
 }
 
 export default new NewsService();
