@@ -5,12 +5,19 @@ import React, {
   ReactNode,
   useContext,
 } from 'react';
-import auth, { FirebaseAuthTypes } from '@react-native-firebase/auth';
+// Modular API
+import {
+  getAuth,
+  onAuthStateChanged,
+  signInWithEmailAndPassword,
+  createUserWithEmailAndPassword,
+  signOut as firebaseSignOut,
+} from '@react-native-firebase/auth';
+import type { FirebaseAuthTypes } from '@react-native-firebase/auth';
 
 interface AuthContextData {
   user: FirebaseAuthTypes.User | null;
   loading: boolean;
-  // Alias para mantener compatibilidad con código viejo
   login(email: string, password: string): Promise<FirebaseAuthTypes.UserCredential>;
   signIn(email: string, password: string): Promise<FirebaseAuthTypes.UserCredential>;
   signUp(email: string, password: string): Promise<FirebaseAuthTypes.UserCredential>;
@@ -20,10 +27,10 @@ interface AuthContextData {
 export const AuthContext = createContext<AuthContextData>({
   user: null,
   loading: true,
-  signIn: async () => auth().signInWithEmailAndPassword('', ''),
-  login: async () => auth().signInWithEmailAndPassword('', ''),
-  signUp: async () => auth().createUserWithEmailAndPassword('', ''),
-  signOut: async () => auth().signOut(),
+  signIn: async () => Promise.reject(),
+  login: async () => Promise.reject(),
+  signUp: async () => Promise.reject(),
+  signOut: async () => Promise.reject(),
 });
 
 export const useAuth = () => useContext(AuthContext);
@@ -33,23 +40,31 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const unsub = auth().onAuthStateChanged(u => {
+    const auth = getAuth();
+    const unsub = onAuthStateChanged(auth, (u) => {
       setUser(u);
       setLoading(false);
     });
     return unsub;
   }, []);
 
-  const signIn = (email: string, password: string) =>
-    auth().signInWithEmailAndPassword(email, password);
+  const signIn = (email: string, password: string) => {
+    const auth = getAuth();
+    return signInWithEmailAndPassword(auth, email, password);
+  };
 
-  // mantenemos alias login() → signIn()
+  // Alias para login() → signIn()
   const login = signIn;
 
-  const signUp = (email: string, password: string) =>
-    auth().createUserWithEmailAndPassword(email, password);
+  const signUp = (email: string, password: string) => {
+    const auth = getAuth();
+    return createUserWithEmailAndPassword(auth, email, password);
+  };
 
-  const signOut = () => auth().signOut();
+  const signOut = () => {
+    const auth = getAuth();
+    return firebaseSignOut(auth);
+  };
 
   return (
     <AuthContext.Provider

@@ -1,4 +1,3 @@
-// src/screens/auth/RegisterScreen.tsx
 import React, { useState } from 'react';
 import {
   View,
@@ -9,7 +8,8 @@ import {
   Alert,
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import auth from '@react-native-firebase/auth';
+// Modular API
+import { getAuth, createUserWithEmailAndPassword, updateProfile } from '@react-native-firebase/auth';
 
 const RegisterScreen: React.FC = () => {
   const navigation = useNavigation();
@@ -21,11 +21,13 @@ const RegisterScreen: React.FC = () => {
 
   const handleRegister = async () => {
     try {
-      const cred = await auth().createUserWithEmailAndPassword(
+      const auth = getAuth();
+      const cred = await createUserWithEmailAndPassword(
+        auth,
         email.trim(),
         password
       );
-      await cred.user.updateProfile({ displayName });
+      await updateProfile(cred.user, { displayName });
 
       Alert.alert('Registro exitoso', 'Ahora puedes iniciar sesión.');
       // @ts-ignore

@@ -53,3 +53,8 @@ yarn-error.*
 scripts/serviceAccountKey.json
 
 proyecto.json
+
+# Firebase
+google-services.json
+GoogleService-Info.plist
+
