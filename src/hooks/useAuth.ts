@@ -1,6 +1,6 @@
-// src/hooks/useAuth.ts
 import { useContext } from 'react';
-import auth from '@react-native-firebase/auth';
+// Modular API
+import { getAuth, updateProfile } from '@react-native-firebase/auth';
 import { AuthContext } from '../context/AuthContext';
 
 /**
@@ -9,10 +9,10 @@ import { AuthContext } from '../context/AuthContext';
 export const useAuth = () => {
   const ctx = useContext(AuthContext);
 
-  /** Ejemplo extra: cambiar displayName */
+  /** Extra: cambiar displayName */
   const updateDisplayName = async (displayName: string) => {
-    const current = auth().currentUser;
-    if (current) await current.updateProfile({ displayName });
+    const current = getAuth().currentUser;
+    if (current) await updateProfile(current, { displayName });
   };
 
   return { ...ctx, updateDisplayName } as const;
