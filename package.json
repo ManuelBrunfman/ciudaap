@@ -26,8 +26,11 @@
     "expo-dev-client": "~5.0.20",
     "expo-font": "~13.0.4",
     "expo-linear-gradient": "~14.0.2",
+    "expo-notifications": "~0.29.14",
     "expo-status-bar": "~2.0.1",
+    "firebase-admin": "^13.4.0",
     "lucide-react": "^0.477.0",
+    "node-fetch": "^3.3.2",
     "react": "18.3.1",
     "react-dom": "18.3.1",
     "react-hook-form": "^7.54.2",
@@ -39,8 +42,7 @@
     "react-native-web": "~0.19.13",
     "react-native-webview": "13.12.5",
     "yup": "^1.6.1",
-    "zustand": "^5.0.3",
-    "expo-notifications": "~0.29.14"
+    "zustand": "^5.0.3"
   },
   "devDependencies": {
     "@babel/core": "^7.25.2",

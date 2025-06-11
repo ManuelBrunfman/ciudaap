@@ -58,3 +58,8 @@ proyecto.json
 google-services.json
 GoogleService-Info.plist
 
+# Ignorar la carpeta de scripts (opcional, si no querés subir ningún script)
+scripts/
+
+# Ignorar la key de Firebase en cualquier parte del proyecto
+serviceAccountKey.json
