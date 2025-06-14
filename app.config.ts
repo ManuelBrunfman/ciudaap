@@ -37,7 +37,7 @@ export default (_: ConfigContext): ExpoConfig => ({
       foregroundImage: './assets/adaptive-icon.png',
       backgroundColor: '#ffffff',
     },
-    googleServicesFile: './google-services.json',
+googleServicesFile: './android/app/google-services.json',
   },
 
   /* ─── Plugins ─────────────────────────────── */
