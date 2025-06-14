@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "main": "index.ts",
   "scripts": {
-"postinstall": "mkdir -p android/app && echo -n \"$GOOGLE_SERVICES_JSON_BASE64\" | base64 --decode > android/app/google-services.json",
+"postinstall": "mkdir -p android/app && cp \"$GOOGLE_SERVICES_JSON\" android/app/google-services.json",
     "start": "node -r dotenv/config node_modules/expo/bin/cli.js start",
     "android": "expo run:android",
     "ios": "expo run:ios",
