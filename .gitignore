@@ -57,6 +57,9 @@ proyecto.json
 # Firebase
 google-services.json
 GoogleService-Info.plist
+android/app/google-services.json
+google-services.json.base64
+
 
 # Ignorar la carpeta de scripts (opcional, si no querés subir ningún script)
 scripts/
