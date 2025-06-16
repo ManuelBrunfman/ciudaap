@@ -11,6 +11,8 @@ expo-env.d.ts
 
 # Carpetas nativas (Prebuild / EAS)
 android/
+!android/app/google-services.json
+
 ios/
 
 # Cachés de Android/iOS
@@ -54,11 +56,15 @@ scripts/serviceAccountKey.json
 
 proyecto.json
 
-# Firebase
-google-services.json
-GoogleService-Info.plist
-android/app/google-services.json
-google-services.json.base64
+ # Firebase
+-# google-services.json
+-# GoogleService-Info.plist
+-# android/app/google-services.json
+-# google-services.json.base64
++google-services.json.base64
++# Mantener el plist de iOS excluido
++GoogleService-Info.plist
+
 
 
 # Ignorar la carpeta de scripts (opcional, si no querés subir ningún script)
