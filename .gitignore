@@ -11,8 +11,7 @@ expo-env.d.ts
 
 # Carpetas nativas (Prebuild / EAS)
 android/
-!android/app/google-services.json
-
+!android/app/google-services.json   # solo si tenés esa copia
 ios/
 
 # Cachés de Android/iOS
@@ -59,8 +58,10 @@ proyecto.json
 # Firebase
 google-services.json.base64
 GoogleService-Info.plist
+# 👇 ¡NO ignores la versión “real” en la raíz!
+#!google-services.json   <-- quedan comentadas o eliminadas
 
-# Ignorar la carpeta de scripts (opcional, si no querés subir ningún script)
+# Ignorar la carpeta de scripts (opcional)
 scripts/
 
 # Ignorar la key de Firebase en cualquier parte del proyecto
