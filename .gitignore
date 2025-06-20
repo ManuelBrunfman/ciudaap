@@ -1,69 +1,40 @@
-# Dependencias JS
+# Node and dependencies
 node_modules/
-yarn.lock
+package-lock.json
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
 
 # Expo
 .expo/
 .expo-shared/
-dist/
-web-build/
-expo-env.d.ts
 
-# Carpetas nativas (Prebuild / EAS)
-android/
-!android/app/google-services.json   # solo si tenés esa copia
-ios/
+# Logs and temp
+*.log
+*.tmp
 
-# Cachés de Android/iOS
-android/.gradle/
-android/app/build/
-ios/build/
-ios/Pods/
-ios/Podfile.lock
+# Environment files
+.env
+.env.*
 
-# Claves y binarios sensibles
-*.orig.*
-*.jks
-*.p8
-*.p12
-*.key
-*.mobileprovision
+# Firebase configs
+google-services.json
+google-services.json.*
+test.json
 *.keystore
 
-# Metro
-.metro-health-check*
-
-# Debug
-npm-debug.*
-yarn-debug.*
-yarn-error.*
-
-# macOS y otros temporales
+# IDEs and editors
+.idea/
+.vscode/
 .DS_Store
-*.pem
+Thumbs.db
 
-# Variables de entorno
-.env
-*.env
-.env.*.local
-
-# TypeScript
-*.tsbuildinfo
-
-# Service accounts (Backend)
-scripts/serviceAccountKey.json
-
-proyecto.json
-
-# Firebase
-google-services.json.base64
-GoogleService-Info.plist
-# 👇 ¡NO ignores la versión “real” en la raíz!
-#!google-services.json   <-- quedan comentadas o eliminadas
-
-# Ignorar la carpeta de scripts (opcional)
-scripts/
-
-# Ignorar la key de Firebase en cualquier parte del proyecto
-serviceAccountKey.json
+# Builds and artifacts
+build/
+dist/
 *.apk
+*.aab
+*.ipa
+
+# Scripts (optional)
+scripts/
