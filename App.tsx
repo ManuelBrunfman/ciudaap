@@ -1,4 +1,3 @@
-// App.tsx
 import React, { useEffect, useRef } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
@@ -7,7 +6,8 @@ import { AuthProvider, useAuth } from './src/context/AuthContext';
 import RootNavigator from './src/navigation/RootNavigator';
 import { View, Text, Alert, Vibration } from 'react-native';
 import * as Notifications from 'expo-notifications';
-import firestore from '@react-native-firebase/firestore';
+import { getFirestore, collection, doc, setDoc } from '@react-native-firebase/firestore';
+import { getApp } from '@react-native-firebase/app';
 
 Notifications.setNotificationHandler({
   handleNotification: async () => ({
@@ -33,13 +33,10 @@ function MainApp() {
       }
       const token = (await Notifications.getExpoPushTokenAsync()).data;
       try {
-        await firestore()
-          .collection('users')
-          .doc(user.uid)
-          .set(
-            { expoPushToken: token },
-            { merge: true }
-          );
+        const db = getFirestore(getApp());
+        const usersCollection = collection(db, 'users');
+        const userDocRef = doc(usersCollection, user.uid);
+        await setDoc(userDocRef, { expoPushToken: token }, { merge: true });
         console.log('Expo Push Token guardado en Firestore:', token);
       } catch (err) {
         console.error('Error guardando token en Firestore:', err);
@@ -51,14 +48,11 @@ function MainApp() {
 
   useEffect(() => {
     notificationListener.current = Notifications.addNotificationReceivedListener(notification => {
-      // Vibrar cada vez que se recibe una notificación en primer plano
       Vibration.vibrate();
-      // Podés descomentar para mostrar alerta:
-      // Alert.alert('¡Notificación!', notification.request.content.body);
     });
 
     responseListener.current = Notifications.addNotificationResponseReceivedListener(response => {
-      // Ejemplo: navegar a una pantalla específica o lógica extra
+      // Lógica adicional al responder a la notificación
     });
 
     return () => {
