@@ -66,3 +66,4 @@ scripts/
 
 # Ignorar la key de Firebase en cualquier parte del proyecto
 serviceAccountKey.json
+*.apk
