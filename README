@@ -120,11 +120,8 @@ BancaApp/
 
 * El tipo de navegación principal (`RootStackParamList`) está en:
 
-  ```
-  ```
-
+  ```typescript
 src/types/RootStackParamList.ts
-
 ```
 - Todos los navigators importan ese tipo para tipado seguro.
 
