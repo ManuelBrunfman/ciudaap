@@ -18,10 +18,15 @@ yarn-error.log*
 .env.*
 
 # Firebase configs
+# Config files
 google-services.json
 google-services.json.*
 test.json
 *.keystore
+
+# Service account credentials
+scripts/serviceAccountKey.json
+*.json.*
 
 # IDEs and editors
 .idea/
