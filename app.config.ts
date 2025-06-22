@@ -1,9 +1,11 @@
-/**
- * app.config.ts – configuración de Expo
+/*
+ * app.config.ts – Expo configuration
  * -------------------------------------------------
- *  • Forzamos compileSdk/targetSdk/buildTools mediante
- *    el plugin oficial `expo-build-properties`.
- *  • Mantiene todas las variables .env y plugins Firebase.
+ *   • Centralizes build settings (compileSdk, targetSdk, buildTools) via
+ *     the official `expo-build-properties` plugin.
+ *   • Keeps all Firebase + .env variables in one place.
+ *   • Secrets (google‑services.json / GoogleService‑Info.plist / keystore)
+ *     live under ./credentials/ and are **ignored** by Git.
  * -------------------------------------------------
  */
 
@@ -11,11 +13,11 @@ import 'dotenv/config';
 import { ExpoConfig, ConfigContext } from '@expo/config';
 
 export default (_: ConfigContext): ExpoConfig => ({
-  /* ──────────── Datos básicos ──────────── */
+  /* ──────────── Basic app info ──────────── */
   name: 'BancApp',
-  slug: 'ciudaapp',
+  slug: 'bancapp',                // unified slug
   owner: 'manubrunfman',
-  description: 'Una aplicación de lxs trabajadorxs del Banco Ciudad.',
+  description: 'Aplicación de lxs trabajadorxs del Banco Ciudad.',
   version: '1.0.0',
   orientation: 'portrait',
   userInterfaceStyle: 'light',
@@ -23,7 +25,7 @@ export default (_: ConfigContext): ExpoConfig => ({
   /* ───────── Expo / React Native ───────── */
   newArchEnabled: false,
 
-  /* ──────── Icono y pantalla splash ─────── */
+  /* ──────── Icons & splash ─────── */
   icon: './assets/icon.png',
   splash: {
     image: './assets/splash-icon.png',
@@ -36,7 +38,7 @@ export default (_: ConfigContext): ExpoConfig => ({
   ios: {
     supportsTablet: true,
     bundleIdentifier: 'com.labancaria.bancapp',
-    // googleServicesFile: './GoogleService-Info.plist',
+    googleServicesFile: './credentials/GoogleService-Info.plist',
   },
 
   /* ───────────────── Android ─────────────── */
@@ -46,7 +48,7 @@ export default (_: ConfigContext): ExpoConfig => ({
       foregroundImage: './assets/adaptive-icon.png',
       backgroundColor: '#ffffff',
     },
-    googleServicesFile: './google-services.json',
+    googleServicesFile: './credentials/google-services.json',
   },
 
   /* ───────────── Plugins ─────────────────── */
@@ -56,7 +58,6 @@ export default (_: ConfigContext): ExpoConfig => ({
     [
       'expo-build-properties',
       {
-        /**  <-- Ajustes de compilación que antes daban error  */
         android: {
           compileSdkVersion: 34,
           targetSdkVersion: 34,
@@ -72,10 +73,8 @@ export default (_: ConfigContext): ExpoConfig => ({
     EXPO_PUBLIC_FIREBASE_API_KEY: process.env.EXPO_PUBLIC_FIREBASE_API_KEY,
     EXPO_PUBLIC_FIREBASE_AUTH_DOMAIN: process.env.EXPO_PUBLIC_FIREBASE_AUTH_DOMAIN,
     EXPO_PUBLIC_FIREBASE_PROJECT_ID: process.env.EXPO_PUBLIC_FIREBASE_PROJECT_ID,
-    EXPO_PUBLIC_FIREBASE_STORAGE_BUCKET:
-      process.env.EXPO_PUBLIC_FIREBASE_STORAGE_BUCKET,
-    EXPO_PUBLIC_FIREBASE_MESSAGING_SENDER_ID:
-      process.env.EXPO_PUBLIC_FIREBASE_MESSAGING_SENDER_ID,
+    EXPO_PUBLIC_FIREBASE_STORAGE_BUCKET: process.env.EXPO_PUBLIC_FIREBASE_STORAGE_BUCKET,
+    EXPO_PUBLIC_FIREBASE_MESSAGING_SENDER_ID: process.env.EXPO_PUBLIC_FIREBASE_MESSAGING_SENDER_ID,
     EXPO_PUBLIC_FIREBASE_APP_ID: process.env.EXPO_PUBLIC_FIREBASE_APP_ID,
   },
 });
