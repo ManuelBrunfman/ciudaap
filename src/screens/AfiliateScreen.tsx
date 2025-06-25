@@ -1,115 +1,164 @@
 import React from 'react';
-import { View, TextInput, Button, Alert, StyleSheet } from 'react-native';
+import { View, Text, TextInput, Button, Alert, StyleSheet } from 'react-native';
 import { useForm, Controller } from 'react-hook-form';
-import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
-import { getFirestore, collection, addDoc, serverTimestamp } from '@react-native-firebase/firestore';
+import { yupResolver } from '@hookform/resolvers/yup';
+import firestore from '@react-native-firebase/firestore';
+import auth from '@react-native-firebase/auth';
 import { sendPushToAdmins } from '../services/sendPushToAdmins';
 
-interface FormData {
+/**
+ * Tipo del formulario
+ */
+type FormData = {
   nombreApellido: string;
   dni: string;
   sector: string;
   telefono: string;
-}
+};
 
+/**
+ * Esquema de validación (yup)
+ *  - Teléfono: acepta solo dígitos, entre 8 y 15
+ */
 const schema = yup.object({
-  nombreApellido: yup.string().required().min(3),
-  dni: yup.string().required().matches(/^\d{7,8}$/),
-  sector: yup.string().required(),
-  telefono: yup.string().required().matches(/^\+54 9 \d{2} \d{4}-\d{4}$/),
+  nombreApellido: yup.string().required('Requerido').min(3, 'Mínimo 3 caracteres'),
+  dni: yup.string().required('Requerido').matches(/^\d{7,8}$/, '7-8 dígitos'),
+  sector: yup.string().required('Requerido'),
+  telefono: yup
+    .string()
+    .required('Requerido')
+    .matches(/^\d{8,15}$/, 'Teléfono inválido (solo dígitos, 8-15)'),
 });
 
-const AfiliateScreen: React.FC = () => {
-  const { control, handleSubmit, reset } = useForm<FormData>({
+export default function AfiliateScreen() {
+  const {
+    control,
+    handleSubmit,
+    formState: { errors },
+    reset,
+  } = useForm<FormData>({
     resolver: yupResolver(schema),
   });
 
+  /**
+   * Se ejecuta al tocar "Enviar"
+   */
   const onSubmit = async (data: FormData) => {
+    // Punto 1: verificar usuario autenticado
+    const currentUser = auth().currentUser;
+    console.log('Usuario actual:', currentUser?.uid);
+    if (!currentUser) {
+      Alert.alert('Error', 'Debes iniciar sesión antes de enviar la solicitud');
+      return;
+    }
+
+    console.log('>>> handleSubmit dispara', data);
     try {
-      const db = getFirestore();
-      await addDoc(collection(db, 'affiliateRequests'), {
+      await firestore().collection('affiliateRequests').add({
         ...data,
         status: 'pending',
-        createdAt: serverTimestamp(),
+        createdAt: firestore.FieldValue.serverTimestamp(),
       });
+
       await sendPushToAdmins({
-        title: 'Nueva solicitud',
+        title: 'Nueva solicitud de afiliación',
         body: `De ${data.nombreApellido}`,
       });
-      Alert.alert('Éxito', 'Solicitud enviada');
+
+      Alert.alert('Listo', 'Solicitud enviada');
       reset();
     } catch (err) {
-      Alert.alert('Error', 'No se pudo enviar la solicitud');
+      console.error(err);
+      Alert.alert('Error', 'No pudimos enviar tu solicitud');
     }
   };
 
   return (
     <View style={styles.container}>
+      {/* Nombre y apellido */}
       <Controller
         control={control}
         name="nombreApellido"
         render={({ field: { onChange, value } }) => (
-          <TextInput
-            style={styles.input}
-            placeholder="Nombre y Apellido"
-            value={value}
-            onChangeText={onChange}
-          />
+          <>
+            <Text>Nombre y apellido</Text>
+            <TextInput style={styles.input} value={value} onChangeText={onChange} />
+            {errors.nombreApellido && (
+              <Text style={styles.error}>{errors.nombreApellido.message}</Text>
+            )}
+          </>
         )}
       />
+
+      {/* DNI */}
       <Controller
         control={control}
         name="dni"
         render={({ field: { onChange, value } }) => (
-          <TextInput
-            style={styles.input}
-            placeholder="DNI"
-            keyboardType="number-pad"
-            value={value}
-            onChangeText={onChange}
-          />
+          <>
+            <Text>DNI</Text>
+            <TextInput
+              style={styles.input}
+              keyboardType="numeric"
+              value={value}
+              onChangeText={onChange}
+            />
+            {errors.dni && <Text style={styles.error}>{errors.dni.message}</Text>}
+          </>
         )}
       />
+
+      {/* Sector */}
       <Controller
         control={control}
         name="sector"
         render={({ field: { onChange, value } }) => (
-          <TextInput
-            style={styles.input}
-            placeholder="Sector"
-            value={value}
-            onChangeText={onChange}
-          />
+          <>
+            <Text>Sector</Text>
+            <TextInput style={styles.input} value={value} onChangeText={onChange} />
+            {errors.sector && <Text style={styles.error}>{errors.sector.message}</Text>}
+          </>
         )}
       />
+
+      {/* Teléfono */}
       <Controller
         control={control}
         name="telefono"
         render={({ field: { onChange, value } }) => (
-          <TextInput
-            style={styles.input}
-            placeholder="Teléfono"
-            keyboardType="phone-pad"
-            value={value}
-            onChangeText={onChange}
-          />
+          <>
+            <Text>Teléfono</Text>
+            <TextInput
+              style={styles.input}
+              keyboardType="phone-pad"
+              value={value}
+              onChangeText={onChange}
+            />
+            {errors.telefono && <Text style={styles.error}>{errors.telefono.message}</Text>}
+          </>
         )}
       />
+
       <Button title="Enviar" onPress={handleSubmit(onSubmit)} />
     </View>
   );
-};
-
-export default AfiliateScreen;
+}
 
 const styles = StyleSheet.create({
-  container: { flex: 1, padding: 16 },
+  container: {
+    flex: 1,
+    padding: 16,
+    gap: 12,
+  },
   input: {
     borderWidth: 1,
     borderColor: '#ccc',
-    borderRadius: 4,
     padding: 8,
-    marginBottom: 12,
+    borderRadius: 8,
+  },
+  error: {
+    color: 'red',
+    fontSize: 12,
   },
 });
