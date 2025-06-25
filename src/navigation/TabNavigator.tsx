@@ -13,6 +13,7 @@ import CredentialScreen from "../screens/credential/DigitalCredentialScreen";
 import NewsListScreen from "../screens/news/NewsListScreen";
 
 import ProfileScreen from "../screens/profile/ProfileScreen";
+import ContactScreen from "../screens/contact/ContactScreen";
 
 const Tab = createBottomTabNavigator();
 
@@ -32,6 +33,7 @@ const TabNavigator = () => {
           if (route.name === "Credential") iconName = "card-outline";
 
           if (route.name === "Profile") iconName = "person-outline";
+          if (route.name === "Contact") iconName = "logo-whatsapp";
 
           // Fix 1: Forzar cast del iconName si TS no lo reconoce:
 
@@ -69,6 +71,12 @@ const TabNavigator = () => {
         name="Profile"
         component={ProfileScreen}
         options={{ title: "Perfil" }}
+      />
+
+      <Tab.Screen
+        name="Contact"
+        component={ContactScreen}
+        options={{ title: "Contacto" }}
       />
     </Tab.Navigator>
   );
