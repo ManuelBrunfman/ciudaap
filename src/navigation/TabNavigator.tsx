@@ -7,17 +7,18 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { Ionicons } from "@expo/vector-icons";
 
 import BenefitsListScreen from "../screens/benefits/BenefitsListScreen";
-
 import CredentialScreen from "../screens/credential/DigitalCredentialScreen";
-
 import NewsListScreen from "../screens/news/NewsListScreen";
-
 import ProfileScreen from "../screens/profile/ProfileScreen";
 import ContactScreen from "../screens/contact/ContactScreen";
+import AfiliateScreen from "../screens/AfiliateScreen";
+import AdminScreen from "../screens/AdminScreen";
+import { useAuth } from "../context/AuthContext";
 
 const Tab = createBottomTabNavigator();
 
 const TabNavigator = () => {
+  const { isAdmin } = useAuth();
   return (
     <Tab.Navigator
       screenOptions={({ route }) => ({
@@ -34,6 +35,8 @@ const TabNavigator = () => {
 
           if (route.name === "Profile") iconName = "person-outline";
           if (route.name === "Contact") iconName = "logo-whatsapp";
+          if (route.name === "Afiliate") iconName = "person-add-outline";
+          if (route.name === "Admin") iconName = "settings-outline";
 
           // Fix 1: Forzar cast del iconName si TS no lo reconoce:
 
@@ -68,6 +71,12 @@ const TabNavigator = () => {
       />
 
       <Tab.Screen
+        name="Afiliate"
+        component={AfiliateScreen}
+        options={{ title: "Afíliate" }}
+      />
+
+      <Tab.Screen
         name="Profile"
         component={ProfileScreen}
         options={{ title: "Perfil" }}
@@ -78,6 +87,14 @@ const TabNavigator = () => {
         component={ContactScreen}
         options={{ title: "Contacto" }}
       />
+
+      {isAdmin && (
+        <Tab.Screen
+          name="Admin"
+          component={AdminScreen}
+          options={{ title: "Admin" }}
+        />
+      )}
     </Tab.Navigator>
   );
 };

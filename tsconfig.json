@@ -22,7 +22,7 @@
 
     "moduleResolution": "bundler",
 
-    "types": ["react", "react-native"],
+    "types": ["react", "react-native", "jest"],
     "noEmit": true,
 
     "baseUrl": "./",

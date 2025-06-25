@@ -14,10 +14,16 @@ import {
   signOut as firebaseSignOut,
 } from '@react-native-firebase/auth';
 import type { FirebaseAuthTypes } from '@react-native-firebase/auth';
+import {
+  getFirestore,
+  doc,
+  onSnapshot,
+} from '@react-native-firebase/firestore';
 
 interface AuthContextData {
   user: FirebaseAuthTypes.User | null;
   loading: boolean;
+  isAdmin: boolean;
   login(email: string, password: string): Promise<FirebaseAuthTypes.UserCredential>;
   signIn(email: string, password: string): Promise<FirebaseAuthTypes.UserCredential>;
   signUp(email: string, password: string): Promise<FirebaseAuthTypes.UserCredential>;
@@ -27,6 +33,7 @@ interface AuthContextData {
 export const AuthContext = createContext<AuthContextData>({
   user: null,
   loading: true,
+  isAdmin: false,
   signIn: async () => Promise.reject(),
   login: async () => Promise.reject(),
   signUp: async () => Promise.reject(),
@@ -38,6 +45,7 @@ export const useAuth = () => useContext(AuthContext);
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [user, setUser] = useState<FirebaseAuthTypes.User | null>(null);
   const [loading, setLoading] = useState(true);
+  const [isAdmin, setIsAdmin] = useState(false);
 
   useEffect(() => {
     const auth = getAuth();
@@ -47,6 +55,19 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     });
     return unsub;
   }, []);
+
+  useEffect(() => {
+    if (!user) {
+      setIsAdmin(false);
+      return;
+    }
+    const db = getFirestore();
+    const ref = doc(db, 'users', user.uid);
+    const unsub = onSnapshot(ref, snap => {
+      setIsAdmin(!!snap.data()?.isAdmin);
+    });
+    return unsub;
+  }, [user]);
 
   const signIn = (email: string, password: string) => {
     const auth = getAuth();
@@ -68,7 +89,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
   return (
     <AuthContext.Provider
-      value={{ user, loading, login, signIn, signUp, signOut }}
+      value={{ user, loading, login, signIn, signUp, signOut, isAdmin }}
     >
       {children}
     </AuthContext.Provider>

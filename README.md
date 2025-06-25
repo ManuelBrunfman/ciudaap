@@ -140,3 +140,14 @@ BancaApp/
 ## 📄 Licencia
 
 Este proyecto está bajo la licencia **MIT**.
+## 📲 Notificaciones push para administradores
+
+1. En Firestore, crea o edita el documento `users/{uid}` del administrador y establece `isAdmin: true`.
+2. Desde la pestaña **Admin** dentro de la app, pulsa **Registrar mis notificaciones** para guardar el token de Expo.
+3. Los usuarios pueden solicitar afiliación en la pestaña **Afíliate** y los administradores recibirán un aviso push.
+
+Para desplegar las reglas de seguridad ejecuta:
+
+```bash
+firebase deploy --only firestore:rules
+```
