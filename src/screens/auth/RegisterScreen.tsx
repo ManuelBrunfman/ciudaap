@@ -9,7 +9,8 @@ import {
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 // Modular API
-import { getAuth, createUserWithEmailAndPassword, updateProfile } from '@react-native-firebase/auth';
+import { updateProfile } from '@react-native-firebase/auth';
+import authService from '../../services/authService';
 
 const RegisterScreen: React.FC = () => {
   const navigation = useNavigation();
@@ -21,12 +22,12 @@ const RegisterScreen: React.FC = () => {
 
   const handleRegister = async () => {
     try {
-      const auth = getAuth();
-      const cred = await createUserWithEmailAndPassword(
-        auth,
-        email.trim(),
-        password
-      );
+      const cred = await authService.signUp(email.trim(), password, {
+        displayName,
+        affiliationNumber,
+        province,
+        status: 'pending',
+      });
       await updateProfile(cred.user, { displayName });
 
       Alert.alert('Registro exitoso', 'Ahora puedes iniciar sesión.');
