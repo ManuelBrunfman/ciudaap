@@ -1,3 +1,5 @@
+// src/screens/auth/RegisterScreen.tsx
+
 import React, { useState } from 'react';
 import {
   View,
@@ -8,8 +10,12 @@ import {
   Alert,
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-// Modular API
-import { getAuth, createUserWithEmailAndPassword, updateProfile } from '@react-native-firebase/auth';
+import {
+  getAuth,
+  createUserWithEmailAndPassword,
+  updateProfile,
+  signOut,
+} from '@react-native-firebase/auth';
 
 const RegisterScreen: React.FC = () => {
   const navigation = useNavigation();
@@ -29,6 +35,9 @@ const RegisterScreen: React.FC = () => {
       );
       await updateProfile(cred.user, { displayName });
 
+      // Cerrar la sesión para volver a la pantalla de login
+      await signOut(auth);
+
       Alert.alert('Registro exitoso', 'Ahora puedes iniciar sesión.');
       // @ts-ignore
       navigation.navigate('Login');
@@ -41,7 +50,7 @@ const RegisterScreen: React.FC = () => {
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Crear Cuenta</Text>
-      {/* …inputs… */}
+
       <TextInput
         style={styles.input}
         placeholder="Correo electrónico"
@@ -50,6 +59,7 @@ const RegisterScreen: React.FC = () => {
         keyboardType="email-address"
         autoCapitalize="none"
       />
+
       <TextInput
         style={styles.input}
         placeholder="Contraseña"
@@ -57,19 +67,22 @@ const RegisterScreen: React.FC = () => {
         onChangeText={setPassword}
         secureTextEntry
       />
+
+      {/* Inputs adicionales */}
       <TextInput
         style={styles.input}
         placeholder="Nombre completo"
         value={displayName}
         onChangeText={setDisplayName}
       />
+
       <TextInput
         style={styles.input}
-        placeholder="Número de afiliación"
+        placeholder="Número de afiliado"
         value={affiliationNumber}
         onChangeText={setAffiliationNumber}
-        keyboardType="numeric"
       />
+
       <TextInput
         style={styles.input}
         placeholder="Provincia"
@@ -87,20 +100,33 @@ const RegisterScreen: React.FC = () => {
 export default RegisterScreen;
 
 const styles = StyleSheet.create({
-  container: { flex: 1, padding: 16, justifyContent: 'center' },
-  title: { fontSize: 22, marginBottom: 12, textAlign: 'center' },
+  container: {
+    flex: 1,
+    padding: 20,
+    justifyContent: 'center',
+    backgroundColor: '#fff',
+  },
+  title: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    marginBottom: 20,
+    textAlign: 'center',
+  },
   input: {
     borderWidth: 1,
     borderColor: '#ccc',
-    padding: 10,
-    marginVertical: 6,
     borderRadius: 8,
+    padding: 12,
+    marginBottom: 10,
   },
   button: {
-    backgroundColor: '#2196F3',
-    padding: 12,
+    backgroundColor: '#007AFF',
+    paddingVertical: 14,
     borderRadius: 8,
-    marginTop: 12,
+    alignItems: 'center',
   },
-  buttonText: { color: '#fff', fontSize: 16, textAlign: 'center' },
+  buttonText: {
+    color: '#fff',
+    fontWeight: 'bold',
+  },
 });

@@ -3,8 +3,8 @@ import { View, Text, TextInput, Button, Alert, StyleSheet } from 'react-native';
 import { useForm, Controller } from 'react-hook-form';
 import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
-import firestore from '@react-native-firebase/firestore';
 import auth from '@react-native-firebase/auth';
+import firestore from '@react-native-firebase/firestore';
 import { sendPushToAdmins } from '../services/sendPushToAdmins';
 
 /**
@@ -45,20 +45,18 @@ export default function AfiliateScreen() {
    * Se ejecuta al tocar "Enviar"
    */
   const onSubmit = async (data: FormData) => {
-    // Punto 1: verificar usuario autenticado
     const currentUser = auth().currentUser;
-    console.log('Usuario actual:', currentUser?.uid);
     if (!currentUser) {
       Alert.alert('Error', 'Debes iniciar sesión antes de enviar la solicitud');
       return;
     }
 
-    console.log('>>> handleSubmit dispara', data);
     try {
       await firestore().collection('affiliateRequests').add({
         ...data,
         status: 'pending',
         createdAt: firestore.FieldValue.serverTimestamp(),
+        userId: currentUser.uid,
       });
 
       await sendPushToAdmins({
@@ -81,13 +79,18 @@ export default function AfiliateScreen() {
         control={control}
         name="nombreApellido"
         render={({ field: { onChange, value } }) => (
-          <>
+          <View style={styles.fieldContainer}>
             <Text>Nombre y apellido</Text>
-            <TextInput style={styles.input} value={value} onChangeText={onChange} />
+            <TextInput
+              style={styles.input}
+              value={value}
+              onChangeText={onChange}
+              placeholder="Ejemplo: Juan Pérez"
+            />
             {errors.nombreApellido && (
               <Text style={styles.error}>{errors.nombreApellido.message}</Text>
             )}
-          </>
+          </View>
         )}
       />
 
@@ -96,16 +99,17 @@ export default function AfiliateScreen() {
         control={control}
         name="dni"
         render={({ field: { onChange, value } }) => (
-          <>
+          <View style={styles.fieldContainer}>
             <Text>DNI</Text>
             <TextInput
               style={styles.input}
-              keyboardType="numeric"
               value={value}
               onChangeText={onChange}
+              keyboardType="numeric"
+              placeholder="Solo dígitos"
             />
             {errors.dni && <Text style={styles.error}>{errors.dni.message}</Text>}
-          </>
+          </View>
         )}
       />
 
@@ -114,11 +118,16 @@ export default function AfiliateScreen() {
         control={control}
         name="sector"
         render={({ field: { onChange, value } }) => (
-          <>
+          <View style={styles.fieldContainer}>
             <Text>Sector</Text>
-            <TextInput style={styles.input} value={value} onChangeText={onChange} />
+            <TextInput
+              style={styles.input}
+              value={value}
+              onChangeText={onChange}
+              placeholder="Ejemplo: Ventas"
+            />
             {errors.sector && <Text style={styles.error}>{errors.sector.message}</Text>}
-          </>
+          </View>
         )}
       />
 
@@ -127,20 +136,25 @@ export default function AfiliateScreen() {
         control={control}
         name="telefono"
         render={({ field: { onChange, value } }) => (
-          <>
+          <View style={styles.fieldContainer}>
             <Text>Teléfono</Text>
             <TextInput
               style={styles.input}
-              keyboardType="phone-pad"
               value={value}
               onChangeText={onChange}
+              keyboardType="phone-pad"
+              placeholder="Ejemplo: 11912345678"
             />
-            {errors.telefono && <Text style={styles.error}>{errors.telefono.message}</Text>}
-          </>
+            {errors.telefono && (
+              <Text style={styles.error}>{errors.telefono.message}</Text>
+            )}
+          </View>
         )}
       />
 
-      <Button title="Enviar" onPress={handleSubmit(onSubmit)} />
+      <View style={styles.buttonContainer}>
+        <Button title="Enviar solicitud" onPress={handleSubmit(onSubmit)} />
+      </View>
     </View>
   );
 }
@@ -149,16 +163,23 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 16,
-    gap: 12,
+    backgroundColor: '#fff',
+  },
+  fieldContainer: {
+    marginBottom: 12,
   },
   input: {
     borderWidth: 1,
     borderColor: '#ccc',
+    borderRadius: 4,
     padding: 8,
-    borderRadius: 8,
+    marginTop: 4,
+  },
+  buttonContainer: {
+    marginTop: 16,
   },
   error: {
     color: 'red',
-    fontSize: 12,
+    marginTop: 4,
   },
 });
