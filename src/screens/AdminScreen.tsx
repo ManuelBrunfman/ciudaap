@@ -98,9 +98,11 @@ const AdminScreen: React.FC = () => {
       ? (item as any).createdAt.toDate()
       : new Date((item as any).createdAt);
     return (
-      <View style={styles.card}>
+    <View style={styles.card}>
         <Text style={styles.name}>{item.nombreApellido}</Text>
         <Text style={styles.dni}>DNI: {item.dni}</Text>
+        <Text style={styles.dni}>Sector: {item.sector}</Text>
+        <Text style={styles.dni}>Teléfono: {item.telefono}</Text>
         <Text style={styles.date}>{dateObj.toLocaleString('es-AR')}</Text>
       </View>
     );

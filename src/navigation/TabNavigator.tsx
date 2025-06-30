@@ -65,21 +65,9 @@ const TabNavigator = () => {
       />
 
       <Tab.Screen
-        name="Credential"
-        component={CredentialScreen}
-        options={{ title: "Credencial" }}
-      />
-
-      <Tab.Screen
         name="Afiliate"
         component={AfiliateScreen}
         options={{ title: "Afíliate" }}
-      />
-
-      <Tab.Screen
-        name="Profile"
-        component={ProfileScreen}
-        options={{ title: "Perfil" }}
       />
 
       <Tab.Screen
