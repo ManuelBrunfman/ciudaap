@@ -1,44 +1,34 @@
 {
   "extends": "./node_modules/expo/tsconfig.base.json",
-
   "compilerOptions": {
     "strict": true,
-
     "jsx": "react-native",
-
     "target": "es2017",
-
     "lib": ["es2017", "dom", "dom.iterable", "esnext"],
-
     "allowSyntheticDefaultImports": true,
-
     "esModuleInterop": true,
-
     "skipLibCheck": true,
-
     "resolveJsonModule": true,
-
     "noImplicitAny": false,
-
     "moduleResolution": "bundler",
-
     "types": ["react", "react-native", "jest"],
     "noEmit": true,
-
     "baseUrl": "./",
-
     "paths": {
       "@/*": ["./src/*"]
-    }
+    },
+    // Si prefieres usar typeRoots en lugar de include:
+    // "typeRoots": ["./src/declarations", "./node_modules/@types"]
   },
-
+  "include": [
+    "src/declarations/globals.d.ts",
+    "src/**/*.ts",
+    "src/**/*.tsx"
+  ],
   "exclude": [
     "node_modules",
-
     "babel.config.js",
-
     "metro.config.js",
-
     "jest.config.js"
   ]
 }
