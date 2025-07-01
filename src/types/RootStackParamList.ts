@@ -19,4 +19,8 @@ export type RootStackParamList = {
   BenefitDetail: { url: string };
   // NewsDetail recibe un objeto newsItem
   NewsDetail: { newsItem: NewsItem };
+  // Pantalla con el listado de videos del canal
+  YouTubeChannel: undefined;
+  // Pantalla que muestra un video específico
+  YouTubeVideo: { videoId: string };
 };

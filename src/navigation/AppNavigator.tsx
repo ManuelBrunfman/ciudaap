@@ -5,6 +5,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 import TabNavigator from './TabNavigator';
 import BenefitDetailScreen from '../screens/benefits/BenefitDetailScreen';
 import NewsDetailScreen from '../screens/news/NewsDetailScreen';
+import YouTubeVideoScreen from '../screens/videos/YouTubeVideoScreen';
 import { View, Text } from 'react-native';
 
 // ✅ Import centralizado del tipo RootStackParamList
@@ -23,6 +24,7 @@ const AppNavigator: React.FC = () => {
         <Stack.Screen name="Main" component={TabNavigator} />
         <Stack.Screen name="BenefitDetail" component={BenefitDetailScreen} />
         <Stack.Screen name="NewsDetail" component={NewsDetailScreen} />
+        <Stack.Screen name="YouTubeVideo" component={YouTubeVideoScreen} />
       </Stack.Navigator>
     );
   } catch (error: any) {

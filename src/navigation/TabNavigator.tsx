@@ -13,6 +13,7 @@ import ProfileScreen from "../screens/profile/ProfileScreen";
 import ContactScreen from "../screens/contact/ContactScreen";
 import AfiliateScreen from "../screens/AfiliateScreen";
 import AdminScreen from "../screens/AdminScreen";
+import YouTubeChannelScreen from "../screens/videos/YouTubeChannelScreen";
 import { useAuth } from "../context/AuthContext";
 
 const Tab = createBottomTabNavigator();
@@ -36,6 +37,7 @@ const TabNavigator = () => {
           if (route.name === "Profile") iconName = "person-outline";
           if (route.name === "Contact") iconName = "logo-whatsapp";
           if (route.name === "Afiliate") iconName = "person-add-outline";
+          if (route.name === "Videos") iconName = "logo-youtube";
           if (route.name === "Admin") iconName = "settings-outline";
 
           // Fix 1: Forzar cast del iconName si TS no lo reconoce:
@@ -62,6 +64,12 @@ const TabNavigator = () => {
         name="Benefits"
         component={BenefitsListScreen}
         options={{ title: "Beneficios" }}
+      />
+
+      <Tab.Screen
+        name="Videos"
+        component={YouTubeChannelScreen}
+        options={{ title: "Videos" }}
       />
 
       <Tab.Screen
