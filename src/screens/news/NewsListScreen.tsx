@@ -14,7 +14,7 @@ import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import type { RootStackParamList, NewsItem } from '../../types/RootStackParamList';
 
-type Nav = StackNavigationProp<RootStackParamList, 'NewsDetail'>;
+type Nav = StackNavigationProp<RootStackParamList, 'NewsDetail' | 'YouTubeChannel'>;
 
 const NewsListScreen: React.FC = () => {
   const [news, setNews] = useState<NewsItem[]>([]);
@@ -37,6 +37,7 @@ const NewsListScreen: React.FC = () => {
   }, []);
 
   const openDetail = (item: NewsItem) => navigation.navigate('NewsDetail', { newsItem: item });
+  const openChannel = () => navigation.navigate('YouTubeChannel');
 
   if (loading) {
     return (
@@ -48,6 +49,9 @@ const NewsListScreen: React.FC = () => {
 
   return (
     <SafeAreaView style={styles.container}>
+      <Pressable style={styles.youtubeButton} onPress={openChannel}>
+        <Text style={styles.youtubeButtonText}>Ver videos</Text>
+      </Pressable>
       <FlatList
         data={news}
         renderItem={({ item }) => (
@@ -87,4 +91,13 @@ const styles = StyleSheet.create({
   textContainer: { padding: 8 },
   title: { fontSize: 16, fontWeight: '600', marginBottom: 4 },
   date: { fontSize: 12, color: '#666' },
+  youtubeButton: {
+    padding: 12,
+    backgroundColor: '#cc0000',
+    alignItems: 'center',
+    marginHorizontal: 12,
+    marginBottom: 8,
+    borderRadius: 4,
+  },
+  youtubeButtonText: { color: '#fff', fontWeight: 'bold' },
 });

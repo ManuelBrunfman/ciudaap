@@ -45,6 +45,7 @@
     "react-native-screens": "~4.4.0",
     "react-native-web": "~0.19.13",
     "react-native-webview": "13.12.5",
+    "rss-parser": "^3.13.0",
     "yup": "^1.6.1",
     "zustand": "^5.0.3"
   },
