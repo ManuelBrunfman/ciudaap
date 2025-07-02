@@ -1,4 +1,4 @@
-{
+module.exports = {
   "env": {
     "browser": true,
     "es2021": true
@@ -21,8 +21,14 @@
     "@typescript-eslint"
   ],
   "rules": {
-    "semi": ["error", "always"],
-    "quotes": ["error", "single"],
+    "semi": [
+      "error",
+      "always"
+    ],
+    "quotes": [
+      "error",
+      "single"
+    ],
     "react/react-in-jsx-scope": "off"
   }
-}
+};
