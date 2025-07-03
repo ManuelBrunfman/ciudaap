@@ -12,7 +12,7 @@ import {
   StyleSheet,
   Alert,
 } from 'react-native';
-import { parse } from 'fast-xml-parser';
+import { XMLParser } from 'fast-xml-parser';
 import { useNavigation } from '@react-navigation/native';
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import type { RootStackParamList } from '../../types/RootStackParamList';
@@ -55,7 +55,8 @@ export default function YouTubeChannelScreen() {
         `https://www.youtube.com/feeds/videos.xml?channel_id=${channelId}`
       );
       const xml = await rssRes.text();
-      const json = parse(xml, { ignoreAttributes: false, attributeNamePrefix: '' });
+      const parser = new XMLParser({ ignoreAttributes: false, attributeNamePrefix: '' });
+      const json = parser.parse(xml);
       const items = (json.feed?.entry ?? []) as any[];
 
       const mapped = items.map(e => ({
