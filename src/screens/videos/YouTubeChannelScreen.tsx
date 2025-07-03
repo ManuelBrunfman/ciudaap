@@ -24,13 +24,11 @@ interface VideoItem {
   published: string;
 }
 
-const CHANNEL_HANDLE_URL =
-  'https://www.youtube.com/@labancariaprensaydifusion9027';
-
-const extractChannelId = (html: string): string | null => {
-  const match = html.match(/"channelId":"(UC[\w-]{22})"/);
-  return match ? match[1] : null;
-};
+/**
+ * Channel ID of @labancariaprensaydifusion9027. Using the ID directly
+ * avoids an extra network request and potential parsing issues.
+ */
+const CHANNEL_ID = 'UC-rMO27hUU1HoPK7rH4DFlw';
 
 type Nav = NativeStackNavigationProp<RootStackParamList, 'YouTubeVideo'>;
 
@@ -43,16 +41,9 @@ export default function YouTubeChannelScreen() {
   const fetchVideos = useCallback(async () => {
     try {
       setRefreshing(true);
-      const htmlRes = await fetch(CHANNEL_HANDLE_URL);
-      const html = await htmlRes.text();
-      const channelId = extractChannelId(html);
-
-      if (!channelId) {
-        throw new Error('No se pudo obtener el channelId del canal.');
-      }
 
       const rssRes = await fetch(
-        `https://www.youtube.com/feeds/videos.xml?channel_id=${channelId}`
+        `https://www.youtube.com/feeds/videos.xml?channel_id=${CHANNEL_ID}`
       );
       const xml = await rssRes.text();
       const parser = new XMLParser({ ignoreAttributes: false, attributeNamePrefix: '' });
