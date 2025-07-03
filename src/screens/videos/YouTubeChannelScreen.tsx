@@ -13,10 +13,9 @@ import {
   Alert,
 } from 'react-native';
 import { parse } from 'fast-xml-parser';
-import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { RootStackParamList } from '../../types/RootStackParamList';
-
-type Props = NativeStackScreenProps<RootStackParamList, 'YouTubeChannel'>;
+import { useNavigation } from '@react-navigation/native';
+import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import type { RootStackParamList } from '../../types/RootStackParamList';
 
 interface VideoItem {
   id: string;
@@ -33,7 +32,10 @@ const extractChannelId = (html: string): string | null => {
   return match ? match[1] : null;
 };
 
-export default function YouTubeChannelScreen({ navigation }: Props) {
+type Nav = NativeStackNavigationProp<RootStackParamList, 'YouTubeVideo'>;
+
+export default function YouTubeChannelScreen() {
+  const navigation = useNavigation<Nav>();
   const [videos, setVideos] = useState<VideoItem[]>([]);
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);

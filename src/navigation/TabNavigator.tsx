@@ -37,7 +37,7 @@ const TabNavigator = () => {
           if (route.name === "Profile") iconName = "person-outline";
           if (route.name === "Contact") iconName = "logo-whatsapp";
           if (route.name === "Afiliate") iconName = "person-add-outline";
-          if (route.name === "Videos") iconName = "logo-youtube";
+          if (route.name === "YouTubeChannel") iconName = "logo-youtube";
           if (route.name === "Admin") iconName = "settings-outline";
 
           // Fix 1: Forzar cast del iconName si TS no lo reconoce:
@@ -67,7 +67,7 @@ const TabNavigator = () => {
       />
 
       <Tab.Screen
-        name="Videos"
+        name="YouTubeChannel"
         component={YouTubeChannelScreen}
         options={{ title: "Videos" }}
       />
