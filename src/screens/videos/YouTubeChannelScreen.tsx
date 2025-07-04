@@ -1,21 +1,22 @@
 // src/screens/videos/YouTubeChannelScreen.tsx
 
-import React, { useEffect, useState, useCallback } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import {
+  ActivityIndicator,
+  Alert,
   FlatList,
   Image,
-  View,
-  Text,
-  TouchableOpacity,
-  ActivityIndicator,
   RefreshControl,
   StyleSheet,
-  Alert,
+  Text,
+  TouchableOpacity,
+  View,
 } from 'react-native';
-import { XMLParser } from 'fast-xml-parser';
 import { useNavigation } from '@react-navigation/native';
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import type { RootStackParamList } from '../../types/RootStackParamList';
+
+type Nav = NativeStackNavigationProp<RootStackParamList, 'YouTubeChannel'>;
 
 interface VideoItem {
   id: string;
@@ -24,13 +25,7 @@ interface VideoItem {
   published: string;
 }
 
-/**
- * Channel ID of @labancariaprensaydifusion9027. Using the ID directly
- * avoids an extra network request and potential parsing issues.
- */
-const CHANNEL_ID = 'UC-rMO27hUU1HoPK7rH4DFlw';
-
-type Nav = NativeStackNavigationProp<RootStackParamList, 'YouTubeVideo'>;
+const CHANNEL_ID = 'UC-rMO27hUU1HoPK7rH4DFlw'; // Reemplazalo si tu canal es otro
 
 export default function YouTubeChannelScreen() {
   const navigation = useNavigation<Nav>();
@@ -39,29 +34,31 @@ export default function YouTubeChannelScreen() {
   const [refreshing, setRefreshing] = useState(false);
 
   const fetchVideos = useCallback(async () => {
+    setRefreshing(true);
     try {
-      setRefreshing(true);
+      const rssUrl = `https://www.youtube.com/feeds/videos.xml?channel_id=${CHANNEL_ID}`;
+      const proxyUrl =
+        'https://api.rss2json.com/v1/api.json?rss_url=' + encodeURIComponent(rssUrl);
 
-      const rssRes = await fetch(
-        `https://www.youtube.com/feeds/videos.xml?channel_id=${CHANNEL_ID}`
-      );
-      const xml = await rssRes.text();
-      const parser = new XMLParser({ ignoreAttributes: false, attributeNamePrefix: '' });
-      const json = parser.parse(xml);
-      const items = (json.feed?.entry ?? []) as any[];
+      const response = await fetch(proxyUrl);
+      console.log('YouTube RSS status:', response.status); // 👈 consola para debug
 
-      const mapped = items.map(e => ({
-        id: e['yt:videoId'],
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+
+      const { items } = await response.json();
+
+      const parsed: VideoItem[] = items.map((e: any) => ({
+        id: e.guid.split(':').pop(),
         title: e.title,
-        thumbnail: Array.isArray(e['media:group']['media:thumbnail'])
-          ? e['media:group']['media:thumbnail'][0].url
-          : e['media:group']['media:thumbnail'].url,
-        published: e.published,
+        thumbnail: e.thumbnail,
+        published: e.pubDate,
       }));
 
-      setVideos(mapped);
+      setVideos(parsed);
     } catch (err) {
-      console.error('Error al cargar videos', err);
+      console.error(err);
       Alert.alert('Error', 'No se pudieron cargar los videos.');
     } finally {
       setRefreshing(false);
@@ -74,17 +71,23 @@ export default function YouTubeChannelScreen() {
   }, [fetchVideos]);
 
   if (loading) {
-    return <ActivityIndicator style={{ flex: 1 }} size="large" />;
+    return <ActivityIndicator style={styles.loader} />;
+  }
+
+  if (!loading && videos.length === 0) {
+    return (
+      <View style={styles.center}>
+        <Text>No hay videos disponibles.</Text>
+      </View>
+    );
   }
 
   return (
     <FlatList
       data={videos}
-      keyExtractor={v => v.id}
-      refreshControl={
-        <RefreshControl refreshing={refreshing} onRefresh={fetchVideos} />
-      }
+      keyExtractor={(item) => item.id}
       contentContainerStyle={styles.list}
+      refreshControl={<RefreshControl refreshing={refreshing} onRefresh={fetchVideos} />}
       renderItem={({ item }) => (
         <TouchableOpacity
           style={styles.card}
@@ -92,12 +95,8 @@ export default function YouTubeChannelScreen() {
         >
           <Image source={{ uri: item.thumbnail }} style={styles.thumb} />
           <View style={styles.info}>
-            <Text style={styles.title} numberOfLines={2}>
-              {item.title}
-            </Text>
-            <Text style={styles.date}>
-              {new Date(item.published).toLocaleDateString()}
-            </Text>
+            <Text style={styles.title}>{item.title}</Text>
+            <Text style={styles.date}>{new Date(item.published).toLocaleDateString()}</Text>
           </View>
         </TouchableOpacity>
       )}
@@ -106,17 +105,19 @@ export default function YouTubeChannelScreen() {
 }
 
 const styles = StyleSheet.create({
+  loader: { flex: 1, justifyContent: 'center' },
+  center: { flex: 1, justifyContent: 'center', alignItems: 'center' },
   list: { padding: 12 },
   card: {
     flexDirection: 'row',
-    marginBottom: 12,
     backgroundColor: '#fff',
     borderRadius: 8,
     elevation: 2,
+    marginBottom: 12,
     overflow: 'hidden',
   },
   thumb: { width: 130, height: 90 },
   info: { flex: 1, padding: 8, justifyContent: 'center' },
-  title: { fontWeight: 'bold', fontSize: 15 },
-  date: { marginTop: 4, color: '#666', fontSize: 12 },
+  title: { fontSize: 15, fontWeight: 'bold' },
+  date: { marginTop: 4, fontSize: 12, color: '#666' },
 });
