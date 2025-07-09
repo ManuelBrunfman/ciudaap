@@ -15,7 +15,7 @@ import { ExpoConfig, ConfigContext } from '@expo/config';
 export default (_: ConfigContext): ExpoConfig => ({
   /* ──────────── Basic app info ──────────── */
   name: 'BancApp',
-  slug: 'bancapp',                // unified slug
+  slug: 'ciudaapp',                // unified slug
   owner: 'manubrunfman',
   description: 'Aplicación de lxs trabajadorxs del Banco Ciudad.',
   version: '1.0.0',

@@ -1,12 +1,5 @@
 // src/screens/videos/YouTubeChannelScreen.tsx
 
-/*
- * Pantalla lista para copiar/pegar.
- * Fallback usando endpoint `search.list` en vez de playlistItems.list
- * para evitar bloqueos de método específicos.
- * Requiere tu API key en .env: EXPO_PUBLIC_YT_API_KEY o YOUTUBE_API_KEY.
- */
-
 import React, { useCallback, useEffect, useState } from 'react';
 import {
   ActivityIndicator,
@@ -22,16 +15,13 @@ import {
 import { useNavigation } from '@react-navigation/native';
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import type { RootStackParamList } from '../../types/RootStackParamList';
+import { XMLParser } from 'fast-xml-parser';
 
-// ID de canal; mantenelo correcto
-const CHANNEL_ID = 'UC-rMO27hUU1HoPK7rH4DFlw';
-// API Key: busca EXPO_PUBLIC_YT_API_KEY o YOUTUBE_API_KEY
-const API_KEY =
-  process.env.EXPO_PUBLIC_YT_API_KEY ||
-  (process.env as any).YOUTUBE_API_KEY ||
-  '';
-
+// --------------------
+// Types & constants
+// --------------------
 type Nav = NativeStackNavigationProp<RootStackParamList, 'YouTubeChannel'>;
+
 interface VideoItem {
   id: string;
   title: string;
@@ -39,6 +29,28 @@ interface VideoItem {
   published: string;
 }
 
+/**
+ * Mostrar videos de una lista de reproducción específica.
+ * Copiá el ID después de `list=` en la URL.
+ * Ej.: https://www.youtube.com/watch?v=abc&list=PL123 → PLAYLIST_ID = "PL123…".
+ */
+const PLAYLIST_ID = 'PL3LGmToYRxqu5XmBd9k0zUQNUeq7MaoNn'; // ← tu playlist
+
+const parser = new XMLParser({ ignoreAttributes: false });
+
+// --------------------
+// Helpers
+// --------------------
+async function fetchPlaylistFeed(playlistId: string) {
+  const url = `https://www.youtube.com/feeds/videos.xml?playlist_id=${playlistId}`;
+  const resp = await fetch(url);
+  if (!resp.ok) throw new Error(`Network response was not ok: ${resp.status}`);
+  return resp;
+}
+
+// --------------------
+// Component
+// --------------------
 export default function YouTubeChannelScreen() {
   const navigation = useNavigation<Nav>();
   const [videos, setVideos] = useState<VideoItem[]>([]);
@@ -46,38 +58,29 @@ export default function YouTubeChannelScreen() {
   const [refreshing, setRefreshing] = useState(false);
 
   const fetchVideos = useCallback(async () => {
-    if (!API_KEY) {
-      Alert.alert(
-        'Falta API Key',
-        'Definí EXPO_PUBLIC_YT_API_KEY o YOUTUBE_API_KEY en tu .env',
-      );
-      setLoading(false);
-      return;
-    }
     setRefreshing(true);
     try {
-      const url =
-        `https://www.googleapis.com/youtube/v3/search?` +
-        `part=snippet&channelId=${CHANNEL_ID}&order=date&maxResults=25&key=${API_KEY}`;
-      const response = await fetch(url);
-      console.log('YT Search API status:', response.status);
-      if (!response.ok) {
-        const errData = await response.json().catch(() => null);
-        const apiMsg = errData?.error?.message || 'Network error';
-        console.log('YT error body:', errData);
-        throw new Error(apiMsg);
-      }
-      const { items } = await response.json();
-      const parsed: VideoItem[] = (items || []).map((it: any) => ({
-        id: it.id.videoId,
-        title: it.snippet.title,
-        thumbnail: it.snippet.thumbnails.medium.url,
-        published: it.snippet.publishedAt,
+      const response = await fetchPlaylistFeed(PLAYLIST_ID);
+      const xmlText = await response.text();
+      const json = parser.parse(xmlText);
+      const entries = json.feed?.entry ?? [];
+
+      const parsed: VideoItem[] = entries.map((e: any) => ({
+        id: e['yt:videoId'],
+        title: e.title,
+        thumbnail: Array.isArray(e['media:group']['media:thumbnail'])
+          ? e['media:group']['media:thumbnail'][0]['@_url']
+          : e['media:group']['media:thumbnail']['@_url'],
+        published: e.published,
       }));
+
       setVideos(parsed);
-    } catch (err: any) {
+    } catch (err) {
       console.error(err);
-      Alert.alert('Error', err.message || 'No se pudieron cargar los videos.');
+      Alert.alert(
+        'Error',
+        'No se pudieron cargar los videos. Verificá que PLAYLIST_ID sea correcto y que la lista sea pública.'
+      );
     } finally {
       setRefreshing(false);
       setLoading(false);
@@ -88,9 +91,7 @@ export default function YouTubeChannelScreen() {
     fetchVideos();
   }, [fetchVideos]);
 
-  if (loading) {
-    return <ActivityIndicator style={styles.loader} />;
-  }
+  if (loading) return <ActivityIndicator style={styles.loader} />;
 
   if (!loading && videos.length === 0) {
     return (
@@ -122,6 +123,9 @@ export default function YouTubeChannelScreen() {
   );
 }
 
+// --------------------
+// Styles
+// --------------------
 const styles = StyleSheet.create({
   loader: { flex: 1, justifyContent: 'center' },
   center: { flex: 1, justifyContent: 'center', alignItems: 'center' },

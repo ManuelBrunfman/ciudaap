@@ -1,47 +1,84 @@
-# Node and dependencies
+###############################################################################
+# ⏩ Node y dependencias
+###############################################################################
 node_modules/
+package-lock.json
 npm-debug.log*
+yarn.lock
 yarn-debug.log*
 yarn-error.log*
+pnpm-lock.yaml
 
-# Expo
+###############################################################################
+# ⏩ Expo / React Native
+###############################################################################
 .expo/
 .expo-shared/
+# Directorios nativos generados por `npx expo prebuild`
+android/
+ios/
+# Si mantienes carpetas nativas en el repo, comenta las dos líneas anteriores ↑
 
-# Logs and temp
+###############################################################################
+# ⏩ Logs y archivos temporales
+###############################################################################
 *.log
 *.tmp
+*.temp
+*.cache
+*.swp
+*~
 
-# Environment files
+###############################################################################
+# ⏩ Archivos de entorno
+###############################################################################
 .env
 .env.*
 
-# Firebase configs
-# Config files
+###############################################################################
+# ⏩ Firebase y secretos
+###############################################################################
+# Se ignoran por defecto…
 google-services.json
 google-services.json.*
-test.json
+GoogleService-Info.plist
 *.keystore
-
-# Service account credentials
 scripts/serviceAccountKey.json
 *.json.*
 
-# IDEs and editors
+# …pero **incluimos** el que necesita Gradle para los builds release
+!android/app/google-services.json
+
+###############################################################################
+# ⏩ IDEs y editores
+###############################################################################
 .idea/
 .vscode/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
 .DS_Store
 Thumbs.db
 
-# Builds and artifacts
+###############################################################################
+# ⏩ Salidas de build y artefactos
+###############################################################################
 build/
 dist/
+web-build/
 *.apk
 *.aab
 *.ipa
+*.app
 
-# Scripts (optional)
+###############################################################################
+# ⏩ Scripts (opcional)
+###############################################################################
 scripts/
-BancaApp-clean.git/
+
+###############################################################################
+# ⏩ Otros proyectos / pruebas
+###############################################################################
 BancaApp-clean.git/
 test.json
