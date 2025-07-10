@@ -41,7 +41,7 @@ const LoginScreen: React.FC = () => {
   try {
     return (
       <ImageBackground
-        source={require('../../../assets/bg-login.png')}
+        source={require('../../../assets/bg.png')}
         style={styles.background}
         resizeMode="cover"
       >
