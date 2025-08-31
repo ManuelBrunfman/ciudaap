@@ -38,8 +38,7 @@ export default (_: ConfigContext): ExpoConfig => ({
   ios: {
     supportsTablet: true,
     bundleIdentifier: 'com.labancaria.bancapp',
-    googleServicesFile: './credentials/GoogleService-Info.plist',
-  },
+    googleServicesFile: './android/app/google-services.json',  },
 
   /* ───────────────── Android ─────────────── */
   android: {
@@ -52,20 +51,22 @@ export default (_: ConfigContext): ExpoConfig => ({
   },
 
   /* ───────────── Plugins ─────────────────── */
-  plugins: [
-    '@react-native-firebase/app',
-    ['@react-native-firebase/messaging', { android: { enableHeadless: true } }],
-    [
-      'expo-build-properties',
-      {
-        android: {
-          compileSdkVersion: 34,
-          targetSdkVersion: 34,
-          buildToolsVersion: '34.0.0',
-        },
+ plugins: [
+  '@react-native-firebase/app',
+  ['@react-native-firebase/messaging', { android: { enableHeadless: true } }],
+  [
+    'expo-build-properties',
+    {
+      android: {
+        compileSdkVersion: 34,
+        targetSdkVersion: 34,
+        buildToolsVersion: '34.0.0',
+        // Agrega esta línea para RN 0.76.9:
+        minSdkVersion: 24,
       },
-    ],
+    },
   ],
+],
 
   /* ───────────── Extra / ENV ─────────────── */
   extra: {

@@ -1,0 +1,3 @@
+# Solo lockfile de Yarn y carpeta Yarn
+yarn.lock
+.yarn/

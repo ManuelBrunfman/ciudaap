@@ -8,6 +8,7 @@ import { View, Text, Alert, Vibration } from 'react-native';
 import * as Notifications from 'expo-notifications';
 import { getFirestore, doc, setDoc, serverTimestamp } from '@react-native-firebase/firestore';
 import { getApp } from '@react-native-firebase/app';
+import messaging from '@react-native-firebase/messaging';
 import { requestPushPermission } from './src/services/notifications';
 
 Notifications.setNotificationHandler({
@@ -23,40 +24,51 @@ function MainApp() {
   const responseListener = useRef<any>();
   const { user, isAdmin } = useAuth();
 
+  /**
+   * 1. Solicita permisos y obtiene el token Expo (para admins) ✅
+   * 2. Obtiene el token FCM y se suscribe al topic "news" (para push masivas) ✅
+   */
   useEffect(() => {
-    if (!user || !isAdmin) return;
-
-    const setupPushNotifications = async () => {
-      let token: string;
-      try {
-        token = await requestPushPermission();
-      } catch (err) {
-        Alert.alert('Permiso denegado', 'No se concedieron permisos para notificaciones push');
-        return;
+    const setupPush = async () => {
+      // === Expo token para admins ===
+      if (user && isAdmin) {
+        try {
+          const expoToken = await requestPushPermission();
+          const db = getFirestore(getApp());
+          await setDoc(
+            doc(db, 'adminPushTokens', user.uid),
+            { expoPushToken: expoToken, updatedAt: serverTimestamp() },
+            { merge: true },
+          );
+          console.log('Expo Push Token guardado:', expoToken);
+        } catch (err) {
+          Alert.alert('Permiso denegado', 'No se concedieron permisos para notificaciones push (Expo)');
+        }
       }
+
+      // === FCM token + topic "news" para TODOS ===
       try {
-        const db = getFirestore(getApp());
-        await setDoc(
-          doc(db, 'adminPushTokens', user.uid),
-          { expoPushToken: token, updatedAt: serverTimestamp() },
-          { merge: true }
-        );
-        console.log('Expo Push Token guardado en Firestore:', token);
+        await messaging().requestPermission(); // iOS / Android 13+
+        await messaging().registerDeviceForRemoteMessages();
+        const fcmToken = await messaging().getToken();
+        console.log('FCM token:', fcmToken);
+        await messaging().subscribeToTopic('news');
       } catch (err) {
-        console.error('Error guardando token en Firestore:', err);
+        console.warn('Error configurando FCM:', err);
       }
     };
 
-    setupPushNotifications();
+    setupPush();
   }, [user, isAdmin]);
 
+  // Vibrar dispositivo al recibir una notificación en foreground
   useEffect(() => {
-    notificationListener.current = Notifications.addNotificationReceivedListener(notification => {
+    notificationListener.current = Notifications.addNotificationReceivedListener(() => {
       Vibration.vibrate();
     });
 
-    responseListener.current = Notifications.addNotificationResponseReceivedListener(response => {
-      // Lógica adicional al responder a la notificación
+    responseListener.current = Notifications.addNotificationResponseReceivedListener(() => {
+      // lógica al tocar la notificación (si hace falta)
     });
 
     return () => {

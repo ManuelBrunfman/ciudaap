@@ -1,14 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import {
-  View,
-  Text,
-  FlatList,
-  ActivityIndicator,
-  StyleSheet,
-  Image,
-  TouchableOpacity,
-  ScrollView,
-  TextInput,
+  View, Text, FlatList, ActivityIndicator, StyleSheet,
+  Image, TouchableOpacity, ScrollView, TextInput,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { getFirestore, collection, getDocs } from '@react-native-firebase/firestore';
@@ -18,20 +11,61 @@ import { useNavigation } from '@react-navigation/native';
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import type { RootStackParamList } from '../../types/RootStackParamList';
 
-// Interfaz de un beneficio
-interface Beneficio {
-  titulo: string;
-  link: string;
-  imagen_url: string;
-  categoria?: string;
-  provincia?: string;
-}
+// --------- ViewModel local que la UI realmente usa ---------
+type BenefitVM = {
+  title: string;
+  url: string;
+  imageUrl?: string;
+  category?: string | null;
+  province?: string | null;
+};
+
+// guard para strings
+const isNonEmptyString = (v: unknown): v is string =>
+  typeof v === 'string' && v.trim().length > 0;
+
+// orden fijo de categorías
+const CATEGORY_ORDER = [
+  'Alojamiento',
+  'Gastronomía',
+  'Excursiones y Actividades',
+  'Transporte',
+  'Salud',
+  'Deportes y Gimnasios',
+  'Retail / Comercios',
+  'Educación',
+  'Otros',
+];
+const catIndex = (c: string) => {
+  const i = CATEGORY_ORDER.indexOf(c);
+  return i === -1 ? 999 : i;
+};
+const sortByCategoryOrder = (a: string, b: string) =>
+  (catIndex(a) === catIndex(b) ? a.localeCompare(b) : catIndex(a) - catIndex(b));
+
+// provincias: “Nacional” primero
+const sortProvinces = (arr: string[]) =>
+  arr.sort((a, b) => {
+    if (a === 'Nacional' && b !== 'Nacional') return -1;
+    if (b === 'Nacional' && a !== 'Nacional') return 1;
+    return a.localeCompare(b);
+  });
+
+// Mapea el doc crudo de Firestore (en ES o EN) a nuestro VM
+const mapDocToVM = (raw: any): BenefitVM => {
+  const title    = (raw?.title ?? raw?.titulo ?? '').toString();
+  const url      = (raw?.url ?? raw?.link ?? '').toString();
+  const imageUrl = (raw?.imageUrl ?? raw?.imagen_url ?? '') || undefined;
+  const category = (raw?.category ?? raw?.categoria ?? null) as string | null;
+  const province = (raw?.province ?? raw?.provincia ?? null) as string | null;
+  return { title, url, imageUrl, category, province };
+};
 
 type NavProp = NativeStackNavigationProp<RootStackParamList, 'BenefitDetail'>;
 
 const BenefitsListScreen: React.FC = () => {
-  const [beneficios, setBeneficios] = useState<Beneficio[]>([]);
-  const [filteredBeneficios, setFilteredBeneficios] = useState<Beneficio[]>([]);
+  const [beneficios, setBeneficios] = useState<BenefitVM[]>([]);
+  const [filteredBeneficios, setFilteredBeneficios] = useState<BenefitVM[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -56,14 +90,20 @@ const BenefitsListScreen: React.FC = () => {
       try {
         const db = getFirestore(getApp());
         const snap = await getDocs(collection(db, 'beneficios'));
-        const data = snap.docs.map(d => d.data() as Beneficio);
+
+        const data: BenefitVM[] = snap.docs.map(d => mapDocToVM(d.data()));
         setBeneficios(data);
-        setCategorias(
-          Array.from(new Set(data.map(i => i.categoria).filter(Boolean) as string[])).sort()
-        );
-        setProvincias(
-          Array.from(new Set(data.map(i => i.provincia).filter(Boolean) as string[])).sort()
-        );
+
+        // Categorías únicas con orden fijo
+        const rawCats: string[] = data.map(i => (i.category ?? '').trim());
+        const cats: string[] = Array.from(new Set<string>(rawCats.filter(isNonEmptyString)))
+          .sort(sortByCategoryOrder);
+        setCategorias(cats);
+
+        // Provincias únicas, “Nacional” primero
+        const rawProvs: string[] = data.map(i => (i.province ?? '').trim());
+        const provs: string[] = Array.from(new Set<string>(rawProvs.filter(isNonEmptyString)));
+        setProvincias(sortProvinces([...provs]));
       } catch (e) {
         console.error('Error al cargar beneficios:', e);
         setError('No se pudieron cargar los beneficios. Intenta más tarde.');
@@ -78,21 +118,21 @@ const BenefitsListScreen: React.FC = () => {
     let result = [...beneficios];
     if (search.trim()) {
       const ql = search.toLowerCase();
-      result = result.filter(i => i.titulo.toLowerCase().includes(ql));
+      result = result.filter(i => i.title.toLowerCase().includes(ql));
     }
-    if (selectedCategoria) result = result.filter(i => i.categoria === selectedCategoria);
-    if (selectedProvincia) result = result.filter(i => i.provincia === selectedProvincia);
+    if (selectedCategoria) result = result.filter(i => (i.category ?? '').trim() === selectedCategoria);
+    if (selectedProvincia) result = result.filter(i => (i.province ?? '').trim() === selectedProvincia);
     setFilteredBeneficios(result);
   }, [search, selectedCategoria, selectedProvincia, beneficios]);
 
-  const renderItem = ({ item }: { item: Beneficio }) => (
+  const renderItem = ({ item }: { item: BenefitVM }) => (
     <TouchableOpacity
       style={styles.card}
-      onPress={() => navigation.navigate('BenefitDetail', { url: item.link })}
+      onPress={() => navigation.navigate('BenefitDetail', { url: item.url })}
     >
-      <Image source={{ uri: item.imagen_url }} style={styles.cardImage} />
+      {!!item.imageUrl && <Image source={{ uri: item.imageUrl }} style={styles.cardImage} />}
       <View style={styles.cardContent}>
-        <Text style={styles.cardTitle}>{item.titulo}</Text>
+        <Text style={styles.cardTitle}>{item.title}</Text>
       </View>
     </TouchableOpacity>
   );
@@ -125,6 +165,7 @@ const BenefitsListScreen: React.FC = () => {
           onChangeText={setSearch}
         />
       </View>
+
       <View style={styles.filterSection}>
         <Text style={styles.filterTitle}>Categoría:</Text>
         <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.filterScroll}>
@@ -147,6 +188,7 @@ const BenefitsListScreen: React.FC = () => {
           ))}
         </ScrollView>
       </View>
+
       <View style={styles.filterSection}>
         <Text style={styles.filterTitle}>Provincia:</Text>
         <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.filterScroll}>
@@ -169,6 +211,7 @@ const BenefitsListScreen: React.FC = () => {
           ))}
         </ScrollView>
       </View>
+
       {filteredBeneficios.length === 0 ? (
         <View style={styles.noResultsContainer}>
           <Text style={styles.noResultsText}>No se encontraron beneficios.</Text>
@@ -177,7 +220,7 @@ const BenefitsListScreen: React.FC = () => {
         <FlatList
           data={filteredBeneficios}
           renderItem={renderItem}
-          keyExtractor={(item, idx) => `${item.titulo}-${idx}`}
+          keyExtractor={(item, idx) => `${item.title}-${idx}`}
           contentContainerStyle={styles.list}
         />
       )}
