@@ -3,8 +3,13 @@ import { View, Text, TextInput, Button, Alert, StyleSheet } from 'react-native';
 import { useForm, Controller } from 'react-hook-form';
 import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
-import auth from '@react-native-firebase/auth';
-import firestore from '@react-native-firebase/firestore';
+import { getAuth } from '@react-native-firebase/auth';
+import {
+  getFirestore,
+  collection,
+  addDoc,
+  serverTimestamp,
+} from '@react-native-firebase/firestore';
 import { sendPushToAdmins } from '../services/sendPushToAdmins';
 
 /**
@@ -45,17 +50,18 @@ export default function AfiliateScreen() {
    * Se ejecuta al tocar "Enviar"
    */
   const onSubmit = async (data: FormData) => {
-    const currentUser = auth().currentUser;
+    const currentUser = getAuth().currentUser;
     if (!currentUser) {
       Alert.alert('Error', 'Debes iniciar sesión antes de enviar la solicitud');
       return;
     }
 
     try {
-      await firestore().collection('affiliateRequests').add({
+      const db = getFirestore();
+      await addDoc(collection(db, 'affiliateRequests'), {
         ...data,
         status: 'pending',
-        createdAt: firestore.FieldValue.serverTimestamp(),
+        createdAt: serverTimestamp(),
         userId: currentUser.uid,
       });
 

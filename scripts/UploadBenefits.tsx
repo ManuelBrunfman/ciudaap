@@ -11,7 +11,7 @@ import {
   TextInput,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import firestore from '@react-native-firebase/firestore';
+import { getFirestore, collection, getDocs } from '@react-native-firebase/firestore';
 import { useNavigation } from '@react-navigation/native';
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import type { RootStackParamList } from '../src/types/RootStackParamList';
@@ -45,7 +45,8 @@ const BenefitsListScreen: React.FC = () => {
     const loadBeneficios = async () => {
       setLoading(true);
       try {
-        const snap = await firestore().collection('benefits').get();
+        const db = getFirestore();
+        const snap = await getDocs(collection(db, 'benefits'));
         const data = snap.docs.map(d => d.data() as Beneficio);
         setBeneficios(data);
 

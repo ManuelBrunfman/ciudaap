@@ -8,7 +8,13 @@ import { View, Text, Alert, Vibration } from 'react-native';
 import * as Notifications from 'expo-notifications';
 import { getFirestore, doc, setDoc, serverTimestamp } from '@react-native-firebase/firestore';
 import { getApp } from '@react-native-firebase/app';
-import messaging from '@react-native-firebase/messaging';
+import {
+  getMessaging,
+  requestPermission as requestFcmPermission,
+  registerDeviceForRemoteMessages,
+  getToken as getFcmToken,
+  subscribeToTopic,
+} from '@react-native-firebase/messaging';
 import { requestPushPermission } from './src/services/notifications';
 
 Notifications.setNotificationHandler({
@@ -24,13 +30,9 @@ function MainApp() {
   const responseListener = useRef<any>();
   const { user, isAdmin } = useAuth();
 
-  /**
-   * 1. Solicita permisos y obtiene el token Expo (para admins) ✅
-   * 2. Obtiene el token FCM y se suscribe al topic "news" (para push masivas) ✅
-   */
+  // 1) Expo token para admins (depende de user/isAdmin)
   useEffect(() => {
-    const setupPush = async () => {
-      // === Expo token para admins ===
+    const saveAdminExpoToken = async () => {
       if (user && isAdmin) {
         try {
           const expoToken = await requestPushPermission();
@@ -45,21 +47,29 @@ function MainApp() {
           Alert.alert('Permiso denegado', 'No se concedieron permisos para notificaciones push (Expo)');
         }
       }
+    };
+    saveAdminExpoToken();
+  }, [user, isAdmin]);
 
-      // === FCM token + topic "news" para TODOS ===
+  // 2) FCM token + topic "news" (solo una vez)
+  const didInitFcm = useRef(false);
+  useEffect(() => {
+    if (didInitFcm.current) return;
+    didInitFcm.current = true;
+    (async () => {
       try {
-        await messaging().requestPermission(); // iOS / Android 13+
-        await messaging().registerDeviceForRemoteMessages();
-        const fcmToken = await messaging().getToken();
+        const app = getApp();
+        const msg = getMessaging(app);
+        await requestFcmPermission(msg); // iOS / Android 13+
+        await registerDeviceForRemoteMessages(msg);
+        const fcmToken = await getFcmToken(msg);
         console.log('FCM token:', fcmToken);
-        await messaging().subscribeToTopic('news');
+        await subscribeToTopic(msg, 'news');
       } catch (err) {
         console.warn('Error configurando FCM:', err);
       }
-    };
-
-    setupPush();
-  }, [user, isAdmin]);
+    })();
+  }, []);
 
   // Vibrar dispositivo al recibir una notificación en foreground
   useEffect(() => {
