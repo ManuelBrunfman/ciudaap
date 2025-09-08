@@ -16,8 +16,8 @@ type BenefitVM = {
   title: string;
   url: string;
   imageUrl?: string;
-  category?: string | null;
-  province?: string | null;
+  category: string | null;
+  province: string | null;
 };
 
 // guard para strings
@@ -51,11 +51,26 @@ const sortProvinces = (arr: string[]) =>
     return a.localeCompare(b);
   });
 
+// ---------- Placeholder si no hay imagen ----------
+const PLACEHOLDER =
+  'https://dummyimage.com/300x300/eeeeee/888888&text=Beneficio';
+
+// Normaliza un posible campo imagen y devuelve undefined si está vacío/inválido
+const normalizeImageUrl = (raw: any): string | undefined => {
+  const candidate = (raw?.imageUrl ?? raw?.imagen_url ?? '').toString().trim();
+  if (!candidate) return undefined;
+  // Evita pasar strings inválidas como "undefined", "null", etc.
+  if (/^(undefined|null)$/i.test(candidate)) return undefined;
+  // Requiere http/https válido
+  if (!/^https?:\/\//i.test(candidate)) return undefined;
+  return candidate;
+};
+
 // Mapea el doc crudo de Firestore (en ES o EN) a nuestro VM
 const mapDocToVM = (raw: any): BenefitVM => {
   const title    = (raw?.title ?? raw?.titulo ?? '').toString();
   const url      = (raw?.url ?? raw?.link ?? '').toString();
-  const imageUrl = (raw?.imageUrl ?? raw?.imagen_url ?? '') || undefined;
+  const imageUrl = normalizeImageUrl(raw);
   const category = (raw?.category ?? raw?.categoria ?? null) as string | null;
   const province = (raw?.province ?? raw?.provincia ?? null) as string | null;
   return { title, url, imageUrl, category, province };
@@ -80,38 +95,42 @@ const BenefitsListScreen: React.FC = () => {
 
   useEffect(() => {
     setLoading(true);
-    const auth = getAuth(getApp());
-    const unsubscribe = onAuthStateChanged(auth, async user => {
-      if (!user) {
-        setError('Debe iniciar sesión para ver los beneficios.');
-        setLoading(false);
-        return;
-      }
+    const app = getApp();
+    const auth = getAuth(app);
+    const unsub = onAuthStateChanged(auth, async user => {
       try {
-        const db = getFirestore(getApp());
-        const snap = await getDocs(collection(db, 'beneficios'));
+        const fs = getFirestore(app);
+        const col = collection(fs, 'beneficios');
+        const snap = await getDocs(col);
 
-        const data: BenefitVM[] = snap.docs.map(d => mapDocToVM(d.data()));
-        setBeneficios(data);
+        const items: BenefitVM[] = [];
+        const cats = new Set<string>();
+        const provs = new Set<string>();
 
-        // Categorías únicas con orden fijo
-        const rawCats: string[] = data.map(i => (i.category ?? '').trim());
-        const cats: string[] = Array.from(new Set<string>(rawCats.filter(isNonEmptyString)))
-          .sort(sortByCategoryOrder);
-        setCategorias(cats);
+        snap.forEach(d => {
+          const vm = mapDocToVM(d.data());
+          if (!isNonEmptyString(vm.title) || !isNonEmptyString(vm.url)) return;
+          items.push(vm);
+          if (isNonEmptyString(vm.category ?? '')) cats.add(vm.category as string);
+          if (isNonEmptyString(vm.province ?? '')) provs.add(vm.province as string);
+        });
 
-        // Provincias únicas, “Nacional” primero
-        const rawProvs: string[] = data.map(i => (i.province ?? '').trim());
-        const provs: string[] = Array.from(new Set<string>(rawProvs.filter(isNonEmptyString)));
-        setProvincias(sortProvinces([...provs]));
-      } catch (e) {
-        console.error('Error al cargar beneficios:', e);
-        setError('No se pudieron cargar los beneficios. Intenta más tarde.');
+        const uniqueCats = Array.from(cats).sort(sortByCategoryOrder);
+        const uniqueProvs = sortProvinces(Array.from(provs));
+
+        setBeneficios(items);
+        setFilteredBeneficios(items);
+        setCategorias(uniqueCats);
+        setProvincias(uniqueProvs);
+        setError(null);
+      } catch (e: any) {
+        console.error(e);
+        setError(e?.message ?? 'Error al cargar beneficios');
       } finally {
         setLoading(false);
       }
     });
-    return unsubscribe;
+    return unsub;
   }, []);
 
   useEffect(() => {
@@ -125,30 +144,35 @@ const BenefitsListScreen: React.FC = () => {
     setFilteredBeneficios(result);
   }, [search, selectedCategoria, selectedProvincia, beneficios]);
 
-  const renderItem = ({ item }: { item: BenefitVM }) => (
-    <TouchableOpacity
-      style={styles.card}
-      onPress={() => navigation.navigate('BenefitDetail', { url: item.url })}
-    >
-      {!!item.imageUrl && <Image source={{ uri: item.imageUrl }} style={styles.cardImage} />}
-      <View style={styles.cardContent}>
-        <Text style={styles.cardTitle}>{item.title}</Text>
-      </View>
-    </TouchableOpacity>
-  );
+  const renderItem = ({ item }: { item: BenefitVM }) => {
+    // Siempre mostrar una imagen: real si existe, si no, placeholder
+    const src = { uri: item.imageUrl ?? PLACEHOLDER };
+
+    return (
+      <TouchableOpacity
+        style={styles.card}
+        onPress={() => navigation.navigate('BenefitDetail', { url: item.url })}
+      >
+        <Image source={src} style={styles.cardImage} resizeMode="cover" />
+        <View style={styles.cardContent}>
+          <Text style={styles.cardTitle}>{item.title}</Text>
+        </View>
+      </TouchableOpacity>
+    );
+  };
 
   if (loading) {
     return (
-      <SafeAreaView style={styles.loadingContainer}>
+      <View style={styles.loadingContainer}>
         <ActivityIndicator size="large" />
         <Text style={styles.loadingText}>Cargando beneficios...</Text>
-      </SafeAreaView>
+      </View>
     );
   }
 
   if (error) {
     return (
-      <SafeAreaView style={styles.loadingContainer}>
+      <SafeAreaView style={styles.container}>
         <Text style={styles.errorText}>{error}</Text>
       </SafeAreaView>
     );
@@ -156,16 +180,17 @@ const BenefitsListScreen: React.FC = () => {
 
   return (
     <SafeAreaView style={styles.container}>
+      {/* Buscador */}
       <View style={styles.searchContainer}>
         <TextInput
-          style={styles.searchInput}
-          placeholder="Buscar beneficios..."
-          placeholderTextColor="#666"
+          placeholder="Buscar beneficio..."
           value={search}
           onChangeText={setSearch}
+          style={styles.searchInput}
         />
       </View>
 
+      {/* Filtro por categoría */}
       <View style={styles.filterSection}>
         <Text style={styles.filterTitle}>Categoría:</Text>
         <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.filterScroll}>
@@ -189,6 +214,7 @@ const BenefitsListScreen: React.FC = () => {
         </ScrollView>
       </View>
 
+      {/* Filtro por provincia */}
       <View style={styles.filterSection}>
         <Text style={styles.filterTitle}>Provincia:</Text>
         <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.filterScroll}>
@@ -212,15 +238,16 @@ const BenefitsListScreen: React.FC = () => {
         </ScrollView>
       </View>
 
+      {/* Lista */}
       {filteredBeneficios.length === 0 ? (
         <View style={styles.noResultsContainer}>
-          <Text style={styles.noResultsText}>No se encontraron beneficios.</Text>
+          <Text style={styles.noResultsText}>No hay resultados con los filtros actuales.</Text>
         </View>
       ) : (
         <FlatList
           data={filteredBeneficios}
+          keyExtractor={(item, idx) => `${item.url}-${idx}`}
           renderItem={renderItem}
-          keyExtractor={(item, idx) => `${item.title}-${idx}`}
           contentContainerStyle={styles.list}
         />
       )}
@@ -234,16 +261,26 @@ const styles = StyleSheet.create({
   loadingText: { marginTop: 10, fontSize: 16, color: '#555' },
   errorText: { fontSize: 16, color: 'red', textAlign: 'center' },
   searchContainer: { marginBottom: 12 },
-  searchInput: { borderWidth: 1, borderColor: '#ccc', borderRadius: 8, paddingHorizontal: 15, height: 45, backgroundColor: '#fff', fontSize: 16, color: '#333' },
+  searchInput: {
+    borderWidth: 1, borderColor: '#ccc', borderRadius: 10,
+    paddingHorizontal: 12, height: 45, backgroundColor: '#fff',
+    fontSize: 16, color: '#333'
+  },
   filterSection: { marginBottom: 12 },
   filterTitle: { fontSize: 16, fontWeight: 'bold', marginBottom: 8, color: '#333' },
   filterScroll: { paddingVertical: 4 },
-  filterButton: { paddingVertical: 8, paddingHorizontal: 15, borderRadius: 20, borderWidth: 1, borderColor: '#007bff', backgroundColor: '#fff', marginRight: 8, alignItems: 'center', justifyContent: 'center' },
+  filterButton: {
+    paddingVertical: 8, paddingHorizontal: 15, borderWidth: 1, borderColor: '#ccc',
+    borderRadius: 20, marginRight: 8, alignItems: 'center', justifyContent: 'center'
+  },
   filterButtonActive: { backgroundColor: '#007bff', borderColor: '#007bff' },
   filterText: { color: '#007bff', fontSize: 14, fontWeight: '600' },
   filterTextActive: { color: '#fff' },
   list: { paddingBottom: 16 },
-  card: { flexDirection: 'row', backgroundColor: '#fff', marginVertical: 6, borderRadius: 10, overflow: 'hidden', elevation: 3, shadowColor: '#000', shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.1, shadowRadius: 3 },
+  card: {
+    flexDirection: 'row', backgroundColor: '#fff', marginVertical: 6, borderRadius: 12, padding: 10,
+    shadowColor: '#000', shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.1, shadowRadius: 3, elevation: 2
+  },
   cardImage: { width: 100, height: 100, borderRadius: 10, overflow: 'hidden' },
   cardContent: { flex: 1, padding: 12, justifyContent: 'center' },
   cardTitle: { fontSize: 17, fontWeight: '700', color: '#333' },

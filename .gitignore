@@ -45,6 +45,8 @@ GoogleService-Info.plist
 *.keystore
 scripts/serviceAccountKey.json
 *.json.*
+credentials/release-signing.properties
+credentials/*.keystore
 
 # …pero **incluimos** el que necesita Gradle para los builds release
 !android/app/google-services.json
