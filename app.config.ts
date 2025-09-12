@@ -47,7 +47,8 @@ export default (_: ConfigContext): ExpoConfig => ({
 
   /* ───────────── Plugins ───────────── */
   plugins: [
-    'expo-dev-client',
+    // Incluí el dev client solo en builds de desarrollo (EAS)
+    process.env.EAS_BUILD_PROFILE === 'development' && 'expo-dev-client',
     '@react-native-firebase/app',
     ['@react-native-firebase/messaging', { android: { enableHeadless: true } }],
     [
@@ -61,7 +62,7 @@ export default (_: ConfigContext): ExpoConfig => ({
         },
       },
     ],
-  ],
+  ].filter(Boolean) as any,
 
   /* ───────────── Extra / ENV ───────────── */
   extra: {

@@ -1,9 +1,7 @@
 // src/navigation/TabNavigator.tsx
 
 import React from "react";
-
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-
 import { Ionicons } from "@expo/vector-icons";
 
 import BenefitsListScreen from "../screens/benefits/BenefitsListScreen";
@@ -24,23 +22,16 @@ const TabNavigator = () => {
     <Tab.Navigator
       screenOptions={({ route }) => ({
         tabBarIcon: ({ color, size }) => {
-          // Por defecto, elegimos un icono “ellipse”
-
           let iconName: string = "ellipse";
 
           if (route.name === "NewsList") iconName = "newspaper-outline";
-
           if (route.name === "Benefits") iconName = "gift-outline";
-
           if (route.name === "Credential") iconName = "card-outline";
-
           if (route.name === "Profile") iconName = "person-outline";
           if (route.name === "Contact") iconName = "logo-whatsapp";
           if (route.name === "Afiliate") iconName = "person-add-outline";
           if (route.name === "YouTubeChannel") iconName = "logo-youtube";
           if (route.name === "Admin") iconName = "settings-outline";
-
-          // Fix 1: Forzar cast del iconName si TS no lo reconoce:
 
           return (
             <Ionicons
@@ -50,7 +41,6 @@ const TabNavigator = () => {
             />
           );
         },
-
         headerShown: false,
       })}
     >
@@ -64,6 +54,12 @@ const TabNavigator = () => {
         name="Benefits"
         component={BenefitsListScreen}
         options={{ title: "Beneficios" }}
+      />
+
+      <Tab.Screen
+        name="Profile"
+        component={ProfileScreen}
+        options={{ title: "Perfil" }}
       />
 
       <Tab.Screen

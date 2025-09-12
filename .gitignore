@@ -84,3 +84,13 @@ scripts/
 ###############################################################################
 BancaApp-clean.git/
 test.json
+
+# Librerías y binarios externos
+libwebp-1.3.2-linux-x86-64*
+oxipng*
+*.tar.gz
+*.tar.xz
+
+
+
+

@@ -7,6 +7,8 @@ import BenefitDetailScreen from '../screens/benefits/BenefitDetailScreen';
 import NewsDetailScreen from '../screens/news/NewsDetailScreen';
 import YouTubeVideoScreen from '../screens/videos/YouTubeVideoScreen';
 import { View, Text } from 'react-native';
+import ForceLogoutScreen from "../screens/ForceLogoutScreen";
+
 
 // ✅ Import centralizado del tipo RootStackParamList
 // Si moviste el archivo a types:
@@ -25,6 +27,8 @@ const AppNavigator: React.FC = () => {
         <Stack.Screen name="BenefitDetail" component={BenefitDetailScreen} />
         <Stack.Screen name="NewsDetail" component={NewsDetailScreen} />
         <Stack.Screen name="YouTubeVideo" component={YouTubeVideoScreen} />
+        <Stack.Screen name="ForceLogout" component={ForceLogoutScreen} />
+
       </Stack.Navigator>
     );
   } catch (error: any) {
