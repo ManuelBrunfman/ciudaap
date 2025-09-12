@@ -1,26 +1,19 @@
-/*
- * app.config.ts – Expo configuration
- * -------------------------------------------------
- *   • Centralizes build settings (compileSdk, targetSdk, buildTools) via
- *     the official `expo-build-properties` plugin.
- *   • Keeps all Firebase + .env variables in one place.
- *   • Secrets (google‑services.json / GoogleService‑Info.plist / keystore)
- *     live under ./credentials/ and are **ignored** by Git.
- * -------------------------------------------------
- */
-
+// app.config.ts
 import 'dotenv/config';
 import { ExpoConfig, ConfigContext } from '@expo/config';
 
 export default (_: ConfigContext): ExpoConfig => ({
   /* ──────────── Basic app info ──────────── */
   name: 'BancApp',
-  slug: 'ciudaapp',                // unified slug
+  slug: 'ciudaapp',
   owner: 'manubrunfman',
   description: 'Aplicación de lxs trabajadorxs del Banco Ciudad.',
   version: '1.0.0',
   orientation: 'portrait',
   userInterfaceStyle: 'light',
+
+  /* 👇 Agregá este scheme (lo usaremos en el deep link exp+ciudaapp://...) */
+  scheme: 'ciudaapp',
 
   /* ───────── Expo / React Native ───────── */
   newArchEnabled: false,
@@ -38,9 +31,11 @@ export default (_: ConfigContext): ExpoConfig => ({
   ios: {
     supportsTablet: true,
     bundleIdentifier: 'com.labancaria.bancapp',
-    googleServicesFile: './android/app/google-services.json',  },
+    // ⚠️ Si algún día hacés iOS, este archivo es el de iOS, no el de Android:
+    // googleServicesFile: './credentials/GoogleService-Info.plist',
+  },
 
-  /* ───────────────── Android ─────────────── */
+  /* ──────────────── Android ─────────────── */
   android: {
     package: 'com.labancaria.bancapp',
     adaptiveIcon: {
@@ -50,25 +45,25 @@ export default (_: ConfigContext): ExpoConfig => ({
     googleServicesFile: './credentials/google-services.json',
   },
 
-  /* ───────────── Plugins ─────────────────── */
- plugins: [
-  '@react-native-firebase/app',
-  ['@react-native-firebase/messaging', { android: { enableHeadless: true } }],
-  [
-    'expo-build-properties',
-    {
-      android: {
-        compileSdkVersion: 34,
-        targetSdkVersion: 34,
-        buildToolsVersion: '34.0.0',
-        // Agrega esta línea para RN 0.76.9:
-        minSdkVersion: 24,
+  /* ───────────── Plugins ───────────── */
+  plugins: [
+    'expo-dev-client',
+    '@react-native-firebase/app',
+    ['@react-native-firebase/messaging', { android: { enableHeadless: true } }],
+    [
+      'expo-build-properties',
+      {
+        android: {
+          compileSdkVersion: 34,
+          targetSdkVersion: 34,
+          buildToolsVersion: '34.0.0',
+          minSdkVersion: 24, // RN 0.76.9
+        },
       },
-    },
+    ],
   ],
-],
 
-  /* ───────────── Extra / ENV ─────────────── */
+  /* ───────────── Extra / ENV ───────────── */
   extra: {
     eas: { projectId: '991ae612-bdd8-4e91-b7e2-0f1777c6bd36' },
     EXPO_PUBLIC_FIREBASE_API_KEY: process.env.EXPO_PUBLIC_FIREBASE_API_KEY,
