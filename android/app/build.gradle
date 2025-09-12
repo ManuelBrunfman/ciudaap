@@ -103,6 +103,8 @@ android {
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1
         versionName "1.0.0"
+        // Limitar recursos a español para reducir tamaño
+        resConfigs "es"
     }
     signingConfigs {
         debug {

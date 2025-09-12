@@ -13,14 +13,14 @@ import {
   View,
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import type { StackNavigationProp } from '@react-navigation/stack';
 import type { RootStackParamList } from '../../types/RootStackParamList';
 import { XMLParser } from 'fast-xml-parser';
 
 // --------------------
 // Types & constants
 // --------------------
-type Nav = NativeStackNavigationProp<RootStackParamList, 'YouTubeChannel'>;
+type Nav = StackNavigationProp<RootStackParamList, 'YouTubeChannel'>;
 
 interface VideoItem {
   id: string;

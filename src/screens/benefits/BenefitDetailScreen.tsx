@@ -4,11 +4,11 @@ import { View, StyleSheet } from "react-native";
 
 import { WebView } from "react-native-webview";
 
-import type { NativeStackScreenProps } from "@react-navigation/native-stack";
+import type { StackScreenProps } from "@react-navigation/stack";
 
 import type { RootStackParamList } from "../../types/RootStackParamList";
 
-type Props = NativeStackScreenProps<RootStackParamList, "BenefitDetail">;
+type Props = StackScreenProps<RootStackParamList, "BenefitDetail">;
 
 const BenefitDetailScreen: React.FC<Props> = ({ route }) => {
   const { url } = route.params;

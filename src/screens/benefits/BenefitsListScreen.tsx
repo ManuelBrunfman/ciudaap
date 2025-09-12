@@ -18,7 +18,7 @@ import { getFirestore, collection, getDocs } from '@react-native-firebase/firest
 import { getAuth, onAuthStateChanged } from '@react-native-firebase/auth';
 import { getApp } from '@react-native-firebase/app';
 import { useNavigation } from '@react-navigation/native';
-import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import type { StackNavigationProp } from '@react-navigation/stack';
 import type { RootStackParamList } from '../../types/RootStackParamList';
 
 // --------- ViewModel local ---------
@@ -131,7 +131,7 @@ const mapDocToVM = (raw: any): BenefitVM => {
 
 // --------- Componente ---------
 
-type NavProp = NativeStackNavigationProp<RootStackParamList, 'BenefitDetail'>;
+type NavProp = StackNavigationProp<RootStackParamList, 'BenefitDetail'>;
 
 const BenefitsListScreen: React.FC = () => {
   const [items, setItems] = useState<BenefitVM[]>([]);

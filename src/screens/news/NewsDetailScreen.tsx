@@ -19,9 +19,9 @@ import type { RootStackParamList } from '../../types/RootStackParamList';
 // Si preferís dejarlo en navigation:
 // import type { RootStackParamList } from '../../navigation/RootStackParamList';
 
-import type { NativeStackScreenProps } from '@react-navigation/native-stack';
+import type { StackScreenProps } from '@react-navigation/stack';
 
-type Props = NativeStackScreenProps<RootStackParamList, 'NewsDetail'>;
+type Props = StackScreenProps<RootStackParamList, 'NewsDetail'>;
 
 const NewsDetailScreen: React.FC<Props> = ({ route }) => {
   const insets = useSafeAreaInsets();
