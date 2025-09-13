@@ -1,6 +1,10 @@
-// Ruta: src/screens/HomeScreen.tsx
-import React from 'react';
-import { SafeAreaView } from 'react-native-safe-area-context'; // Importamos SafeAreaView
+import { LinearGradient } from 'expo-linear-gradient';
+import { StatusBar } from 'expo-status-bar';
+import { gradientStart, gradientMiddle, gradientEnd, white, lightGray } from '../theme/colors';
+      <LinearGradient colors={[gradientStart, gradientMiddle, gradientEnd]} style={styles.container}>
+    color: white,
+    color: lightGray,
+    color: white,
 import { View, Text, StyleSheet, ScrollView } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { StatusBar } from 'expo-status-bar';

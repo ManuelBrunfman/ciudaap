@@ -12,6 +12,17 @@ import {
 import { LinearGradient } from 'expo-linear-gradient';
 import { useAuth } from '../../context/AuthContext';
 import { useNavigation } from '@react-navigation/native';
+import {
+  primary,
+  primaryDark,
+  secondary,
+  secondaryDark,
+  white,
+  text,
+  black,
+  lightBlue,
+  placeholder,
+} from '../../theme/colors';
 
 const { width } = Dimensions.get('window');
 
@@ -63,7 +74,7 @@ const LoginScreen: React.FC = () => {
               <TextInput
                 style={styles.input}
                 placeholder="Correo"
-                placeholderTextColor="#999999"
+                placeholderTextColor={placeholder}
                 value={email}
                 onChangeText={setEmail}
                 keyboardType="email-address"
@@ -74,7 +85,7 @@ const LoginScreen: React.FC = () => {
               <TextInput
                 style={styles.input}
                 placeholder="Contraseña"
-                placeholderTextColor="#999999"
+                placeholderTextColor={placeholder}
                 value={password}
                 onChangeText={setPassword}
                 secureTextEntry
@@ -90,7 +101,7 @@ const LoginScreen: React.FC = () => {
                 onPress={handleLogin}
               >
                 <LinearGradient
-                  colors={['#4caf50', '#388e3c']}
+                  colors={[secondary, secondaryDark]}
                   style={styles.buttonGradient}
                   start={{ x: 0, y: 0 }}
                   end={{ x: 0, y: 1 }}
@@ -104,7 +115,7 @@ const LoginScreen: React.FC = () => {
                 onPress={handleSignUp}
               >
                 <LinearGradient
-                  colors={['#2196f3', '#1976d2']}
+                  colors={[primary, primaryDark]}
                   style={styles.buttonGradient}
                   start={{ x: 0, y: 0 }}
                   end={{ x: 0, y: 1 }}
@@ -154,7 +165,7 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 28,
     fontWeight: 'bold',
-    color: '#FFFFFF',
+    color: white,
     textShadowColor: 'rgba(0,0,0,0.5)',
     textShadowOffset: { width: 2, height: 2 },
     textShadowRadius: 4,
@@ -173,16 +184,16 @@ const styles = StyleSheet.create({
     padding: 12,
     borderRadius: 25,
     fontSize: 16,
-    backgroundColor: '#FFFFFF',
-    color: '#2D3436',
-    shadowColor: '#000',
+    backgroundColor: white,
+    color: text,
+    shadowColor: black,
     shadowOffset: { width: 2, height: 2 },
     shadowOpacity: 0.2,
     shadowRadius: 5,
     elevation: 3,
   },
   forgotPassword: {
-    color: '#cceeff',
+    color: lightBlue,
     fontSize: 14,
     marginTop: 5,
     textDecorationLine: 'underline',
@@ -197,7 +208,7 @@ const styles = StyleSheet.create({
     borderRadius: 25,
     overflow: 'hidden',
     marginHorizontal: 5,
-    shadowColor: '#000',
+    shadowColor: black,
     shadowOffset: { width: 4, height: 4 },
     shadowOpacity: 0.3,
     shadowRadius: 8,
@@ -211,6 +222,6 @@ const styles = StyleSheet.create({
   buttonText: {
     fontSize: 16,
     fontWeight: 'bold',
-    color: '#FFFFFF',
+    color: white,
   },
 });
