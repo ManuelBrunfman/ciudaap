@@ -12,6 +12,7 @@ import {
 import { LinearGradient } from 'expo-linear-gradient';
 import { useAuth } from '../../context/AuthContext';
 import { useNavigation } from '@react-navigation/native';
+import * as colors from '../../theme/colors';
 
 const { width } = Dimensions.get('window');
 
@@ -63,7 +64,7 @@ const LoginScreen: React.FC = () => {
               <TextInput
                 style={styles.input}
                 placeholder="Correo"
-                placeholderTextColor="#999999"
+                placeholderTextColor={colors.placeholder}
                 value={email}
                 onChangeText={setEmail}
                 keyboardType="email-address"
@@ -74,7 +75,7 @@ const LoginScreen: React.FC = () => {
               <TextInput
                 style={styles.input}
                 placeholder="Contraseña"
-                placeholderTextColor="#999999"
+                placeholderTextColor={colors.placeholder}
                 value={password}
                 onChangeText={setPassword}
                 secureTextEntry
@@ -90,7 +91,7 @@ const LoginScreen: React.FC = () => {
                 onPress={handleLogin}
               >
                 <LinearGradient
-                  colors={['#4caf50', '#388e3c']}
+                  colors={[colors.primary, colors.primaryDark]}
                   style={styles.buttonGradient}
                   start={{ x: 0, y: 0 }}
                   end={{ x: 0, y: 1 }}
@@ -104,7 +105,7 @@ const LoginScreen: React.FC = () => {
                 onPress={handleSignUp}
               >
                 <LinearGradient
-                  colors={['#2196f3', '#1976d2']}
+                  colors={[colors.secondary, colors.secondaryDark]}
                   style={styles.buttonGradient}
                   start={{ x: 0, y: 0 }}
                   end={{ x: 0, y: 1 }}
@@ -118,7 +119,7 @@ const LoginScreen: React.FC = () => {
       </ImageBackground>
     );
   } catch (error: any) {
-    console.error("Error en LoginScreen:", error);
+    console.error('Error en LoginScreen:', error);
     return (
       <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
         <Text style={{ color: 'red', fontSize: 20, textAlign: 'center' }}>
@@ -154,7 +155,7 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 28,
     fontWeight: 'bold',
-    color: '#FFFFFF',
+    color: colors.white,
     textShadowColor: 'rgba(0,0,0,0.5)',
     textShadowOffset: { width: 2, height: 2 },
     textShadowRadius: 4,
@@ -173,16 +174,16 @@ const styles = StyleSheet.create({
     padding: 12,
     borderRadius: 25,
     fontSize: 16,
-    backgroundColor: '#FFFFFF',
-    color: '#2D3436',
-    shadowColor: '#000',
+    backgroundColor: colors.white,
+    color: colors.text,
+    shadowColor: colors.black,
     shadowOffset: { width: 2, height: 2 },
     shadowOpacity: 0.2,
     shadowRadius: 5,
     elevation: 3,
   },
   forgotPassword: {
-    color: '#cceeff',
+    color: colors.link,
     fontSize: 14,
     marginTop: 5,
     textDecorationLine: 'underline',
@@ -197,7 +198,7 @@ const styles = StyleSheet.create({
     borderRadius: 25,
     overflow: 'hidden',
     marginHorizontal: 5,
-    shadowColor: '#000',
+    shadowColor: colors.black,
     shadowOffset: { width: 4, height: 4 },
     shadowOpacity: 0.3,
     shadowRadius: 8,
@@ -211,6 +212,6 @@ const styles = StyleSheet.create({
   buttonText: {
     fontSize: 16,
     fontWeight: 'bold',
-    color: '#FFFFFF',
+    color: colors.white,
   },
 });

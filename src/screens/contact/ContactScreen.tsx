@@ -1,7 +1,14 @@
 import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, Linking } from 'react-native';
+import {
+  View,
+  Text,
+  StyleSheet,
+  TouchableOpacity,
+  Linking,
+} from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { FontAwesome } from '@expo/vector-icons';
+import * as colors from '../../theme/colors';
 
 const numero = '5491158178508'; // Sin el +
 const mensaje = 'Hola, me quiero contactar con alguien de la gremial.';
@@ -17,13 +24,19 @@ const ContactScreen: React.FC = () => {
       <View style={styles.content}>
         <Text style={styles.title}>Contacto Gremial</Text>
         <Text style={styles.subtitle}>
-          Si necesitás ayuda o querés comunicarte con la gremial, presioná el botón de WhatsApp abajo.
+          Si necesitás ayuda o querés comunicarte con la gremial, presioná el
+          botón de WhatsApp abajo.
         </Text>
       </View>
 
       <View style={styles.bottomBar}>
         <TouchableOpacity style={styles.whatsappButton} onPress={abrirWhatsApp}>
-          <FontAwesome name="whatsapp" size={24} color="#fff" style={{ marginRight: 8 }} />
+          <FontAwesome
+            name="whatsapp"
+            size={24}
+            color={colors.white}
+            style={{ marginRight: 8 }}
+          />
           <Text style={styles.buttonText}>Contactar por WhatsApp</Text>
         </TouchableOpacity>
       </View>
@@ -36,7 +49,7 @@ export default ContactScreen;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: colors.white,
     justifyContent: 'space-between',
   },
   content: {
@@ -53,33 +66,33 @@ const styles = StyleSheet.create({
   },
   subtitle: {
     fontSize: 16,
-    color: '#555',
+    color: colors.gray,
     textAlign: 'center',
   },
   bottomBar: {
     width: '100%',
     padding: 16,
-    backgroundColor: '#fff',
+    backgroundColor: colors.white,
     borderTopWidth: 1,
-    borderTopColor: '#eee',
+    borderTopColor: colors.lightGray,
     alignItems: 'center',
     justifyContent: 'center',
   },
   whatsappButton: {
     flexDirection: 'row',
-    backgroundColor: '#25D366',
+    backgroundColor: colors.whatsapp,
     paddingVertical: 14,
     paddingHorizontal: 24,
     borderRadius: 30,
     alignItems: 'center',
     elevation: 2,
-    shadowColor: '#000',
+    shadowColor: colors.black,
     shadowOpacity: 0.2,
     shadowOffset: { width: 0, height: 2 },
     shadowRadius: 4,
   },
   buttonText: {
-    color: '#fff',
+    color: colors.white,
     fontSize: 16,
     fontWeight: 'bold',
   },
