@@ -12,6 +12,7 @@ import {
 import { LinearGradient } from 'expo-linear-gradient';
 import { useAuth } from '../../context/AuthContext';
 import { useNavigation } from '@react-navigation/native';
+import { spacing } from '../../theme/spacing';
 
 const { width } = Dimensions.get('window');
 
@@ -144,12 +145,12 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    paddingHorizontal: 20,
+    paddingHorizontal: spacing.lg,
   },
   logo: {
     width: 100,
     height: 100,
-    marginBottom: 20,
+    marginBottom: spacing.lg,
   },
   title: {
     fontSize: 28,
@@ -158,7 +159,7 @@ const styles = StyleSheet.create({
     textShadowColor: 'rgba(0,0,0,0.5)',
     textShadowOffset: { width: 2, height: 2 },
     textShadowRadius: 4,
-    marginBottom: 20,
+    marginBottom: spacing.lg,
   },
   form: {
     width: '100%',
@@ -166,11 +167,11 @@ const styles = StyleSheet.create({
   },
   inputGroup: {
     width: width * 0.8,
-    marginBottom: 15,
+    marginBottom: spacing.md + spacing.xs,
   },
   input: {
     width: '100%',
-    padding: 12,
+    padding: spacing.md,
     borderRadius: 25,
     fontSize: 16,
     backgroundColor: '#FFFFFF',
@@ -184,19 +185,19 @@ const styles = StyleSheet.create({
   forgotPassword: {
     color: '#cceeff',
     fontSize: 14,
-    marginTop: 5,
+    marginTop: spacing.xs,
     textDecorationLine: 'underline',
   },
   buttonGroup: {
     flexDirection: 'row',
     justifyContent: 'center',
-    marginTop: 15,
+    marginTop: spacing.md + spacing.xs,
   },
   button: {
     width: 120,
     borderRadius: 25,
     overflow: 'hidden',
-    marginHorizontal: 5,
+    marginHorizontal: spacing.xs,
     shadowColor: '#000',
     shadowOffset: { width: 4, height: 4 },
     shadowOpacity: 0.3,
@@ -204,7 +205,7 @@ const styles = StyleSheet.create({
     elevation: 4,
   },
   buttonGradient: {
-    paddingVertical: 12,
+    paddingVertical: spacing.md,
     alignItems: 'center',
     justifyContent: 'center',
   },
