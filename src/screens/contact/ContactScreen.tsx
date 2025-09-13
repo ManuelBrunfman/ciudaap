@@ -1,5 +1,7 @@
 import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, Linking } from 'react-native';
+import { View, StyleSheet, TouchableOpacity, Linking } from 'react-native';
+import AppText from '../../components/AppText';
+import { typography } from '../../theme/typography';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { FontAwesome } from '@expo/vector-icons';
 
@@ -15,16 +17,16 @@ const ContactScreen: React.FC = () => {
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.content}>
-        <Text style={styles.title}>Contacto Gremial</Text>
-        <Text style={styles.subtitle}>
+        <AppText style={styles.title}>Contacto Gremial</AppText>
+        <AppText style={styles.subtitle}>
           Si necesitás ayuda o querés comunicarte con la gremial, presioná el botón de WhatsApp abajo.
-        </Text>
+        </AppText>
       </View>
 
       <View style={styles.bottomBar}>
         <TouchableOpacity style={styles.whatsappButton} onPress={abrirWhatsApp}>
           <FontAwesome name="whatsapp" size={24} color="#fff" style={{ marginRight: 8 }} />
-          <Text style={styles.buttonText}>Contactar por WhatsApp</Text>
+          <AppText style={styles.buttonText}>Contactar por WhatsApp</AppText>
         </TouchableOpacity>
       </View>
     </SafeAreaView>
@@ -46,13 +48,12 @@ const styles = StyleSheet.create({
     paddingHorizontal: 24,
   },
   title: {
-    fontSize: 24,
-    fontWeight: 'bold',
+    ...typography.heading2,
     marginBottom: 16,
     textAlign: 'center',
   },
   subtitle: {
-    fontSize: 16,
+    ...typography.body,
     color: '#555',
     textAlign: 'center',
   },
@@ -79,8 +80,7 @@ const styles = StyleSheet.create({
     shadowRadius: 4,
   },
   buttonText: {
+    ...typography.button,
     color: '#fff',
-    fontSize: 16,
-    fontWeight: 'bold',
   },
 });
