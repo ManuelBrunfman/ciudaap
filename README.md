@@ -103,6 +103,25 @@ BancaApp/
 └─ README.md
 ```
 
+## 📐 Escala de espaciado
+
+Las dimensiones de `padding` y `margin` se definen en `src/theme/spacing.ts` para asegurar consistencia en los componentes.
+
+```ts
+import { spacing } from '../theme/spacing';
+
+<View style={{ padding: spacing.md, marginBottom: spacing.sm }} />
+```
+
+Valores disponibles:
+
+| Clave | Valor |
+|-------|-------|
+| xs    | 4     |
+| sm    | 8     |
+| md    | 12    |
+| lg    | 20    |
+
 ---
 
 ## ⚙️ Políticas de control de versiones
