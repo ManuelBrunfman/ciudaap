@@ -1,14 +1,26 @@
-// Ruta: src/screens/HomeScreen.tsx
-import React from 'react';
-import { SafeAreaView } from 'react-native-safe-area-context'; // Importamos SafeAreaView
-import { View, Text, StyleSheet, ScrollView } from 'react-native';
-import { LinearGradient } from 'expo-linear-gradient';
-import { StatusBar } from 'expo-status-bar';
-
-const HomeScreen: React.FC = () => {
-  return (
-    <SafeAreaView style={{ flex: 1 }}>
-      <LinearGradient colors={['#4c669f', '#3b5998', '#192f6a']} style={styles.container}>
+import { View, StyleSheet, ScrollView } from 'react-native';
+import AppText from '../components/AppText';
+import { typography } from '../theme/typography';
+          <AppText style={styles.title}>Bienvenido a Bancapp</AppText>
+          <AppText style={styles.subtitle}>Información Relevante</AppText>
+          <AppText style={styles.info}>
+          </AppText>
+  title: {
+    ...typography.heading1,
+    color: '#fff',
+    marginBottom: 10,
+  },
+  subtitle: {
+    ...typography.subtitle,
+    color: '#eee',
+    marginBottom: 20,
+  },
+  info: {
+    ...typography.body,
+    color: '#fff',
+    textAlign: 'center',
+  },
+});
         <StatusBar style="light" />
         <ScrollView contentContainerStyle={styles.content}>
           <Text style={styles.title}>Bienvenido a Bancapp</Text>

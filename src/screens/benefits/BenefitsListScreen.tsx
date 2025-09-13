@@ -20,6 +20,7 @@ import { getApp } from '@react-native-firebase/app';
 import { useNavigation } from '@react-navigation/native';
 import type { StackNavigationProp } from '@react-navigation/stack';
 import type { RootStackParamList } from '../../types/RootStackParamList';
+import { spacing } from '../../theme/spacing';
 
 // --------- ViewModel local ---------
 type BenefitVM = {
@@ -300,27 +301,27 @@ const BenefitsListScreen: React.FC = () => {
 };
 
 const styles = StyleSheet.create({
-  container: { flex: 1, padding: 12, backgroundColor: '#f0f2f5' },
+  container: { flex: 1, padding: spacing.md, backgroundColor: '#f0f2f5' },
   loadingContainer: { flex: 1, alignItems: 'center', justifyContent: 'center', backgroundColor: '#f0f2f5' },
-  loadingText: { marginTop: 10, fontSize: 16, color: '#555' },
+  loadingText: { marginTop: spacing.sm + spacing.xs / 2, fontSize: 16, color: '#555' },
   errorText: { fontSize: 16, color: 'red', textAlign: 'center' },
-  searchContainer: { marginBottom: 12 },
-  searchInput: { borderWidth: 1, borderColor: '#ccc', borderRadius: 10, paddingHorizontal: 12, height: 45, backgroundColor: '#fff', fontSize: 16, color: '#333' },
-  filterSection: { marginBottom: 12 },
-  filterTitle: { fontSize: 16, fontWeight: 'bold', marginBottom: 8, color: '#333' },
-  filterScroll: { paddingVertical: 4 },
-  filterButton: { paddingVertical: 8, paddingHorizontal: 15, borderWidth: 1, borderColor: '#ccc', borderRadius: 20, marginRight: 8, alignItems: 'center', justifyContent: 'center' },
+  searchContainer: { marginBottom: spacing.md },
+  searchInput: { borderWidth: 1, borderColor: '#ccc', borderRadius: 10, paddingHorizontal: spacing.md, height: 45, backgroundColor: '#fff', fontSize: 16, color: '#333' },
+  filterSection: { marginBottom: spacing.md },
+  filterTitle: { fontSize: 16, fontWeight: 'bold', marginBottom: spacing.sm, color: '#333' },
+  filterScroll: { paddingVertical: spacing.xs },
+  filterButton: { paddingVertical: spacing.sm, paddingHorizontal: spacing.md + spacing.xs, borderWidth: 1, borderColor: '#ccc', borderRadius: 20, marginRight: spacing.sm, alignItems: 'center', justifyContent: 'center' },
   filterButtonActive: { backgroundColor: '#007bff', borderColor: '#007bff' },
   filterText: { color: '#007bff', fontSize: 14, fontWeight: '600' },
   filterTextActive: { color: '#fff' },
-  list: { paddingBottom: 16 },
-  card: { flexDirection: 'row', backgroundColor: '#fff', marginVertical: 6, borderRadius: 12, padding: 10, shadowColor: '#000', shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.1, shadowRadius: 3, elevation: 2 },
+  list: { paddingBottom: spacing.md + spacing.xs },
+  card: { flexDirection: 'row', backgroundColor: '#fff', marginVertical: spacing.sm - spacing.xs / 2, borderRadius: 12, padding: spacing.sm + spacing.xs / 2, shadowColor: '#000', shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.1, shadowRadius: 3, elevation: 2 },
   cardImage: { width: 100, height: 100, borderRadius: 10, overflow: 'hidden' },
-  cardContent: { flex: 1, padding: 12, justifyContent: 'center' },
+  cardContent: { flex: 1, padding: spacing.md, justifyContent: 'center' },
   cardTitle: { fontSize: 17, fontWeight: '700', color: '#333' },
-  cardSubtitle: { fontSize: 13, color: '#666', marginTop: 2 },
-  cardChip: { alignSelf: 'flex-start', marginTop: 6, backgroundColor: '#eef4ff', color: '#2f5cff', paddingHorizontal: 8, paddingVertical: 2, borderRadius: 6, overflow: 'hidden' },
-  noResultsContainer: { flex: 1, justifyContent: 'center', alignItems: 'center', padding: 20 },
+  cardSubtitle: { fontSize: 13, color: '#666', marginTop: spacing.xs / 2 },
+  cardChip: { alignSelf: 'flex-start', marginTop: spacing.sm - spacing.xs / 2, backgroundColor: '#eef4ff', color: '#2f5cff', paddingHorizontal: spacing.sm, paddingVertical: spacing.xs / 2, borderRadius: 6, overflow: 'hidden' },
+  noResultsContainer: { flex: 1, justifyContent: 'center', alignItems: 'center', padding: spacing.lg },
   noResultsText: { fontSize: 16, color: '#666', textAlign: 'center' },
 });
 
