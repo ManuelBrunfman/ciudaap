@@ -5,6 +5,7 @@ import { StatusBar } from 'expo-status-bar';
 import { AuthProvider, useAuth } from './src/context/AuthContext';
 import RootNavigator from './src/navigation/RootNavigator';
 import { View, Text, Alert, Vibration } from 'react-native';
+import { globalStyles } from './src/theme/globalStyles';
 import * as Notifications from 'expo-notifications';
 import { getFirestore, doc, setDoc, serverTimestamp } from '@react-native-firebase/firestore';
 import { getApp } from '@react-native-firebase/app';
@@ -107,8 +108,8 @@ export default function App() {
   } catch (error: any) {
     console.error('Error en App:', error);
     return (
-      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-        <Text style={{ color: 'red', fontSize: 20, textAlign: 'center' }}>
+      <View style={globalStyles.centeredContainer}>
+        <Text style={globalStyles.errorText}>
           Ocurrió un error inesperado en la aplicación.
         </Text>
       </View>

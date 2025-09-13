@@ -4,6 +4,7 @@ import LoginScreen from '../screens/auth/LoginScreen';
 import RegisterScreen from '../screens/auth/RegisterScreen';
 import PasswordResetScreen from '../screens/auth/PasswordResetScreen';
 import { View, Text } from 'react-native'; // Import Text and View
+import { globalStyles } from '../theme/globalStyles';
 
 export type AuthStackParamList = {
   Login: undefined;
@@ -25,8 +26,8 @@ const AuthNavigator: React.FC = () => {
   } catch (error: any) {
     console.error("Error en AuthNavigator:", error);
     return (
-      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-        <Text style={{ color: 'red', fontSize: 20, textAlign: 'center' }}>
+      <View style={globalStyles.centeredContainer}>
+        <Text style={globalStyles.errorText}>
           Ocurrió un error en la navegación de autenticación.
         </Text>
       </View>

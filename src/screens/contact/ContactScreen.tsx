@@ -23,7 +23,7 @@ const ContactScreen: React.FC = () => {
 
       <View style={styles.bottomBar}>
         <TouchableOpacity style={styles.whatsappButton} onPress={abrirWhatsApp}>
-          <FontAwesome name="whatsapp" size={24} color="#fff" style={{ marginRight: 8 }} />
+          <FontAwesome name="whatsapp" size={24} color="#fff" style={styles.icon} />
           <Text style={styles.buttonText}>Contactar por WhatsApp</Text>
         </TouchableOpacity>
       </View>
@@ -78,6 +78,7 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 2 },
     shadowRadius: 4,
   },
+  icon: { marginRight: 8 },
   buttonText: {
     color: '#fff',
     fontSize: 16,

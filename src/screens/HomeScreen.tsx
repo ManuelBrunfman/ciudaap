@@ -1,5 +1,9 @@
-// Ruta: src/screens/HomeScreen.tsx
-import React from 'react';
+import React from 'react';
+import { SafeAreaView } from 'react-native-safe-area-context'; // Importamos SafeAreaView
+import { View, Text, StyleSheet, ScrollView } from 'react-native';
+import { globalStyles } from '../theme/globalStyles';
+    <SafeAreaView style={globalStyles.flex1}>
+
 import { SafeAreaView } from 'react-native-safe-area-context'; // Importamos SafeAreaView
 import { View, Text, StyleSheet, ScrollView } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';

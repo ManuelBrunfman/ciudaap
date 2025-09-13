@@ -7,6 +7,7 @@ import BenefitDetailScreen from '../screens/benefits/BenefitDetailScreen';
 import NewsDetailScreen from '../screens/news/NewsDetailScreen';
 import YouTubeVideoScreen from '../screens/videos/YouTubeVideoScreen';
 import { View, Text } from 'react-native';
+import { globalStyles } from '../theme/globalStyles';
 import ForceLogoutScreen from "../screens/ForceLogoutScreen";
 
 
@@ -34,8 +35,8 @@ const AppNavigator: React.FC = () => {
   } catch (error: any) {
     console.error("Error en AppNavigator:", error);
     return (
-      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-        <Text style={{ color: 'red', fontSize: 20, textAlign: 'center' }}>
+      <View style={globalStyles.centeredContainer}>
+        <Text style={globalStyles.errorText}>
           Ocurrió un error en la navegación principal.
         </Text>
       </View>
@@ -48,3 +49,4 @@ export default AppNavigator;
 /**
  * Si usás RootStackParamList en otros navegadores, siempre importalo de la misma fuente.
  */
+

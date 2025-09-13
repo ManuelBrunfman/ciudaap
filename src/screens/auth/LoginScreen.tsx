@@ -12,6 +12,7 @@ import {
 import { LinearGradient } from 'expo-linear-gradient';
 import { useAuth } from '../../context/AuthContext';
 import { useNavigation } from '@react-navigation/native';
+import { globalStyles } from '../../theme/globalStyles';
 
 const { width } = Dimensions.get('window');
 
@@ -120,8 +121,8 @@ const LoginScreen: React.FC = () => {
   } catch (error: any) {
     console.error("Error en LoginScreen:", error);
     return (
-      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-        <Text style={{ color: 'red', fontSize: 20, textAlign: 'center' }}>
+      <View style={globalStyles.centeredContainer}>
+        <Text style={globalStyles.errorText}>
           Ocurrió un error al cargar la pantalla de inicio de sesión.
         </Text>
       </View>
@@ -214,3 +215,4 @@ const styles = StyleSheet.create({
     color: '#FFFFFF',
   },
 });
+
