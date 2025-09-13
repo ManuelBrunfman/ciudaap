@@ -57,7 +57,7 @@ const LoginScreen: React.FC = () => {
             style={styles.logo}
             resizeMode="contain"
           />
-          <Text style={styles.title}>La Bancaria</Text>
+          <Text style={styles.title}>Bancaap Ciudad</Text>
           <View style={styles.form}>
             <View style={styles.inputGroup}>
               <TextInput
