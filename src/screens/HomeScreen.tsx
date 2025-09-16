@@ -1,65 +1,29 @@
+import React from 'react';
 import { View, StyleSheet, ScrollView } from 'react-native';
-import AppText from '../components/AppText';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import AppText from '../ui/AppText';
+import { useTheme } from '../theme';
+import { spacing } from '../theme/spacing';
 import { typography } from '../theme/typography';
-          <AppText style={styles.title}>Bienvenido a Bancapp</AppText>
-          <AppText style={styles.subtitle}>Información Relevante</AppText>
-          <AppText style={styles.info}>
-          </AppText>
-  title: {
-    ...typography.heading1,
-    color: '#fff',
-    marginBottom: 10,
-  },
-  subtitle: {
-    ...typography.subtitle,
-    color: '#eee',
-    marginBottom: 20,
-  },
-  info: {
-    ...typography.body,
-    color: '#fff',
-    textAlign: 'center',
-  },
+
+export default function HomeScreen() {
+  const t = useTheme();
+  return (
+    <SafeAreaView style={[styles.container, { backgroundColor: t.colors.background }]}>
+      <ScrollView contentContainerStyle={styles.content}>
+        <AppText style={[styles.title, { color: t.colors.onBackground }]}>Bienvenido a Bancapp</AppText>
+        <AppText style={[styles.subtitle, { color: t.colors.muted }]}>Información Relevante</AppText>
+        <AppText style={[styles.info, { color: t.colors.onBackground }]}>Aquí puedes mostrar la información más relevante de la aplicación, noticias, estadísticas o cualquier dato importante que desees destacar para el usuario.</AppText>
+      </ScrollView>
+    </SafeAreaView>
+  );
+}
+
+const styles = StyleSheet.create({
+  container: { flex: 1 },
+  content: { padding: spacing.lg, alignItems: 'center', justifyContent: 'center' },
+  title: { ...typography.heading1, marginBottom: spacing.sm },
+  subtitle: { ...typography.subtitle, marginBottom: spacing.md },
+  info: { ...typography.body, textAlign: 'center' },
 });
-        <StatusBar style="light" />
-        <ScrollView contentContainerStyle={styles.content}>
-          <Text style={styles.title}>Bienvenido a Bancapp</Text>
-          <Text style={styles.subtitle}>Información Relevante</Text>
-          <Text style={styles.info}>
-            Aquí puedes mostrar la información más relevante de la aplicación, noticias, estadísticas o cualquier dato importante
-            que desees destacar para el usuario.
-          </Text>
-        </ScrollView>
-      </LinearGradient>
-    </SafeAreaView>
-  );
-};
-
-export default HomeScreen;
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
-  content: {
-    padding: 20,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  title: {
-    fontSize: 32,
-    fontWeight: 'bold',
-    color: '#fff',
-    marginBottom: 10,
-  },
-  subtitle: {
-    fontSize: 18,
-    color: '#eee',
-    marginBottom: 20,
-  },
-  info: {
-    fontSize: 16,
-    color: '#fff',
-    textAlign: 'center',
-  },
-});
+

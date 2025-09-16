@@ -10,7 +10,7 @@
 
 import React, { useState, useEffect } from 'react';
 import {
-  View, Text, FlatList, ActivityIndicator, StyleSheet,
+  View, FlatList, ActivityIndicator, StyleSheet,
   Image, TouchableOpacity, ScrollView, TextInput,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -21,6 +21,9 @@ import { useNavigation } from '@react-navigation/native';
 import type { StackNavigationProp } from '@react-navigation/stack';
 import type { RootStackParamList } from '../../types/RootStackParamList';
 import { spacing } from '../../theme/spacing';
+import { useTheme } from '../../theme';
+import AppText from '../../ui/AppText';
+import Card from '../../ui/Card';
 
 // --------- ViewModel local ---------
 type BenefitVM = {
@@ -135,6 +138,7 @@ const mapDocToVM = (raw: any): BenefitVM => {
 type NavProp = StackNavigationProp<RootStackParamList, 'BenefitDetail'>;
 
 const BenefitsListScreen: React.FC = () => {
+  const t = useTheme();
   const [items, setItems] = useState<BenefitVM[]>([]);
   const [filtered, setFiltered] = useState<BenefitVM[]>([]);
   const [loading, setLoading] = useState(true);
@@ -215,54 +219,64 @@ const BenefitsListScreen: React.FC = () => {
   }, [search, selectedCategoria, selectedProvincia, items]);
 
   const renderItem = ({ item }: { item: BenefitVM }) => (
-    <TouchableOpacity style={styles.card} onPress={() => (navigation as any)?.navigate?.('BenefitDetail', { url: item.url })}>
-      <Image source={{ uri: item.imageUrl || PLACEHOLDER }} style={styles.cardImage} resizeMode="cover" />
-      <View style={styles.cardContent}>
-        <Text style={styles.cardTitle}>{item.title}</Text>
-        {item.category ? <Text style={styles.cardSubtitle}>{item.category}</Text> : null}
-        {item.province ? <Text style={styles.cardChip}>{item.province}</Text> : null}
-      </View>
+    <TouchableOpacity onPress={() => (navigation as any)?.navigate?.('BenefitDetail', { url: item.url })}>
+      <Card style={[styles.card, { backgroundColor: t.colors.surface, shadowColor: t.colors.onBackground }] }>
+        <Image source={{ uri: item.imageUrl || PLACEHOLDER }} style={styles.cardImage} resizeMode="cover" />
+        <View style={styles.cardContent}>
+          <AppText style={[styles.cardTitle, { color: t.colors.onBackground }]}>{item.title}</AppText>
+          {item.category ? <AppText style={[styles.cardSubtitle, { color: t.colors.muted }]}>{item.category}</AppText> : null}
+          {item.province ? (
+            <AppText style={[styles.cardChip, { backgroundColor: t.colors.surface, color: t.colors.primary }]}>
+              {item.province}
+            </AppText>
+          ) : null}
+        </View>
+      </Card>
     </TouchableOpacity>
   );
 
   if (loading) {
     return (
-      <View style={styles.loadingContainer}>
+      <View style={[styles.loadingContainer, { backgroundColor: t.colors.background }]}>
         <ActivityIndicator size="large" />
-        <Text style={styles.loadingText}>Cargando beneficios...</Text>
+        <AppText style={[styles.loadingText, { color: t.colors.muted }]}>Cargando beneficios...</AppText>
       </View>
     );
   }
 
   if (error) {
     return (
-      <SafeAreaView style={styles.container}>
-        <Text style={styles.errorText}>{error}</Text>
+      <SafeAreaView style={[styles.container, { backgroundColor: t.colors.background }]}>
+        <AppText style={{ color: t.colors.danger, textAlign: 'center' }}>{error}</AppText>
       </SafeAreaView>
     );
   }
 
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView style={[styles.container, { backgroundColor: t.colors.background }]}>
       <View style={styles.searchContainer}>
         <TextInput
           placeholder="Buscar beneficio..."
           value={search}
           onChangeText={setSearch}
-          style={styles.searchInput}
+          placeholderTextColor={t.colors.muted}
+          style={[
+            styles.searchInput,
+            { borderColor: t.colors.border, backgroundColor: t.colors.background, color: t.colors.onBackground },
+          ]}
         />
       </View>
 
       {/* Filtro por categoría */}
       <View style={styles.filterSection}>
-        <Text style={styles.filterTitle}>Categoría:</Text>
+        <AppText style={[styles.filterTitle, { color: t.colors.onBackground }]}>Categoría:</AppText>
         <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.filterScroll}>
-          <TouchableOpacity style={[styles.filterButton, !selectedCategoria && styles.filterButtonActive]} onPress={() => setSelectedCategoria(null)}>
-            <Text style={[styles.filterText, !selectedCategoria && styles.filterTextActive]}>Todas</Text>
+          <TouchableOpacity style={[styles.filterButton, !selectedCategoria && { backgroundColor: t.colors.primary, borderColor: t.colors.primary }]} onPress={() => setSelectedCategoria(null)}>
+            <AppText style={[styles.filterText, !selectedCategoria && { color: t.colors.onPrimary }]}>Todas</AppText>
           </TouchableOpacity>
           {categorias.map(cat => (
-            <TouchableOpacity key={cat} style={[styles.filterButton, selectedCategoria === cat && styles.filterButtonActive]} onPress={() => setSelectedCategoria(cat)}>
-              <Text style={[styles.filterText, selectedCategoria === cat && styles.filterTextActive]}>{cat}</Text>
+            <TouchableOpacity key={cat} style={[styles.filterButton, selectedCategoria === cat && { backgroundColor: t.colors.primary, borderColor: t.colors.primary }]} onPress={() => setSelectedCategoria(cat)}>
+              <AppText style={[styles.filterText, selectedCategoria === cat && { color: t.colors.onPrimary }]}>{cat}</AppText>
             </TouchableOpacity>
           ))}
         </ScrollView>
@@ -270,14 +284,14 @@ const BenefitsListScreen: React.FC = () => {
 
       {/* Filtro por provincia */}
       <View style={styles.filterSection}>
-        <Text style={styles.filterTitle}>Provincia:</Text>
+        <AppText style={[styles.filterTitle, { color: t.colors.onBackground }]}>Provincia:</AppText>
         <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.filterScroll}>
-          <TouchableOpacity style={[styles.filterButton, !selectedProvincia && styles.filterButtonActive]} onPress={() => setSelectedProvincia(null)}>
-            <Text style={[styles.filterText, !selectedProvincia && styles.filterTextActive]}>Todas</Text>
+          <TouchableOpacity style={[styles.filterButton, !selectedProvincia && { backgroundColor: t.colors.primary, borderColor: t.colors.primary }]} onPress={() => setSelectedProvincia(null)}>
+            <AppText style={[styles.filterText, !selectedProvincia && { color: t.colors.onPrimary }]}>Todas</AppText>
           </TouchableOpacity>
           {provincias.map(prov => (
-            <TouchableOpacity key={prov} style={[styles.filterButton, selectedProvincia === prov && styles.filterButtonActive]} onPress={() => setSelectedProvincia(prov)}>
-              <Text style={[styles.filterText, selectedProvincia === prov && styles.filterTextActive]}>{prov}</Text>
+            <TouchableOpacity key={prov} style={[styles.filterButton, selectedProvincia === prov && { backgroundColor: t.colors.primary, borderColor: t.colors.primary }]} onPress={() => setSelectedProvincia(prov)}>
+              <AppText style={[styles.filterText, selectedProvincia === prov && { color: t.colors.onPrimary }]}>{prov}</AppText>
             </TouchableOpacity>
           ))}
         </ScrollView>
@@ -286,7 +300,7 @@ const BenefitsListScreen: React.FC = () => {
       {/* Lista */}
       {filtered.length === 0 ? (
         <View style={styles.noResultsContainer}>
-          <Text style={styles.noResultsText}>No hay resultados con los filtros actuales.</Text>
+          <AppText style={[styles.noResultsText, { color: t.colors.muted }]}>No hay resultados con los filtros actuales.</AppText>
         </View>
       ) : (
         <FlatList
@@ -301,28 +315,25 @@ const BenefitsListScreen: React.FC = () => {
 };
 
 const styles = StyleSheet.create({
-  container: { flex: 1, padding: spacing.md, backgroundColor: '#f0f2f5' },
-  loadingContainer: { flex: 1, alignItems: 'center', justifyContent: 'center', backgroundColor: '#f0f2f5' },
-  loadingText: { marginTop: spacing.sm + spacing.xs / 2, fontSize: 16, color: '#555' },
-  errorText: { fontSize: 16, color: 'red', textAlign: 'center' },
+  container: { flex: 1, padding: spacing.md },
+  loadingContainer: { flex: 1, alignItems: 'center', justifyContent: 'center' },
+  loadingText: { marginTop: spacing.sm + spacing.xs / 2, fontSize: 16 },
   searchContainer: { marginBottom: spacing.md },
-  searchInput: { borderWidth: 1, borderColor: '#ccc', borderRadius: 10, paddingHorizontal: spacing.md, height: 45, backgroundColor: '#fff', fontSize: 16, color: '#333' },
+  searchInput: { borderWidth: 1, borderRadius: 10, paddingHorizontal: spacing.md, height: 45, fontSize: 16 },
   filterSection: { marginBottom: spacing.md },
-  filterTitle: { fontSize: 16, fontWeight: 'bold', marginBottom: spacing.sm, color: '#333' },
+  filterTitle: { fontSize: 16, fontWeight: 'bold', marginBottom: spacing.sm },
   filterScroll: { paddingVertical: spacing.xs },
-  filterButton: { paddingVertical: spacing.sm, paddingHorizontal: spacing.md + spacing.xs, borderWidth: 1, borderColor: '#ccc', borderRadius: 20, marginRight: spacing.sm, alignItems: 'center', justifyContent: 'center' },
-  filterButtonActive: { backgroundColor: '#007bff', borderColor: '#007bff' },
-  filterText: { color: '#007bff', fontSize: 14, fontWeight: '600' },
-  filterTextActive: { color: '#fff' },
+  filterButton: { paddingVertical: spacing.sm, paddingHorizontal: spacing.md + spacing.xs, borderWidth: 1, borderRadius: 20, marginRight: spacing.sm, alignItems: 'center', justifyContent: 'center' },
+  filterText: { fontSize: 14, fontWeight: '600' },
   list: { paddingBottom: spacing.md + spacing.xs },
-  card: { flexDirection: 'row', backgroundColor: '#fff', marginVertical: spacing.sm - spacing.xs / 2, borderRadius: 12, padding: spacing.sm + spacing.xs / 2, shadowColor: '#000', shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.1, shadowRadius: 3, elevation: 2 },
+  card: { flexDirection: 'row', marginVertical: spacing.sm - spacing.xs / 2, borderRadius: 12, padding: spacing.sm + spacing.xs / 2, shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.1, shadowRadius: 3, elevation: 2 },
   cardImage: { width: 100, height: 100, borderRadius: 10, overflow: 'hidden' },
   cardContent: { flex: 1, padding: spacing.md, justifyContent: 'center' },
-  cardTitle: { fontSize: 17, fontWeight: '700', color: '#333' },
-  cardSubtitle: { fontSize: 13, color: '#666', marginTop: spacing.xs / 2 },
-  cardChip: { alignSelf: 'flex-start', marginTop: spacing.sm - spacing.xs / 2, backgroundColor: '#eef4ff', color: '#2f5cff', paddingHorizontal: spacing.sm, paddingVertical: spacing.xs / 2, borderRadius: 6, overflow: 'hidden' },
+  cardTitle: { fontSize: 17, fontWeight: '700' },
+  cardSubtitle: { fontSize: 13, marginTop: spacing.xs / 2 },
+  cardChip: { alignSelf: 'flex-start', marginTop: spacing.sm - spacing.xs / 2, paddingHorizontal: spacing.sm, paddingVertical: spacing.xs / 2, borderRadius: 6, overflow: 'hidden' },
   noResultsContainer: { flex: 1, justifyContent: 'center', alignItems: 'center', padding: spacing.lg },
-  noResultsText: { fontSize: 16, color: '#666', textAlign: 'center' },
+  noResultsText: { fontSize: 16, textAlign: 'center' },
 });
 
 export default BenefitsListScreen;

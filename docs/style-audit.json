@@ -1,0 +1,56 @@
+{
+  "colorsTop": [],
+  "rgbaTop": [
+    [
+      "rgba(0,0,0,0.7)",
+      1
+    ],
+    [
+      "rgba(0,0,0,0.5)",
+      1
+    ],
+    [
+      "rgba(0,0,0,0.3)",
+      1
+    ]
+  ],
+  "paddingSizesTop": [],
+  "marginSizesTop": [
+    [
+      8,
+      1
+    ]
+  ],
+  "borderRadiusTop": [
+    [
+      10,
+      4
+    ],
+    [
+      8,
+      3
+    ],
+    [
+      12,
+      2
+    ],
+    [
+      4,
+      1
+    ],
+    [
+      25,
+      1
+    ],
+    [
+      20,
+      1
+    ],
+    [
+      6,
+      1
+    ]
+  ],
+  "buttonPrimaryCandidate": "#007AFF",
+  "scannedFiles": 41
+}

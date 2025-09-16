@@ -1,75 +1,36 @@
 import React from 'react';
-import { View, Text, TextInput, Button, Alert, StyleSheet } from 'react-native';
+import { View, TextInput, Alert, StyleSheet } from 'react-native';
 import { useForm, Controller } from 'react-hook-form';
 import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { getAuth } from '@react-native-firebase/auth';
-import {
-  getFirestore,
-  collection,
-  addDoc,
-  serverTimestamp,
-} from '@react-native-firebase/firestore';
+import { getFirestore, collection, addDoc, serverTimestamp } from '@react-native-firebase/firestore';
 import { sendPushToAdmins } from '../services/sendPushToAdmins';
+import { useTheme } from '../theme';
+import { spacing } from '../theme/spacing';
+import AppText from '../ui/AppText';
+import AppButton from '../ui/AppButton';
 
-/**
- * Tipo del formulario
- */
-type FormData = {
-  nombreApellido: string;
-  dni: string;
-  sector: string;
-  telefono: string;
-};
+type FormData = { nombreApellido: string; dni: string; sector: string; telefono: string };
 
-/**
- * Esquema de validación (yup)
- *  - Teléfono: acepta solo dígitos, entre 8 y 15
- */
 const schema = yup.object({
   nombreApellido: yup.string().required('Requerido').min(3, 'Mínimo 3 caracteres'),
   dni: yup.string().required('Requerido').matches(/^\d{7,8}$/, '7-8 dígitos'),
   sector: yup.string().required('Requerido'),
-  telefono: yup
-    .string()
-    .required('Requerido')
-    .matches(/^\d{8,15}$/, 'Teléfono inválido (solo dígitos, 8-15)'),
+  telefono: yup.string().required('Requerido').matches(/^\d{8,15}$/, 'Teléfono inválido (solo dígitos, 8-15)'),
 });
 
 export default function AfiliateScreen() {
-  const {
-    control,
-    handleSubmit,
-    formState: { errors },
-    reset,
-  } = useForm<FormData>({
-    resolver: yupResolver(schema),
-  });
+  const t = useTheme();
+  const { control, handleSubmit, formState: { errors }, reset } = useForm<FormData>({ resolver: yupResolver(schema) });
 
-  /**
-   * Se ejecuta al tocar "Enviar"
-   */
   const onSubmit = async (data: FormData) => {
     const currentUser = getAuth().currentUser;
-    if (!currentUser) {
-      Alert.alert('Error', 'Debes iniciar sesión antes de enviar la solicitud');
-      return;
-    }
-
+    if (!currentUser) { Alert.alert('Error', 'Debes iniciar sesión'); return; }
     try {
       const db = getFirestore();
-      await addDoc(collection(db, 'affiliateRequests'), {
-        ...data,
-        status: 'pending',
-        createdAt: serverTimestamp(),
-        userId: currentUser.uid,
-      });
-
-      await sendPushToAdmins({
-        title: 'Nueva solicitud de afiliación',
-        body: `De ${data.nombreApellido}`,
-      });
-
+      await addDoc(collection(db, 'affiliateRequests'), { ...data, status: 'pending', createdAt: serverTimestamp(), userId: currentUser.uid });
+      await sendPushToAdmins({ title: 'Nueva solicitud de afiliación', body: `De ${data.nombreApellido}` });
       Alert.alert('Listo', 'Solicitud enviada');
       reset();
     } catch (err) {
@@ -79,113 +40,77 @@ export default function AfiliateScreen() {
   };
 
   return (
-    <View style={styles.container}>
-      {/* Nombre y apellido */}
-      <Controller
-        control={control}
-        name="nombreApellido"
-        render={({ field: { onChange, value } }) => (
-          <View style={styles.fieldContainer}>
-            <Text>Nombre y apellido</Text>
-            <TextInput
-              style={styles.input}
-              value={value}
-              onChangeText={onChange}
-              placeholder="Ejemplo: Juan Pérez"
-            />
-            {errors.nombreApellido && (
-              <Text style={styles.error}>{errors.nombreApellido.message}</Text>
-            )}
-          </View>
-        )}
-      />
+    <View style={[styles.container, { backgroundColor: t.colors.background }]}>
+      <Controller control={control} name="nombreApellido" render={({ field: { onChange, value } }) => (
+        <View style={styles.fieldContainer}>
+          <AppText>Nombre y apellido</AppText>
+          <TextInput
+            style={[styles.input, { borderColor: t.colors.border, color: t.colors.onBackground, backgroundColor: t.colors.background }]}
+            value={value}
+            onChangeText={onChange}
+            placeholder="Ejemplo: Juan Pérez"
+            placeholderTextColor={t.colors.muted}
+          />
+          {errors.nombreApellido && <AppText style={[styles.error, { color: t.colors.danger }]}>{errors.nombreApellido.message}</AppText>}
+        </View>
+      )} />
 
-      {/* DNI */}
-      <Controller
-        control={control}
-        name="dni"
-        render={({ field: { onChange, value } }) => (
-          <View style={styles.fieldContainer}>
-            <Text>DNI</Text>
-            <TextInput
-              style={styles.input}
-              value={value}
-              onChangeText={onChange}
-              keyboardType="numeric"
-              placeholder="Solo dígitos"
-            />
-            {errors.dni && <Text style={styles.error}>{errors.dni.message}</Text>}
-          </View>
-        )}
-      />
+      <Controller control={control} name="dni" render={({ field: { onChange, value } }) => (
+        <View style={styles.fieldContainer}>
+          <AppText>DNI</AppText>
+          <TextInput
+            style={[styles.input, { borderColor: t.colors.border, color: t.colors.onBackground, backgroundColor: t.colors.background }]}
+            value={value}
+            onChangeText={onChange}
+            keyboardType="numeric"
+            placeholder="Solo dígitos"
+            placeholderTextColor={t.colors.muted}
+          />
+          {errors.dni && <AppText style={[styles.error, { color: t.colors.danger }]}>{errors.dni.message}</AppText>}
+        </View>
+      )} />
 
-      {/* Sector */}
-      <Controller
-        control={control}
-        name="sector"
-        render={({ field: { onChange, value } }) => (
-          <View style={styles.fieldContainer}>
-            <Text>Sector</Text>
-            <TextInput
-              style={styles.input}
-              value={value}
-              onChangeText={onChange}
-              placeholder="Ejemplo: Ventas"
-            />
-            {errors.sector && <Text style={styles.error}>{errors.sector.message}</Text>}
-          </View>
-        )}
-      />
+      <Controller control={control} name="sector" render={({ field: { onChange, value } }) => (
+        <View style={styles.fieldContainer}>
+          <AppText>Sector</AppText>
+          <TextInput
+            style={[styles.input, { borderColor: t.colors.border, color: t.colors.onBackground, backgroundColor: t.colors.background }]}
+            value={value}
+            onChangeText={onChange}
+            placeholder="Ejemplo: Ventas"
+            placeholderTextColor={t.colors.muted}
+          />
+          {errors.sector && <AppText style={[styles.error, { color: t.colors.danger }]}>{errors.sector.message}</AppText>}
+        </View>
+      )} />
 
-      {/* Teléfono */}
-      <Controller
-        control={control}
-        name="telefono"
-        render={({ field: { onChange, value } }) => (
-          <View style={styles.fieldContainer}>
-            <Text>Teléfono</Text>
-            <TextInput
-              style={styles.input}
-              value={value}
-              onChangeText={onChange}
-              keyboardType="phone-pad"
-              placeholder="Ejemplo: 11912345678"
-            />
-            {errors.telefono && (
-              <Text style={styles.error}>{errors.telefono.message}</Text>
-            )}
-          </View>
-        )}
-      />
+      <Controller control={control} name="telefono" render={({ field: { onChange, value } }) => (
+        <View style={styles.fieldContainer}>
+          <AppText>Teléfono</AppText>
+          <TextInput
+            style={[styles.input, { borderColor: t.colors.border, color: t.colors.onBackground, backgroundColor: t.colors.background }]}
+            value={value}
+            onChangeText={onChange}
+            keyboardType="phone-pad"
+            placeholder="Ejemplo: 11912345678"
+            placeholderTextColor={t.colors.muted}
+          />
+          {errors.telefono && <AppText style={[styles.error, { color: t.colors.danger }]}>{errors.telefono.message}</AppText>}
+        </View>
+      )} />
 
       <View style={styles.buttonContainer}>
-        <Button title="Enviar solicitud" onPress={handleSubmit(onSubmit)} />
+        <AppButton title="Enviar solicitud" onPress={handleSubmit(onSubmit)} variant="filled" />
       </View>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    padding: 16,
-    backgroundColor: '#fff',
-  },
-  fieldContainer: {
-    marginBottom: 12,
-  },
-  input: {
-    borderWidth: 1,
-    borderColor: '#ccc',
-    borderRadius: 4,
-    padding: 8,
-    marginTop: 4,
-  },
-  buttonContainer: {
-    marginTop: 16,
-  },
-  error: {
-    color: 'red',
-    marginTop: 4,
-  },
+  container: { flex: 1, padding: spacing.md },
+  fieldContainer: { marginBottom: spacing.md },
+  input: { borderWidth: 1, borderRadius: 4, padding: spacing.sm, marginTop: spacing.xs },
+  buttonContainer: { marginTop: spacing.md },
+  error: { marginTop: spacing.xs },
 });
+

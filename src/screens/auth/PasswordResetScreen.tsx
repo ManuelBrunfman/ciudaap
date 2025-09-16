@@ -1,7 +1,11 @@
 // Ruta: src/screens/auth/PasswordResetScreen.tsx
-import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
+import React, { useState } from 'react';
+import { View, TextInput, TouchableOpacity, StyleSheet, Alert } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
+import { useTheme } from '../../theme';
+import AppText from '../../ui/AppText';
+import AppButton from '../../ui/AppButton';
+import { spacing } from '../../theme/spacing';
 
 const PasswordResetScreen: React.FC = () => {
   const navigation = useNavigation();
@@ -12,64 +16,46 @@ const PasswordResetScreen: React.FC = () => {
     Alert.alert('Resetear Contraseña', 'Funcionalidad no implementada.');
   };
 
-  return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Resetear Contraseña</Text>
-      <TextInput
-        style={styles.input}
-        placeholder="Correo electrónico"
-        value={email}
-        onChangeText={setEmail}
-        keyboardType="email-address"
-        autoCapitalize="none"
-      />
-      <TouchableOpacity style={styles.button} onPress={handleReset}>
-        <Text style={styles.buttonText}>Resetear</Text>
-      </TouchableOpacity>
-      <TouchableOpacity onPress={() => navigation.navigate('Login' as never)}>
-        <Text style={styles.link}>Volver al inicio de sesión</Text>
-      </TouchableOpacity>
-    </View>
-  );
+  const t = useTheme();
+  return (
+    <View style={[styles.container, { backgroundColor: t.colors.background }]}>
+      <AppText variant="heading2" style={styles.title}>Resetear Contraseña</AppText>
+      <TextInput
+        style={[styles.input, { borderColor: t.colors.border, color: t.colors.onBackground }]}
+        placeholder="Correo electrónico"
+        placeholderTextColor={t.colors.muted}
+        value={email}
+        onChangeText={setEmail}
+        keyboardType="email-address"
+        autoCapitalize="none"
+      />
+      <AppButton title="Resetear" onPress={handleReset} variant="filled" />
+      <TouchableOpacity onPress={() => navigation.navigate('Login' as never)}>
+        <AppText style={[styles.link, { color: t.colors.primary }]}>Volver al inicio de sesión</AppText>
+      </TouchableOpacity>
+    </View>
+  );
 };
 
 export default PasswordResetScreen;
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    padding: 20,
-    backgroundColor: '#fff',
-  },
-  title: {
-    fontSize: 28,
-    fontWeight: 'bold',
-    marginBottom: 20,
-    textAlign: 'center',
-  },
-  input: {
-    height: 50,
-    borderColor: '#ccc',
-    borderWidth: 1,
-    borderRadius: 8,
-    marginBottom: 15,
-    paddingHorizontal: 10,
-  },
-  button: {
-    backgroundColor: '#007AFF',
-    paddingVertical: 15,
-    borderRadius: 8,
-    alignItems: 'center',
-    marginBottom: 10,
-  },
-  buttonText: {
-    color: '#fff',
-    fontSize: 18,
-  },
-  link: {
-    color: '#007AFF',
-    textAlign: 'center',
-    marginTop: 10,
-  },
-});
+  container: { flex: 1, justifyContent: 'center', padding: spacing.lg },
+  title: {
+    fontSize: 28,
+    fontWeight: 'bold',
+    marginBottom: spacing.lg,
+    textAlign: 'center',
+  },
+  input: {
+    height: 50,
+    borderWidth: 1,
+    borderRadius: 10,
+    marginBottom: spacing.md,
+    paddingHorizontal: spacing.md,
+  },
+  link: {
+    textAlign: 'center',
+    marginTop: spacing.sm,
+  },
+});

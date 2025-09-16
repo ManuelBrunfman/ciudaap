@@ -13,14 +13,19 @@ import AfiliateScreen from "../screens/AfiliateScreen";
 import AdminScreen from "../screens/AdminScreen";
 import YouTubeChannelScreen from "../screens/videos/YouTubeChannelScreen";
 import { useAuth } from "../context/AuthContext";
+import { useTheme } from "../theme";
 
 const Tab = createBottomTabNavigator();
 
 const TabNavigator = () => {
+  const t = useTheme();
   const { isAdmin } = useAuth();
   return (
     <Tab.Navigator
       screenOptions={({ route }) => ({
+        tabBarActiveTintColor: t.colors.primary,
+        tabBarInactiveTintColor: t.colors.muted,
+        tabBarStyle: { backgroundColor: t.colors.surface, borderTopColor: t.colors.border },
         tabBarIcon: ({ color, size }) => {
           let iconName: string = "ellipse";
 

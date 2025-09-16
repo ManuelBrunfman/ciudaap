@@ -1,0 +1,77 @@
+# MODO
+Non-interactive. Apply all changes without per-file confirmation. Do not ask for approvals. If you normally ask to approve per file, skip that and apply all changes automatically.
+
+# CONTEXTO
+Repositorio: ManuelBrunfman/ciudaap
+Rama: codex-pruebas
+Stack: Expo Managed, React Native, TypeScript, Firebase Web SDK, React Navigation
+Objetivo: unificar estilos visuales del proyecto de forma orgánica, usando StyleSheet.create y respetando la estructura actual. No agregar librerías nuevas. No tocar lógica de negocio ni Firebase.
+
+# TAREAS
+
+1) Escanear el proyecto y construir un reporte de estilos actuales:
+   - listar colores hex/RGBA más frecuentes
+   - listar tamaños de padding/margin más usados
+   - detectar color más usado en botones para setear como colors.primary
+   - guardar resultado en docs/style-audit.json
+
+2) Crear/normalizar tokens en src/theme/:
+   - src/theme/spacing.ts (reusar si ya existe, no romper exports)
+   - src/theme/colors.ts con lightColors/darkColors (SIN duplicados)
+   - src/theme/typography.ts
+   - src/theme/index.ts (hook useTheme, radius/elevation/opacity)
+   - agregar helper getNavigationTheme(t) que mapea:
+     primary, background, card, text, border, notification
+   - NO duplicar bloques de “fonts” ni repetir definiciones de color
+
+3) Crear componentes base en src/ui/ (React Native puro con StyleSheet.create e imports RELATIVOS):
+   - AppText.tsx
+   - AppButton.tsx
+   - Card.tsx
+   - Divider.tsx
+
+4) Integrar theme en navegación:
+   - envolver NavigationContainer en App.tsx o en AppNavigator.tsx según corresponda
+   - usar useColorScheme para alternar dark/light
+   - no alterar la lógica de auth ni Firebase
+
+5) Refactorizar únicamente estos archivos para reemplazar estilos hardcodeados por tokens:
+   - src/navigation/AppNavigator.tsx
+   - src/navigation/TabNavigator.tsx
+   - src/screens/auth/LoginScreen.tsx
+   - src/screens/profile/ProfileScreen.tsx
+   - src/screens/benefits/BenefitsListScreen.tsx
+   - src/screens/benefits/BenefitDetailScreen.tsx
+   - src/screens/news/NewsDetailScreen.tsx
+   - src/screens/videos/YouTubeChannelScreen.tsx
+   - src/screens/videos/YouTubeVideoScreen.tsx
+
+Reglas de refactor:
+   - color '#000'|'#111'|'#222' → t.colors.onBackground
+   - color '#fff' → t.colors.onPrimary (si texto sobre primary) o t.colors.onBackground
+   - backgroundColor '#fff' → t.colors.background
+   - backgroundColor de cards/listas → t.colors.surface
+   - borderColor '#E5E5E5'|'lightgray' → t.colors.border
+   - margin/padding 4|8|12|20|28 → t.spacing.xs|sm|md|lg|xl
+   - borderRadius 6|10|14|20 → t.radius.s|m|l|xl
+   - <Text> comunes → <AppText>
+   - botones caseros → <AppButton variant="filled|outline|ghost">
+   - NO duplicar definiciones de colores ni bloques de “fonts” en el theme
+
+6) ESLint:
+   - NO modificar configuración de ESLint. No instalar plugins. No tocar .eslintrc.
+   - Si detectás conflictos de lint, saltearlos. El foco es theme + refactor.
+
+7) Validación:
+   - no quedan estilos hardcodeados en los archivos listados
+   - dark/light funciona
+   - la UI mantiene estructura y navegación original
+   - el proyecto compila y buildea en Expo Managed
+
+# CRITERIOS DE ACEPTACIÓN
+- Tokens creados en src/theme y reusados en todas las pantallas listadas
+- Componentes base AppText, AppButton, Card, Divider disponibles
+- Dark/Light funcional con useColorScheme y getNavigationTheme(t) sin duplicaciones
+- Sin cambios en ESLint
+- Sin dependencias nuevas
+- Proyecto builda correctamente

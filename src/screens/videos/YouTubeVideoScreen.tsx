@@ -2,6 +2,7 @@
 
 import React from 'react';
 import { ActivityIndicator, StyleSheet } from 'react-native';
+import { useTheme } from '../../theme';
 import { WebView } from 'react-native-webview';
 import type { StackScreenProps } from '@react-navigation/stack';
 import type { RootStackParamList } from '../../types/RootStackParamList';
@@ -12,11 +13,12 @@ type Props = StackScreenProps<RootStackParamList, 'YouTubeVideo'>;
 
 export default function YouTubeVideoScreen({ route }: Props) {
   const { videoId } = route.params;
+  const t = useTheme();
 
   return (
     <WebView
       source={{ uri: `https://www.youtube.com/embed/${videoId}` }}
-      style={{ flex: 1 }}
+      style={{ flex: 1, backgroundColor: t.colors.background }}
       startInLoadingState
       renderLoading={() => <ActivityIndicator style={styles.loader} />}
       allowsFullscreenVideo

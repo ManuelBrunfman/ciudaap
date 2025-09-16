@@ -1,42 +1,33 @@
 // src/screens/credential/DigitalCredentialScreen.tsx
 import React from 'react';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import {
-  View,
-  Text,
-  StyleSheet,
-  ImageBackground,
-  Dimensions,
-} from 'react-native';
-
+import { View, StyleSheet, ImageBackground, Dimensions } from 'react-native';
 import { useAuth } from '../../context/AuthContext';
+import { useTheme } from '../../theme';
+import { spacing } from '../../theme/spacing';
+import AppText from '../../ui/AppText';
 
 const { width } = Dimensions.get('window');
 
 const DigitalCredentialScreen: React.FC = () => {
   const { user } = useAuth();
+  const t = useTheme();
 
   if (!user) {
     return (
-      <SafeAreaView style={styles.container}>
-        <Text>No hay usuario autenticado</Text>
+      <SafeAreaView style={[styles.container, { backgroundColor: t.colors.background }]}>
+        <AppText style={{ color: t.colors.muted }}>No hay usuario autenticado</AppText>
       </SafeAreaView>
     );
   }
 
   return (
-    <SafeAreaView style={styles.container}>
-      <ImageBackground
-        source={require('../../../assets/credencial-bg.png')}
-        style={styles.cardBackground}
-        resizeMode="contain"
-      >
+    <SafeAreaView style={[styles.container, { backgroundColor: t.colors.background }]}>
+      <ImageBackground source={require('../../../assets/credencial-bg.png')} style={styles.cardBackground} resizeMode="contain">
         <View style={styles.overlay}>
           <View style={styles.textContainer}>
-            <Text style={styles.infoText}>Email: {user.email}</Text>
-            <Text style={styles.infoText}>
-              Nombre: {user.displayName ?? 'Sin nombre'}
-            </Text>
+            <AppText style={[styles.infoText, { color: t.colors.onPrimary }]}>Email: {user.email}</AppText>
+            <AppText style={[styles.infoText, { color: t.colors.onPrimary }]}>Nombre: {user.displayName ?? 'Sin nombre'}</AppText>
           </View>
         </View>
       </ImageBackground>
@@ -47,31 +38,10 @@ const DigitalCredentialScreen: React.FC = () => {
 export default DigitalCredentialScreen;
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#f5f5f5',
-    alignItems: 'center',
-    justifyContent: 'center',
-    paddingHorizontal: 16,
-  },
-  cardBackground: {
-    width: width - 32, // Margen de 16 px a cada lado
-    height: 300,
-    borderRadius: 12,
-    overflow: 'hidden',
-  },
-  overlay: {
-    flex: 1,
-    backgroundColor: 'rgba(0,0,0,0.3)',
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
+  container: { flex: 1, alignItems: 'center', justifyContent: 'center', paddingHorizontal: spacing.md },
+  cardBackground: { width: width - spacing.lg * 2, height: 300, borderRadius: 12, overflow: 'hidden' },
+  overlay: { flex: 1, backgroundColor: 'rgba(0,0,0,0.3)', justifyContent: 'center', alignItems: 'center' },
   textContainer: {},
-  infoText: {
-    fontSize: 20,
-    color: '#ffffff',
-    fontWeight: 'bold',
-    marginVertical: 4,
-    textAlign: 'center',
-  },
+  infoText: { fontSize: 20, fontWeight: 'bold', marginVertical: spacing.xs, textAlign: 'center' },
 });
+

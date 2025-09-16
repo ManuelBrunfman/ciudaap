@@ -8,7 +8,6 @@ import {
   Image,
   RefreshControl,
   StyleSheet,
-  Text,
   TouchableOpacity,
   View,
 } from 'react-native';
@@ -16,6 +15,9 @@ import { useNavigation } from '@react-navigation/native';
 import type { StackNavigationProp } from '@react-navigation/stack';
 import type { RootStackParamList } from '../../types/RootStackParamList';
 import { XMLParser } from 'fast-xml-parser';
+import AppText from '../../ui/AppText';
+import { useTheme } from '../../theme';
+import { spacing } from '../../theme/spacing';
 
 // --------------------
 // Types & constants
@@ -56,6 +58,7 @@ export default function YouTubeChannelScreen() {
   const [videos, setVideos] = useState<VideoItem[]>([]);
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
+  const t = useTheme();
 
   const fetchVideos = useCallback(async () => {
     setRefreshing(true);
@@ -95,8 +98,8 @@ export default function YouTubeChannelScreen() {
 
   if (!loading && videos.length === 0) {
     return (
-      <View style={styles.center}>
-        <Text>No hay videos disponibles.</Text>
+      <View style={[styles.center, { backgroundColor: t.colors.background }]}>
+        <AppText style={{ color: t.colors.muted }}>No hay videos disponibles.</AppText>
       </View>
     );
   }
@@ -105,17 +108,17 @@ export default function YouTubeChannelScreen() {
     <FlatList
       data={videos}
       keyExtractor={(item) => item.id}
-      contentContainerStyle={styles.list}
+      contentContainerStyle={[styles.list, { backgroundColor: t.colors.background }]}
       refreshControl={<RefreshControl refreshing={refreshing} onRefresh={fetchVideos} />}
       renderItem={({ item }) => (
         <TouchableOpacity
-          style={styles.card}
+          style={[styles.card, { backgroundColor: t.colors.surface }]}
           onPress={() => navigation.navigate('YouTubeVideo', { videoId: item.id })}
         >
           <Image source={{ uri: item.thumbnail }} style={styles.thumb} />
           <View style={styles.info}>
-            <Text style={styles.title}>{item.title}</Text>
-            <Text style={styles.date}>{new Date(item.published).toLocaleDateString()}</Text>
+            <AppText style={[styles.title, { color: t.colors.onBackground }]}>{item.title}</AppText>
+            <AppText style={[styles.date, { color: t.colors.muted }]}>{new Date(item.published).toLocaleDateString()}</AppText>
           </View>
         </TouchableOpacity>
       )}
@@ -129,17 +132,16 @@ export default function YouTubeChannelScreen() {
 const styles = StyleSheet.create({
   loader: { flex: 1, justifyContent: 'center' },
   center: { flex: 1, justifyContent: 'center', alignItems: 'center' },
-  list: { padding: 12 },
+  list: { padding: spacing.md },
   card: {
     flexDirection: 'row',
-    backgroundColor: '#fff',
-    borderRadius: 8,
+    borderRadius: 10,
     elevation: 2,
-    marginBottom: 12,
+    marginBottom: spacing.md,
     overflow: 'hidden',
   },
   thumb: { width: 130, height: 90 },
-  info: { flex: 1, padding: 8, justifyContent: 'center' },
+  info: { flex: 1, padding: spacing.sm, justifyContent: 'center' },
   title: { fontSize: 15, fontWeight: 'bold' },
-  date: { marginTop: 4, fontSize: 12, color: '#666' },
+  date: { marginTop: spacing.xs, fontSize: 12 },
 });

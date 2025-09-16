@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import {
   View,
-  Text,
   Image,
   FlatList,
   StyleSheet,
@@ -13,6 +12,9 @@ import { getFirestore, collection, query, orderBy, onSnapshot } from '@react-nat
 import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import type { RootStackParamList, NewsItem } from '../../types/RootStackParamList';
+import { useTheme } from '../../theme';
+import { spacing } from '../../theme/spacing';
+import AppText from '../../ui/AppText';
 
 type Nav = StackNavigationProp<RootStackParamList, 'NewsDetail'>;
 
@@ -20,6 +22,7 @@ const NewsListScreen: React.FC = () => {
   const [news, setNews] = useState<NewsItem[]>([]);
   const [loading, setLoading] = useState(true);
   const navigation = useNavigation<Nav>();
+  const t = useTheme();
 
   useEffect(() => {
     const db = getFirestore();
@@ -40,31 +43,31 @@ const NewsListScreen: React.FC = () => {
 
   if (loading) {
     return (
-      <SafeAreaView style={styles.loading}>
-        <ActivityIndicator size="large" color="#2E86C1" />
+      <SafeAreaView style={[styles.loading, { backgroundColor: t.colors.background }]}>
+        <ActivityIndicator size="large" color={t.colors.primary} />
       </SafeAreaView>
     );
   }
 
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView style={[styles.container, { backgroundColor: t.colors.background }]}>
       <FlatList
         data={news}
         renderItem={({ item }) => (
-          <Pressable style={styles.card} onPress={() => openDetail(item)}>
+          <Pressable style={[styles.card, { backgroundColor: t.colors.surface }]} onPress={() => openDetail(item)}>
             {item.img && <Image source={{ uri: item.img }} style={styles.image} />}
             <View style={styles.textContainer}>
-              <Text style={styles.title}>{item.title}</Text>
-              <Text style={styles.date}>
+              <AppText style={[styles.title, { color: t.colors.onBackground }]}>{item.title}</AppText>
+              <AppText style={[styles.date, { color: t.colors.muted }]}>
                 {item.createdAt?.toDate
                   ? item.createdAt.toDate().toLocaleString()
                   : new Date(item.createdAt).toLocaleString()}
-              </Text>
+              </AppText>
             </View>
           </Pressable>
         )}
         keyExtractor={i => i.id}
-        contentContainerStyle={styles.list}
+        contentContainerStyle={[styles.list]}
       />
     </SafeAreaView>
   );
@@ -75,16 +78,15 @@ export default NewsListScreen;
 const styles = StyleSheet.create({
   container: { flex: 1 },
   loading: { flex: 1, alignItems: 'center', justifyContent: 'center' },
-  list: { padding: 12 },
+  list: { padding: spacing.md },
   card: {
-    backgroundColor: '#fff',
     borderRadius: 8,
-    marginBottom: 12,
+    marginBottom: spacing.md,
     overflow: 'hidden',
     elevation: 2,
   },
   image: { width: '100%', height: 160 },
-  textContainer: { padding: 8 },
-  title: { fontSize: 16, fontWeight: '600', marginBottom: 4 },
-  date: { fontSize: 12, color: '#666' },
+  textContainer: { padding: spacing.sm },
+  title: { fontSize: 16, fontWeight: '600', marginBottom: spacing.xs },
+  date: { fontSize: 12 },
 });

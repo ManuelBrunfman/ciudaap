@@ -1,24 +1,16 @@
 // src/screens/auth/RegisterScreen.tsx
-
 import React, { useState } from 'react';
-import {
-  View,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  StyleSheet,
-  Alert,
-} from 'react-native';
+import { View, TextInput, StyleSheet, Alert } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import {
-  getAuth,
-  createUserWithEmailAndPassword,
-  updateProfile,
-  signOut,
-} from '@react-native-firebase/auth';
+import { getAuth, createUserWithEmailAndPassword, updateProfile, signOut } from '@react-native-firebase/auth';
+import { useTheme } from '../../theme';
+import { spacing } from '../../theme/spacing';
+import AppText from '../../ui/AppText';
+import AppButton from '../../ui/AppButton';
 
 const RegisterScreen: React.FC = () => {
   const navigation = useNavigation();
+  const t = useTheme();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [displayName, setDisplayName] = useState('');
@@ -28,16 +20,9 @@ const RegisterScreen: React.FC = () => {
   const handleRegister = async () => {
     try {
       const auth = getAuth();
-      const cred = await createUserWithEmailAndPassword(
-        auth,
-        email.trim(),
-        password
-      );
+      const cred = await createUserWithEmailAndPassword(auth, email.trim(), password);
       await updateProfile(cred.user, { displayName });
-
-      // Cerrar la sesión para volver a la pantalla de login
       await signOut(auth);
-
       Alert.alert('Registro exitoso', 'Ahora puedes iniciar sesión.');
       // @ts-ignore
       navigation.navigate('Login');
@@ -48,51 +33,53 @@ const RegisterScreen: React.FC = () => {
   };
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Crear Cuenta</Text>
+    <View style={[styles.container, { backgroundColor: t.colors.background }]}>
+      <AppText variant="heading2" style={styles.title}>Crear Cuenta</AppText>
 
       <TextInput
-        style={styles.input}
+        style={[styles.input, { borderColor: t.colors.border, color: t.colors.onBackground }]}
         placeholder="Correo electrónico"
         value={email}
         onChangeText={setEmail}
         keyboardType="email-address"
         autoCapitalize="none"
+        placeholderTextColor={t.colors.muted}
       />
 
       <TextInput
-        style={styles.input}
+        style={[styles.input, { borderColor: t.colors.border, color: t.colors.onBackground }]}
         placeholder="Contraseña"
         value={password}
         onChangeText={setPassword}
         secureTextEntry
+        placeholderTextColor={t.colors.muted}
       />
 
-      {/* Inputs adicionales */}
       <TextInput
-        style={styles.input}
+        style={[styles.input, { borderColor: t.colors.border, color: t.colors.onBackground }]}
         placeholder="Nombre completo"
         value={displayName}
         onChangeText={setDisplayName}
+        placeholderTextColor={t.colors.muted}
       />
 
       <TextInput
-        style={styles.input}
+        style={[styles.input, { borderColor: t.colors.border, color: t.colors.onBackground }]}
         placeholder="Número de afiliado"
         value={affiliationNumber}
         onChangeText={setAffiliationNumber}
+        placeholderTextColor={t.colors.muted}
       />
 
       <TextInput
-        style={styles.input}
+        style={[styles.input, { borderColor: t.colors.border, color: t.colors.onBackground }]}
         placeholder="Provincia"
         value={province}
         onChangeText={setProvince}
+        placeholderTextColor={t.colors.muted}
       />
 
-      <TouchableOpacity style={styles.button} onPress={handleRegister}>
-        <Text style={styles.buttonText}>Registrarse</Text>
-      </TouchableOpacity>
+      <AppButton title="Registrarse" onPress={handleRegister} variant="filled" />
     </View>
   );
 };
@@ -100,33 +87,8 @@ const RegisterScreen: React.FC = () => {
 export default RegisterScreen;
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    padding: 20,
-    justifyContent: 'center',
-    backgroundColor: '#fff',
-  },
-  title: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    marginBottom: 20,
-    textAlign: 'center',
-  },
-  input: {
-    borderWidth: 1,
-    borderColor: '#ccc',
-    borderRadius: 8,
-    padding: 12,
-    marginBottom: 10,
-  },
-  button: {
-    backgroundColor: '#007AFF',
-    paddingVertical: 14,
-    borderRadius: 8,
-    alignItems: 'center',
-  },
-  buttonText: {
-    color: '#fff',
-    fontWeight: 'bold',
-  },
+  container: { flex: 1, padding: spacing.lg, justifyContent: 'center' },
+  title: { textAlign: 'center', marginBottom: spacing.lg },
+  input: { borderWidth: 1, borderRadius: 8, padding: spacing.md, marginBottom: spacing.sm },
 });
+

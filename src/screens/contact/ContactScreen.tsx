@@ -1,11 +1,13 @@
 import React from 'react';
-import { View, StyleSheet, TouchableOpacity, Linking } from 'react-native';
-import AppText from '../../components/AppText';
+import { View, StyleSheet, Linking } from 'react-native';
+import AppText from '../../ui/AppText';
 import { typography } from '../../theme/typography';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { FontAwesome } from '@expo/vector-icons';
+import { useTheme } from '../../theme';
+import { spacing } from '../../theme/spacing';
+import AppButton from '../../ui/AppButton';
 
-const numero = '5491158178508'; // Sin el +
+const numero = '5491158178508';
 const mensaje = 'Hola, me quiero contactar con alguien de la gremial.';
 
 const abrirWhatsApp = () => {
@@ -14,20 +16,25 @@ const abrirWhatsApp = () => {
 };
 
 const ContactScreen: React.FC = () => {
+  const t = useTheme();
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView style={[styles.container, { backgroundColor: t.colors.background }]}>
       <View style={styles.content}>
-        <AppText style={styles.title}>Contacto Gremial</AppText>
-        <AppText style={styles.subtitle}>
+        <AppText style={[styles.title, { color: t.colors.onBackground }]}>Contacto Gremial</AppText>
+        <AppText style={[styles.subtitle, { color: t.colors.muted }]}>
           Si necesitás ayuda o querés comunicarte con la gremial, presioná el botón de WhatsApp abajo.
         </AppText>
       </View>
 
-      <View style={styles.bottomBar}>
-        <TouchableOpacity style={styles.whatsappButton} onPress={abrirWhatsApp}>
-          <FontAwesome name="whatsapp" size={24} color="#fff" style={{ marginRight: 8 }} />
-          <AppText style={styles.buttonText}>Contactar por WhatsApp</AppText>
-        </TouchableOpacity>
+      <View style={[styles.bottomBar, { backgroundColor: t.colors.background, borderTopColor: t.colors.border }]}>
+        <View style={styles.ctaWrap}>
+          <AppButton
+            title="Contactar por WhatsApp"
+            onPress={abrirWhatsApp}
+            variant="filled"
+            style={{ backgroundColor: '#25D366', width: 320, maxWidth: '100%' }}
+          />
+        </View>
       </View>
     </SafeAreaView>
   );
@@ -36,51 +43,10 @@ const ContactScreen: React.FC = () => {
 export default ContactScreen;
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    justifyContent: 'space-between',
-  },
-  content: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    paddingHorizontal: 24,
-  },
-  title: {
-    ...typography.heading2,
-    marginBottom: 16,
-    textAlign: 'center',
-  },
-  subtitle: {
-    ...typography.body,
-    color: '#555',
-    textAlign: 'center',
-  },
-  bottomBar: {
-    width: '100%',
-    padding: 16,
-    backgroundColor: '#fff',
-    borderTopWidth: 1,
-    borderTopColor: '#eee',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  whatsappButton: {
-    flexDirection: 'row',
-    backgroundColor: '#25D366',
-    paddingVertical: 14,
-    paddingHorizontal: 24,
-    borderRadius: 30,
-    alignItems: 'center',
-    elevation: 2,
-    shadowColor: '#000',
-    shadowOpacity: 0.2,
-    shadowOffset: { width: 0, height: 2 },
-    shadowRadius: 4,
-  },
-  buttonText: {
-    ...typography.button,
-    color: '#fff',
-  },
+  container: { flex: 1, justifyContent: 'space-between' },
+  content: { flex: 1, justifyContent: 'center', alignItems: 'center', paddingHorizontal: spacing.lg },
+  title: { ...typography.heading2, marginBottom: spacing.md, textAlign: 'center' },
+  subtitle: { ...typography.body, textAlign: 'center' },
+  bottomBar: { width: '100%', padding: spacing.md, borderTopWidth: 1, alignItems: 'center', justifyContent: 'center' },
+  ctaWrap: { width: '100%', alignItems: 'center' },
 });

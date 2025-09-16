@@ -6,8 +6,10 @@ import TabNavigator from './TabNavigator';
 import BenefitDetailScreen from '../screens/benefits/BenefitDetailScreen';
 import NewsDetailScreen from '../screens/news/NewsDetailScreen';
 import YouTubeVideoScreen from '../screens/videos/YouTubeVideoScreen';
-import { View, Text } from 'react-native';
+import { View, StyleSheet } from 'react-native';
 import ForceLogoutScreen from "../screens/ForceLogoutScreen";
+import AppText from '../ui/AppText';
+import { useTheme } from '../theme';
 
 
 // ✅ Import centralizado del tipo RootStackParamList
@@ -20,6 +22,7 @@ import { RootStackParamList } from '../types/RootStackParamList'; // AJUSTÁ SEG
 const Stack = createStackNavigator<RootStackParamList>();
 
 const AppNavigator: React.FC = () => {
+  const t = useTheme();
   try {
     return (
       <Stack.Navigator screenOptions={{ headerShown: false }}>
@@ -34,10 +37,10 @@ const AppNavigator: React.FC = () => {
   } catch (error: any) {
     console.error("Error en AppNavigator:", error);
     return (
-      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-        <Text style={{ color: 'red', fontSize: 20, textAlign: 'center' }}>
+      <View style={[styles.center]}>
+        <AppText style={{ color: t.colors.danger, fontSize: 20, textAlign: 'center' }}>
           Ocurrió un error en la navegación principal.
-        </Text>
+        </AppText>
       </View>
     );
   }
@@ -48,3 +51,6 @@ export default AppNavigator;
 /**
  * Si usás RootStackParamList en otros navegadores, siempre importalo de la misma fuente.
  */
+const styles = StyleSheet.create({
+  center: { flex: 1, justifyContent: 'center', alignItems: 'center' },
+});

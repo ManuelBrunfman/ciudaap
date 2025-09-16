@@ -16,6 +16,7 @@ import {
   subscribeToTopic,
 } from '@react-native-firebase/messaging';
 import { requestPushPermission } from './src/services/notifications';
+import { ThemeProvider, useTheme, getNavigationTheme } from './src/theme';
 
 Notifications.setNotificationHandler({
   handleNotification: async () => ({
@@ -89,10 +90,9 @@ function MainApp() {
 
   return (
     <SafeAreaProvider>
-      <NavigationContainer>
-        <StatusBar style="auto" />
-        <RootNavigator />
-      </NavigationContainer>
+      <ThemeProvider>
+        <ThemedNavigation />
+      </ThemeProvider>
     </SafeAreaProvider>
   );
 }
@@ -114,4 +114,14 @@ export default function App() {
       </View>
     );
   }
+}
+
+function ThemedNavigation() {
+  const t = useTheme();
+  return (
+    <NavigationContainer theme={getNavigationTheme(t) as any}>
+      <StatusBar style={t.scheme === 'dark' ? 'light' : 'dark'} />
+      <RootNavigator />
+    </NavigationContainer>
+  );
 }

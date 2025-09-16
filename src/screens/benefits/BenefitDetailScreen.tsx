@@ -1,8 +1,7 @@
 import React from "react";
-
 import { View, StyleSheet } from "react-native";
-
 import { WebView } from "react-native-webview";
+import { useTheme } from "../../theme";
 
 import type { StackScreenProps } from "@react-navigation/stack";
 
@@ -12,10 +11,10 @@ type Props = StackScreenProps<RootStackParamList, "BenefitDetail">;
 
 const BenefitDetailScreen: React.FC<Props> = ({ route }) => {
   const { url } = route.params;
-
+  const t = useTheme();
   return (
-    <View style={styles.container}>
-      <WebView source={{ uri: url }} />
+    <View style={[styles.container, { backgroundColor: t.colors.background }]}>
+      <WebView source={{ uri: url }} style={{ backgroundColor: t.colors.background }} />
     </View>
   );
 };
