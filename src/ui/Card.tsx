@@ -1,14 +1,23 @@
 import React from 'react';
-import { View, ViewProps, StyleSheet } from 'react-native';
+import { View, StyleSheet, type ViewProps } from 'react-native';
 import { useTheme } from '../theme';
 
-type Props = ViewProps;
-
-export default function Card({ style, ...rest }: Props) {
+export default function Card({ style, ...rest }: ViewProps) {
   const t = useTheme();
   return (
     <View
-      style={[styles.base, { backgroundColor: t.colors.surface, borderRadius: t.radius.l } , style]}
+      style={[
+        styles.base,
+        {
+          backgroundColor: t.colors.surface,
+          borderRadius: t.radius.l,
+          borderWidth: StyleSheet.hairlineWidth,
+          borderColor: t.colors.border,
+          shadowColor: t.colors.overlay,
+          elevation: t.elevation.sm,
+        },
+        style,
+      ]}
       {...rest}
     />
   );
@@ -19,4 +28,3 @@ const styles = StyleSheet.create({
     overflow: 'hidden',
   },
 });
-

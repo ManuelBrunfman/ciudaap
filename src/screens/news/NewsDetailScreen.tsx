@@ -1,34 +1,28 @@
 // src/screens/news/NewsDetailScreen.tsx
 
-import React from 'react';
+import React, { useMemo } from 'react';
 import { SafeAreaView, ScrollView, StyleSheet, Image, Linking } from 'react-native';
-
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-
-// ✅ IMPORT CORRECTO DEL TIPO DE NAVIGATOR
-// Si moviste el tipo a 'src/types/RootStackParamList.ts':
 import type { RootStackParamList } from '../../types/RootStackParamList';
-// Si preferís dejarlo en navigation:
-// import type { RootStackParamList } from '../../navigation/RootStackParamList';
-
 import type { StackScreenProps } from '@react-navigation/stack';
 import AppText from '../../ui/AppText';
-import { useTheme } from '../../theme';
-import { spacing } from '../../theme/spacing';
 import AppButton from '../../ui/AppButton';
+import { useTheme, type AppTheme } from '../../theme';
 
 type Props = StackScreenProps<RootStackParamList, 'NewsDetail'>;
 
 const NewsDetailScreen: React.FC<Props> = ({ route }) => {
   const insets = useSafeAreaInsets();
   const t = useTheme();
+  const styles = useMemo(() => createStyles(t, insets.top, insets.bottom), [t, insets.bottom, insets.top]);
 
-  // Validación para asegurarnos de que se haya recibido el parámetro newsItem
   if (!route.params || !route.params.newsItem) {
     return (
-      <SafeAreaView style={[styles.container, { paddingTop: insets.top, paddingBottom: insets.bottom, backgroundColor: t.colors.background }]}>
+      <SafeAreaView style={styles.container}>
         <ScrollView contentContainerStyle={styles.scrollContainer}>
-          <AppText style={[styles.errorText, { color: t.colors.danger }]}>No se encontró la noticia. Por favor, regresa e intenta nuevamente.</AppText>
+          <AppText variant="subtitle" color={t.colors.danger} style={styles.errorText}>
+            No se encontró la noticia. Por favor, regresa e intenta nuevamente.
+          </AppText>
         </ScrollView>
       </SafeAreaView>
     );
@@ -38,23 +32,25 @@ const NewsDetailScreen: React.FC<Props> = ({ route }) => {
 
   const handleOpenUrl = () => {
     if (newsItem.link) {
-      Linking.openURL(newsItem.link).catch((err) =>
-        console.error('Error al abrir la URL', err)
-      );
+      Linking.openURL(newsItem.link).catch(err => console.error('Error al abrir la URL', err));
     } else {
       console.warn('No se proporcionó URL para esta noticia');
     }
   };
 
   return (
-    <SafeAreaView style={[styles.container, { paddingTop: insets.top, paddingBottom: insets.bottom, backgroundColor: t.colors.background }]}>
+    <SafeAreaView style={styles.container}>
       <ScrollView contentContainerStyle={styles.scrollContainer}>
-        <AppText variant="heading2" style={[styles.title, { color: t.colors.onBackground }]}>{newsItem.title}</AppText>
-        {newsItem.img && (
-          <Image source={{ uri: newsItem.img }} style={styles.image} />
-        )}
-        <AppText style={[styles.content, { color: t.colors.onBackground }]}>{newsItem.content}</AppText>
-        <AppButton title="Leer la noticia completa" onPress={handleOpenUrl} />
+        <AppText variant="heading2" color={t.colors.onBackground} style={styles.title}>
+          {newsItem.title}
+        </AppText>
+        {newsItem.img ? (
+          <Image source={{ uri: newsItem.img }} style={styles.image} resizeMode="cover" />
+        ) : null}
+        <AppText variant="body" color={t.colors.onBackground} style={styles.content}>
+          {newsItem.content}
+        </AppText>
+        <AppButton title="Leer la noticia completa" onPress={handleOpenUrl} style={styles.cta} />
       </ScrollView>
     </SafeAreaView>
   );
@@ -62,31 +58,35 @@ const NewsDetailScreen: React.FC<Props> = ({ route }) => {
 
 export default NewsDetailScreen;
 
-// Estilos base
-const styles = StyleSheet.create({
-  container: { flex: 1 },
-  scrollContainer: {
-    paddingHorizontal: spacing.md,
-    paddingBottom: spacing.lg,
-  },
-  title: {
-    fontSize: 18,
-    fontWeight: 'bold',
-    marginVertical: spacing.sm,
-  },
-  image: {
-    width: '100%',
-    height: 200,
-    resizeMode: 'cover',
-    marginBottom: spacing.sm,
-  },
-  content: {
-    fontSize: 16,
-    marginBottom: spacing.md,
-  },
-  errorText: {
-    fontSize: 18,
-    textAlign: 'center',
-    marginVertical: spacing.lg,
-  },
-});
+const createStyles = (t: AppTheme, paddingTop: number, paddingBottom: number) =>
+  StyleSheet.create({
+    container: {
+      flex: 1,
+      backgroundColor: 'transparent',
+      paddingTop,
+      paddingBottom,
+    },
+    scrollContainer: {
+      paddingHorizontal: t.spacing.md,
+      paddingBottom: t.spacing.lg,
+    },
+    title: {
+      marginVertical: t.spacing.sm,
+    },
+    image: {
+      width: '100%',
+      height: 200,
+      borderRadius: t.radius.l,
+      marginBottom: t.spacing.sm,
+    },
+    content: {
+      marginBottom: t.spacing.md,
+    },
+    cta: {
+      marginTop: t.spacing.md,
+    },
+    errorText: {
+      textAlign: 'center',
+      marginVertical: t.spacing.lg,
+    },
+  });

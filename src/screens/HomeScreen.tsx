@@ -9,7 +9,7 @@ import { typography } from '../theme/typography';
 export default function HomeScreen() {
   const t = useTheme();
   return (
-    <SafeAreaView style={[styles.container, { backgroundColor: t.colors.background }]}>
+    <SafeAreaView style={[styles.container, { backgroundColor: 'transparent' }]}>
       <ScrollView contentContainerStyle={styles.content}>
         <AppText style={[styles.title, { color: t.colors.onBackground }]}>Bienvenido a Bancapp</AppText>
         <AppText style={[styles.subtitle, { color: t.colors.muted }]}>Información Relevante</AppText>
@@ -26,4 +26,3 @@ const styles = StyleSheet.create({
   subtitle: { ...typography.subtitle, marginBottom: spacing.md },
   info: { ...typography.body, textAlign: 'center' },
 });
-

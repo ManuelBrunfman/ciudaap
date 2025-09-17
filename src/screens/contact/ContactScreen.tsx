@@ -18,7 +18,7 @@ const abrirWhatsApp = () => {
 const ContactScreen: React.FC = () => {
   const t = useTheme();
   return (
-    <SafeAreaView style={[styles.container, { backgroundColor: t.colors.background }]}>
+    <SafeAreaView style={[styles.container, { backgroundColor: 'transparent' }]}>
       <View style={styles.content}>
         <AppText style={[styles.title, { color: t.colors.onBackground }]}>Contacto Gremial</AppText>
         <AppText style={[styles.subtitle, { color: t.colors.muted }]}>
@@ -26,13 +26,13 @@ const ContactScreen: React.FC = () => {
         </AppText>
       </View>
 
-      <View style={[styles.bottomBar, { backgroundColor: t.colors.background, borderTopColor: t.colors.border }]}>
+      <View style={[styles.bottomBar, { borderTopColor: t.colors.border, backgroundColor: 'transparent' }]}>
         <View style={styles.ctaWrap}>
           <AppButton
             title="Contactar por WhatsApp"
             onPress={abrirWhatsApp}
             variant="filled"
-            style={{ backgroundColor: '#25D366', width: 320, maxWidth: '100%' }}
+            style={styles.button}
           />
         </View>
       </View>
@@ -49,4 +49,5 @@ const styles = StyleSheet.create({
   subtitle: { ...typography.body, textAlign: 'center' },
   bottomBar: { width: '100%', padding: spacing.md, borderTopWidth: 1, alignItems: 'center', justifyContent: 'center' },
   ctaWrap: { width: '100%', alignItems: 'center' },
+  button: { width: 320, maxWidth: '100%' },
 });

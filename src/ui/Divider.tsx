@@ -1,10 +1,19 @@
 import React from 'react';
-import { View, StyleSheet, ViewProps } from 'react-native';
+import { View, StyleSheet, type ViewProps } from 'react-native';
 import { useTheme } from '../theme';
 
-export default function Divider(props: ViewProps) {
+export default function Divider({ style, ...props }: ViewProps) {
   const t = useTheme();
-  return <View style={[styles.base, { backgroundColor: t.colors.border }]} {...props} />;
+  return (
+    <View
+      style={[
+        styles.base,
+        { backgroundColor: t.colors.border, opacity: t.opacity.faint },
+        style,
+      ]}
+      {...props}
+    />
+  );
 }
 
 const styles = StyleSheet.create({
@@ -13,4 +22,3 @@ const styles = StyleSheet.create({
     width: '100%',
   },
 });
-

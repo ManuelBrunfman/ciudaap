@@ -40,12 +40,12 @@ export default function AfiliateScreen() {
   };
 
   return (
-    <View style={[styles.container, { backgroundColor: t.colors.background }]}>
+    <View style={[styles.container, { backgroundColor: 'transparent' }]}>
       <Controller control={control} name="nombreApellido" render={({ field: { onChange, value } }) => (
         <View style={styles.fieldContainer}>
           <AppText>Nombre y apellido</AppText>
           <TextInput
-            style={[styles.input, { borderColor: t.colors.border, color: t.colors.onBackground, backgroundColor: t.colors.background }]}
+            style={[styles.input, { borderColor: t.colors.border, color: t.colors.onBackground, backgroundColor: t.colors.surfaceAlt }]}
             value={value}
             onChangeText={onChange}
             placeholder="Ejemplo: Juan Pérez"
@@ -59,7 +59,7 @@ export default function AfiliateScreen() {
         <View style={styles.fieldContainer}>
           <AppText>DNI</AppText>
           <TextInput
-            style={[styles.input, { borderColor: t.colors.border, color: t.colors.onBackground, backgroundColor: t.colors.background }]}
+            style={[styles.input, { borderColor: t.colors.border, color: t.colors.onBackground, backgroundColor: t.colors.surfaceAlt }]}
             value={value}
             onChangeText={onChange}
             keyboardType="numeric"
@@ -74,7 +74,7 @@ export default function AfiliateScreen() {
         <View style={styles.fieldContainer}>
           <AppText>Sector</AppText>
           <TextInput
-            style={[styles.input, { borderColor: t.colors.border, color: t.colors.onBackground, backgroundColor: t.colors.background }]}
+            style={[styles.input, { borderColor: t.colors.border, color: t.colors.onBackground, backgroundColor: t.colors.surfaceAlt }]}
             value={value}
             onChangeText={onChange}
             placeholder="Ejemplo: Ventas"
@@ -88,7 +88,7 @@ export default function AfiliateScreen() {
         <View style={styles.fieldContainer}>
           <AppText>Teléfono</AppText>
           <TextInput
-            style={[styles.input, { borderColor: t.colors.border, color: t.colors.onBackground, backgroundColor: t.colors.background }]}
+            style={[styles.input, { borderColor: t.colors.border, color: t.colors.onBackground, backgroundColor: t.colors.surfaceAlt }]}
             value={value}
             onChangeText={onChange}
             keyboardType="phone-pad"
@@ -113,4 +113,3 @@ const styles = StyleSheet.create({
   buttonContainer: { marginTop: spacing.md },
   error: { marginTop: spacing.xs },
 });
-

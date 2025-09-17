@@ -1,6 +1,6 @@
 // src/screens/videos/YouTubeChannelScreen.tsx
 
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import {
   ActivityIndicator,
   Alert,
@@ -16,8 +16,8 @@ import type { StackNavigationProp } from '@react-navigation/stack';
 import type { RootStackParamList } from '../../types/RootStackParamList';
 import { XMLParser } from 'fast-xml-parser';
 import AppText from '../../ui/AppText';
-import { useTheme } from '../../theme';
-import { spacing } from '../../theme/spacing';
+import Card from '../../ui/Card';
+import { useTheme, type AppTheme } from '../../theme';
 
 // --------------------
 // Types & constants
@@ -31,18 +31,10 @@ interface VideoItem {
   published: string;
 }
 
-/**
- * Mostrar videos de una lista de reproducción específica.
- * Copiá el ID después de `list=` en la URL.
- * Ej.: https://www.youtube.com/watch?v=abc&list=PL123 → PLAYLIST_ID = "PL123…".
- */
-const PLAYLIST_ID = 'PL3LGmToYRxqu5XmBd9k0zUQNUeq7MaoNn'; // ← tu playlist
+const PLAYLIST_ID = 'PL3LGmToYRxqu5XmBd9k0zUQNUeq7MaoNn';
 
 const parser = new XMLParser({ ignoreAttributes: false });
 
-// --------------------
-// Helpers
-// --------------------
 async function fetchPlaylistFeed(playlistId: string) {
   const url = `https://www.youtube.com/feeds/videos.xml?playlist_id=${playlistId}`;
   const resp = await fetch(url);
@@ -50,15 +42,13 @@ async function fetchPlaylistFeed(playlistId: string) {
   return resp;
 }
 
-// --------------------
-// Component
-// --------------------
 export default function YouTubeChannelScreen() {
   const navigation = useNavigation<Nav>();
   const [videos, setVideos] = useState<VideoItem[]>([]);
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
   const t = useTheme();
+  const styles = useMemo(() => createStyles(t), [t]);
 
   const fetchVideos = useCallback(async () => {
     setRefreshing(true);
@@ -82,7 +72,7 @@ export default function YouTubeChannelScreen() {
       console.error(err);
       Alert.alert(
         'Error',
-        'No se pudieron cargar los videos. Verificá que PLAYLIST_ID sea correcto y que la lista sea pública.'
+        'No se pudieron cargar los videos. Verificá que PLAYLIST_ID sea correcto y que la lista sea pública.',
       );
     } finally {
       setRefreshing(false);
@@ -94,54 +84,100 @@ export default function YouTubeChannelScreen() {
     fetchVideos();
   }, [fetchVideos]);
 
-  if (loading) return <ActivityIndicator style={styles.loader} />;
+  if (loading) {
+    return (
+      <View style={styles.loader}>
+        <ActivityIndicator color={t.colors.primary} size="large" />
+      </View>
+    );
+  }
 
   if (!loading && videos.length === 0) {
     return (
-      <View style={[styles.center, { backgroundColor: t.colors.background }]}>
-        <AppText style={{ color: t.colors.muted }}>No hay videos disponibles.</AppText>
+      <View style={styles.emptyState}>
+        <AppText variant="body" color={t.colors.onSurfaceMuted}>
+          No hay videos disponibles.
+        </AppText>
       </View>
     );
   }
 
   return (
     <FlatList
+      style={styles.list}
+      contentContainerStyle={styles.listContent}
       data={videos}
-      keyExtractor={(item) => item.id}
-      contentContainerStyle={[styles.list, { backgroundColor: t.colors.background }]}
-      refreshControl={<RefreshControl refreshing={refreshing} onRefresh={fetchVideos} />}
+      keyExtractor={item => item.id}
+      refreshControl={
+        <RefreshControl
+          refreshing={refreshing}
+          onRefresh={fetchVideos}
+          colors={[t.colors.primary]}
+          tintColor={t.colors.primary}
+        />
+      }
       renderItem={({ item }) => (
         <TouchableOpacity
-          style={[styles.card, { backgroundColor: t.colors.surface }]}
+          style={styles.cardTouchable}
           onPress={() => navigation.navigate('YouTubeVideo', { videoId: item.id })}
         >
-          <Image source={{ uri: item.thumbnail }} style={styles.thumb} />
-          <View style={styles.info}>
-            <AppText style={[styles.title, { color: t.colors.onBackground }]}>{item.title}</AppText>
-            <AppText style={[styles.date, { color: t.colors.muted }]}>{new Date(item.published).toLocaleDateString()}</AppText>
-          </View>
+          <Card style={styles.card}>
+            <Image source={{ uri: item.thumbnail }} style={styles.thumb} resizeMode="cover" />
+            <View style={styles.info}>
+              <AppText variant="subtitle" color={t.colors.onBackground}>
+                {item.title}
+              </AppText>
+              <AppText variant="caption" color={t.colors.onSurfaceMuted} style={styles.date}>
+                {new Date(item.published).toLocaleDateString()}
+              </AppText>
+            </View>
+          </Card>
         </TouchableOpacity>
       )}
     />
   );
 }
 
-// --------------------
-// Styles
-// --------------------
-const styles = StyleSheet.create({
-  loader: { flex: 1, justifyContent: 'center' },
-  center: { flex: 1, justifyContent: 'center', alignItems: 'center' },
-  list: { padding: spacing.md },
-  card: {
-    flexDirection: 'row',
-    borderRadius: 10,
-    elevation: 2,
-    marginBottom: spacing.md,
-    overflow: 'hidden',
-  },
-  thumb: { width: 130, height: 90 },
-  info: { flex: 1, padding: spacing.sm, justifyContent: 'center' },
-  title: { fontSize: 15, fontWeight: 'bold' },
-  date: { marginTop: spacing.xs, fontSize: 12 },
-});
+const createStyles = (t: AppTheme) =>
+  StyleSheet.create({
+    loader: {
+      flex: 1,
+      justifyContent: 'center',
+      alignItems: 'center',
+      backgroundColor: 'transparent',
+    },
+    emptyState: {
+      flex: 1,
+      justifyContent: 'center',
+      alignItems: 'center',
+      padding: t.spacing.lg,
+      backgroundColor: 'transparent',
+    },
+    list: {
+      flex: 1,
+      backgroundColor: 'transparent',
+    },
+    listContent: {
+      padding: t.spacing.md,
+    },
+    cardTouchable: {
+      marginBottom: t.spacing.md,
+    },
+    card: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      padding: t.spacing.sm,
+    },
+    thumb: {
+      width: 130,
+      height: 90,
+      borderRadius: t.radius.m,
+      marginRight: t.spacing.md,
+    },
+    info: {
+      flex: 1,
+    },
+    date: {
+      marginTop: t.spacing.xs,
+    },
+  });

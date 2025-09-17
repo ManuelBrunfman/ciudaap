@@ -1,28 +1,33 @@
-import React from "react";
-import { View, StyleSheet } from "react-native";
-import { WebView } from "react-native-webview";
-import { useTheme } from "../../theme";
+import React, { useMemo } from 'react';
+import { View, StyleSheet } from 'react-native';
+import { WebView } from 'react-native-webview';
+import { useTheme, type AppTheme } from '../../theme';
+import type { StackScreenProps } from '@react-navigation/stack';
+import type { RootStackParamList } from '../../types/RootStackParamList';
 
-import type { StackScreenProps } from "@react-navigation/stack";
-
-import type { RootStackParamList } from "../../types/RootStackParamList";
-
-type Props = StackScreenProps<RootStackParamList, "BenefitDetail">;
+type Props = StackScreenProps<RootStackParamList, 'BenefitDetail'>;
 
 const BenefitDetailScreen: React.FC<Props> = ({ route }) => {
   const { url } = route.params;
   const t = useTheme();
+  const styles = useMemo(() => createStyles(t), [t]);
+
   return (
-    <View style={[styles.container, { backgroundColor: t.colors.background }]}>
-      <WebView source={{ uri: url }} style={{ backgroundColor: t.colors.background }} />
+    <View style={styles.container}>
+      <WebView source={{ uri: url }} style={styles.webview} />
     </View>
   );
 };
 
 export default BenefitDetailScreen;
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
-});
+const createStyles = (t: AppTheme) =>
+  StyleSheet.create({
+    container: {
+      flex: 1,
+      backgroundColor: 'transparent',
+    },
+    webview: {
+      backgroundColor: 'transparent',
+    },
+  });

@@ -17,6 +17,7 @@ import {
 } from '@react-native-firebase/messaging';
 import { requestPushPermission } from './src/services/notifications';
 import { ThemeProvider, useTheme, getNavigationTheme } from './src/theme';
+import AppBackground from './src/ui/AppBackground';
 
 Notifications.setNotificationHandler({
   handleNotification: async () => ({
@@ -119,9 +120,12 @@ export default function App() {
 function ThemedNavigation() {
   const t = useTheme();
   return (
-    <NavigationContainer theme={getNavigationTheme(t) as any}>
-      <StatusBar style={t.scheme === 'dark' ? 'light' : 'dark'} />
-      <RootNavigator />
-    </NavigationContainer>
+    <View style={{ flex: 1 }}>
+      <AppBackground />
+      <NavigationContainer theme={getNavigationTheme(t) as any}>
+        <StatusBar style={t.scheme === 'dark' ? 'light' : 'dark'} />
+        <RootNavigator />
+      </NavigationContainer>
+    </View>
   );
 }

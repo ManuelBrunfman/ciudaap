@@ -15,14 +15,14 @@ const DigitalCredentialScreen: React.FC = () => {
 
   if (!user) {
     return (
-      <SafeAreaView style={[styles.container, { backgroundColor: t.colors.background }]}>
+      <SafeAreaView style={[styles.container, { backgroundColor: 'transparent' }]}>
         <AppText style={{ color: t.colors.muted }}>No hay usuario autenticado</AppText>
       </SafeAreaView>
     );
   }
 
   return (
-    <SafeAreaView style={[styles.container, { backgroundColor: t.colors.background }]}>
+    <SafeAreaView style={[styles.container, { backgroundColor: 'transparent' }]}>
       <ImageBackground source={require('../../../assets/credencial-bg.png')} style={styles.cardBackground} resizeMode="contain">
         <View style={styles.overlay}>
           <View style={styles.textContainer}>
@@ -44,4 +44,3 @@ const styles = StyleSheet.create({
   textContainer: {},
   infoText: { fontSize: 20, fontWeight: 'bold', marginVertical: spacing.xs, textAlign: 'center' },
 });
-

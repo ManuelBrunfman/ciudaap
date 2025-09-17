@@ -47,7 +47,7 @@ const AdminScreen: React.FC = () => {
 
   if (!isAdmin) {
     return (
-      <View style={[styles.center, { backgroundColor: t.colors.background }]}>
+      <View style={[styles.center, { backgroundColor: 'transparent' }]}>
         <AppText style={{ color: t.colors.muted }}>No tenés permisos para ver esta sección.</AppText>
       </View>
     );
@@ -55,7 +55,7 @@ const AdminScreen: React.FC = () => {
 
   if (loading) {
     return (
-      <View style={[styles.center, { backgroundColor: t.colors.background }]}>
+      <View style={[styles.center, { backgroundColor: 'transparent' }]}>
         <ActivityIndicator size="large" color={t.colors.primary} />
       </View>
     );
@@ -63,7 +63,7 @@ const AdminScreen: React.FC = () => {
 
   if (requests.length === 0) {
     return (
-      <View style={[styles.center, { backgroundColor: t.colors.background }]}>
+      <View style={[styles.center, { backgroundColor: 'transparent' }]}>
         <AppText style={{ color: t.colors.muted }}>No hay solicitudes pendientes.</AppText>
       </View>
     );
@@ -87,7 +87,7 @@ const AdminScreen: React.FC = () => {
       data={requests}
       keyExtractor={(item) => item.id}
       renderItem={renderItem}
-      contentContainerStyle={[styles.list, { backgroundColor: t.colors.background }]}
+      contentContainerStyle={[styles.list, { backgroundColor: 'transparent' }]}
     />
   );
 };
@@ -109,4 +109,3 @@ const styles = StyleSheet.create({
 });
 
 export default AdminScreen;
-

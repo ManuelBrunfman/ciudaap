@@ -1,5 +1,10 @@
 {
-  "colorsTop": [],
+  "colorsTop": [
+    [
+      "#25D366",
+      1
+    ]
+  ],
   "rgbaTop": [
     [
       "rgba(0,0,0,0.7)",
@@ -51,6 +56,6 @@
       1
     ]
   ],
-  "buttonPrimaryCandidate": "#007AFF",
+  "buttonPrimaryCandidate": "#25D366",
   "scannedFiles": 41
 }

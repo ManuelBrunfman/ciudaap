@@ -43,14 +43,14 @@ const NewsListScreen: React.FC = () => {
 
   if (loading) {
     return (
-      <SafeAreaView style={[styles.loading, { backgroundColor: t.colors.background }]}>
+      <SafeAreaView style={[styles.loading, { backgroundColor: 'transparent' }]}>
         <ActivityIndicator size="large" color={t.colors.primary} />
       </SafeAreaView>
     );
   }
 
   return (
-    <SafeAreaView style={[styles.container, { backgroundColor: t.colors.background }]}>
+    <SafeAreaView style={[styles.container, { backgroundColor: 'transparent' }]}>
       <FlatList
         data={news}
         renderItem={({ item }) => (

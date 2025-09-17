@@ -1,31 +1,42 @@
 // src/screens/videos/YouTubeVideoScreen.tsx
 
-import React from 'react';
+import React, { useMemo } from 'react';
 import { ActivityIndicator, StyleSheet } from 'react-native';
-import { useTheme } from '../../theme';
 import { WebView } from 'react-native-webview';
+import { useTheme, type AppTheme } from '../../theme';
 import type { StackScreenProps } from '@react-navigation/stack';
 import type { RootStackParamList } from '../../types/RootStackParamList';
-
-// Ajustá la ruta si tu archivo de tipos está en otra ubicación
 
 type Props = StackScreenProps<RootStackParamList, 'YouTubeVideo'>;
 
 export default function YouTubeVideoScreen({ route }: Props) {
   const { videoId } = route.params;
   const t = useTheme();
+  const styles = useMemo(() => createStyles(t), [t]);
 
   return (
     <WebView
       source={{ uri: `https://www.youtube.com/embed/${videoId}` }}
-      style={{ flex: 1, backgroundColor: t.colors.background }}
+      style={styles.webview}
       startInLoadingState
-      renderLoading={() => <ActivityIndicator style={styles.loader} />}
+      renderLoading={() => (
+        <ActivityIndicator style={styles.loader} size="large" color={t.colors.primary} />
+      )}
       allowsFullscreenVideo
     />
   );
 }
 
-const styles = StyleSheet.create({
-  loader: { flex: 1, justifyContent: 'center' },
-});
+const createStyles = (t: AppTheme) =>
+  StyleSheet.create({
+    webview: {
+      flex: 1,
+      backgroundColor: 'transparent',
+    },
+    loader: {
+      flex: 1,
+      justifyContent: 'center',
+      alignItems: 'center',
+      backgroundColor: 'transparent',
+    },
+  });

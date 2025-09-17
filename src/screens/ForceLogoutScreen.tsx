@@ -23,7 +23,7 @@ export default function ForceLogoutScreen() {
   }, [navigation]);
 
   return (
-    <View style={[styles.container, { backgroundColor: t.colors.background }]}>
+    <View style={[styles.container, { backgroundColor: 'transparent' }]}>
       <ActivityIndicator size="large" color={t.colors.primary} />
       <AppText style={styles.text}>Cerrando sesión...</AppText>
     </View>
@@ -34,4 +34,3 @@ const styles = StyleSheet.create({
   container: { flex: 1, alignItems: "center", justifyContent: "center" },
   text: { marginTop: 8, fontSize: 16 },
 });
-
