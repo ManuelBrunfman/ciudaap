@@ -4,7 +4,13 @@
       "Bash(npx expo install:*)",
       "Bash(npm audit:*)",
       "Bash(npx react-native-bundle-visualizer:*)",
-      "Bash(find:*)"
+      "Bash(find:*)",
+      "Bash(rm:*)",
+      "Bash(npm install:*)",
+      "Bash(chmod:*)",
+      "Bash(npx expo prebuild:*)",
+      "Bash(npm run start:*)",
+      "Bash(npx expo start:*)"
     ],
     "deny": [],
     "ask": []

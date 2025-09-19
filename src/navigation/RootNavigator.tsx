@@ -1,8 +1,9 @@
 import React from 'react';
-import { ActivityIndicator, View, Text } from 'react-native'; // Import Text and View
+import { ActivityIndicator, View, Text } from 'react-native';
 import { useAuth } from '../context/AuthContext';
 import AuthNavigator from './AuthNavigator';
 import AppNavigator from './AppNavigator';
+import logger from '../utils/logger';
 
 const RootNavigator: React.FC = () => {
   const { user, loading } = useAuth();
@@ -18,7 +19,7 @@ const RootNavigator: React.FC = () => {
   try {
     return user ? <AppNavigator /> : <AuthNavigator />;
   } catch (error: any) {
-    console.error("Error en RootNavigator:", error);
+    logger.error("Error en RootNavigator:", error);
     return (
       <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
         <Text style={{ color: 'red', fontSize: 20, textAlign: 'center' }}>

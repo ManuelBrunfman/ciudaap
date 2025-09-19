@@ -2,7 +2,6 @@ import React, { useMemo, useState } from 'react';
 import {
   View,
   TextInput,
-  Alert,
   StyleSheet,
   ImageBackground,
   TouchableOpacity,
@@ -14,6 +13,7 @@ import { useAuth } from '../../context/AuthContext';
 import { useTheme, type AppTheme } from '../../theme';
 import AppText from '../../ui/AppText';
 import AppButton from '../../ui/AppButton';
+import errorHandler from '../../utils/errorHandler';
 
 const { width } = Dimensions.get('window');
 
@@ -29,7 +29,7 @@ const LoginScreen: React.FC = () => {
     try {
       await login(email, password);
     } catch (error) {
-      Alert.alert('Error', 'Error al iniciar sesión');
+      errorHandler.handleError(error, 'Error al iniciar sesión');
     }
   };
 

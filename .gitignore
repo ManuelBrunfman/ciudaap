@@ -44,6 +44,8 @@ google-services.json.*
 GoogleService-Info.plist
 *.keystore
 scripts/serviceAccountKey.json
+scripts/firebase-admin-key.json
+**/*serviceAccount*.json
 *.json.*
 credentials/release-signing.properties
 credentials/*.keystore

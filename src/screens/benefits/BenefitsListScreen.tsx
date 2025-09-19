@@ -1,6 +1,6 @@
 // PATH: BenefitsListScreen.tsx
 
-import React, { useState, useEffect, useMemo, useCallback } from 'react';
+import React, { useState, useEffect, useMemo, useCallback, useRef } from 'react';
 import {
   View,
   FlatList,
@@ -10,6 +10,7 @@ import {
   TouchableOpacity,
   ScrollView,
   TextInput,
+  Dimensions,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { getFirestore, collection, getDocs } from '@react-native-firebase/firestore';
@@ -45,7 +46,7 @@ const eqNorm = (a: unknown, b: unknown) => normalizeStr(a) === normalizeStr(b);
 
 const CATEGORY_ORDER: readonly string[] = [
   'Alojamiento',
-  'Gastronomía',
+  'GastronomÃ­a',
   'Excursiones y Actividades',
   'Transporte',
   'Retail',
@@ -58,26 +59,28 @@ const canonicalCategory = (raw?: string | null, title?: string | null): string =
   const s = normalizeStr(raw);
   const t = normalizeStr(title);
   if (s.includes('aloj')) return 'Alojamiento';
-  if (s.includes('gastro')) return 'Gastronomía';
+  if (s.includes('gastro')) return 'GastronomÃ­a';
   if (s.includes('excurs') || s.includes('actividad')) return 'Excursiones y Actividades';
   if (s.includes('transp')) return 'Transporte';
   if (s.includes('retail')) return 'Retail';
   if (s.includes('comerc')) return 'Comercio';
   if (s.includes('deporte') || s.includes('gimnas')) return 'Deportes';
   if (s.includes('salud') || s.includes('educac') || s.includes('serv')) return 'Servicios';
-  if (/(hotel|hosteri|hostería|apart|cabañ|departamento|hostel|resort|spa)/i.test(t)) return 'Alojamiento';
-  if (/(resto|restaurant|parrilla|gastro|cervec|cocina|bar)/i.test(t)) return 'Gastronomía';
-  if (/(termas|excurs|actividad|paseo|catamara|reserva|rafting|trekking|delta|ballena)/i.test(t)) return 'Excursiones y Actividades';
-  if (/(micro|bus|chevalier|rutatl|crucero del norte|hertz|rent ?car|avion|a[eé]reo|cochera)/i.test(t)) return 'Transporte';
+  if (/(hotel|hosteri|hosterÃ­a|apart|cabaÃ±|departamento|hostel|resort|spa)/i.test(t)) return 'Alojamiento';
+  if (/(resto|restaurant|parrilla|gastro|cervec|cocina|bar)/i.test(t)) return 'GastronomÃ­a';
+  if (/(termas|excurs|actividad|paseo|catamara|reserva|rafting|trekking|delta|ballena)/i.test(t))
+    return 'Excursiones y Actividades';
+  if (/(micro|bus|chevalier|rutatl|crucero del norte|hertz|rent ?car|avion|a[eÃ©]reo|cochera)/i.test(t))
+    return 'Transporte';
   if (/(megatlon|gimnas|gym|deporte)/i.test(t)) return 'Deportes';
   if (/(indumentaria|tienda|local|retail)/i.test(t)) return 'Retail';
   if (/(comercio)/i.test(t)) return 'Comercio';
   return 'Servicios';
 };
 
-const catIndex = (c: string) => CATEGORY_ORDER.indexOf(c) === -1 ? 999 : CATEGORY_ORDER.indexOf(c);
+const catIndex = (c: string) => (CATEGORY_ORDER.indexOf(c) === -1 ? 999 : CATEGORY_ORDER.indexOf(c));
 const sortByCategoryOrder = (a: string, b: string) =>
-  (catIndex(a) === catIndex(b) ? a.localeCompare(b) : catIndex(a) - catIndex(b));
+  catIndex(a) === catIndex(b) ? a.localeCompare(b) : catIndex(a) - catIndex(b);
 
 const sortProvinces = (arr: string[]) =>
   arr.sort((a, b) => {
@@ -86,7 +89,7 @@ const sortProvinces = (arr: string[]) =>
     return a.localeCompare(b);
   });
 
-const DISFRUTA_RE = /^disfrut[aá]\b/i;
+const DISFRUTA_RE = /^disfrut[aÃ¡]\b/i;
 
 const canonicalPath = (u: string) => {
   try {
@@ -100,10 +103,11 @@ const canonicalPath = (u: string) => {
   }
 };
 
-const score = (it: BenefitVM) => (it.imageUrl ? 1 : 0) + (it.province && it.province !== 'Nacional' ? 1 : 0) + (it.category ? 1 : 0);
+const score = (it: BenefitVM) =>
+  (it.imageUrl ? 1 : 0) + (it.province && it.province !== 'Nacional' ? 1 : 0) + (it.category ? 1 : 0);
 
 const fixProvinceIfBaguUshuaia = (it: BenefitVM): BenefitVM =>
-  /bag[uú]\s+ushuaia/i.test(it.title)
+  /bag[uÃº]\s+ushuaia/i.test(it.title)
     ? { ...it, province: it.province === 'Nacional' ? 'Tierra del Fuego' : it.province }
     : it;
 
@@ -134,7 +138,71 @@ const BenefitsListScreen: React.FC = () => {
   const [selectedProvincia, setSelectedProvincia] = useState<string | null>(null);
   const [categorias, setCategorias] = useState<string[]>([]);
   const [provincias, setProvincias] = useState<string[]>([]);
+
+  const containerRef = useRef<any>(null);
+  const categoriesRef = useRef<any>(null);
+  const provinceFilterRef = useRef<any>(null);
+  const categoriesBottomRef = useRef<number | null>(null);
+  const provinceBottomRef = useRef<number | null>(null);
+  const [fadeArea, setFadeArea] = useState<{ top: number; height: number } | null>(null);
   const navigation = useNavigation<NavProp>();
+
+  const updateFadeArea = useCallback(() => {
+    const categoriesBottom = categoriesBottomRef.current;
+    const provinceBottom = provinceBottomRef.current;
+    if (typeof categoriesBottom === 'number' && typeof provinceBottom === 'number') {
+      const height = provinceBottom - categoriesBottom;
+      if (height > 0) {
+        setFadeArea({ top: categoriesBottom, height });
+        return;
+      }
+    }
+    setFadeArea(null);
+  }, []);
+
+  const measureRelativeToContainer = useCallback(
+    (node: any, assign: (y: number, height: number) => void) => {
+      const container = containerRef.current;
+      if (!node || !container || !node.measureLayout) return;
+      node.measureLayout(
+        container,
+        (_x: number, y: number, _w: number, h: number) => {
+          assign(y, h);
+          updateFadeArea();
+        },
+        () => {},
+      );
+    },
+    [updateFadeArea],
+  );
+
+  const handleCategoriesLayout = useCallback(() => {
+    measureRelativeToContainer(categoriesRef.current, (y, height) => {
+      categoriesBottomRef.current = y + height;
+    });
+  }, [measureRelativeToContainer]);
+
+  const handleProvinceLayout = useCallback(() => {
+    measureRelativeToContainer(provinceFilterRef.current, (y, height) => {
+      provinceBottomRef.current = y + height; // Ahora capturamos el bottom, no el top
+    });
+  }, [measureRelativeToContainer]);
+
+  useEffect(() => {
+    handleCategoriesLayout();
+    handleProvinceLayout();
+  }, [handleCategoriesLayout, handleProvinceLayout, categorias.length, provincias.length, filtered.length]);
+
+  const handleContainerLayout = useCallback(() => {
+    handleCategoriesLayout();
+    handleProvinceLayout();
+  }, [handleCategoriesLayout, handleProvinceLayout]);
+
+  useEffect(() => {
+    if (filtered.length === 0) {
+      setFadeArea(null);
+    }
+  }, [filtered.length]);
 
   useEffect(() => {
     setLoading(true);
@@ -170,13 +238,10 @@ const BenefitsListScreen: React.FC = () => {
           if (isNonEmptyString(it.province)) provs.add(it.province!);
         }
 
-        const uniqueCats = Array.from(cats).sort(sortByCategoryOrder);
-        const uniqueProvs = sortProvinces(Array.from(provs));
-
         setItems(cleaned);
         setFiltered(cleaned);
-        setCategorias(uniqueCats);
-        setProvincias(uniqueProvs);
+        setCategorias(Array.from(cats).sort(sortByCategoryOrder));
+        setProvincias(sortProvinces(Array.from(provs)));
         setError(null);
       } catch (e: any) {
         console.error(e);
@@ -242,144 +307,267 @@ const BenefitsListScreen: React.FC = () => {
 
   if (error) {
     return (
-      <SafeAreaView style={styles.container}>
-        <AppText variant="body" color={t.colors.danger} style={styles.errorText}>
-          {error}
-        </AppText>
+      <SafeAreaView style={styles.safeArea}>
+        <View style={styles.container}>
+          <AppText variant="body" color={t.colors.danger} style={styles.errorText}>
+            {error}
+          </AppText>
+        </View>
       </SafeAreaView>
     );
   }
 
+  // Calcular la altura de la pantalla para el posicionamiento absoluto
+  const screenHeight = Dimensions.get('window').height;
+
   return (
-    <SafeAreaView style={styles.container}>
-      {/* filtros arriba */}
-      <View style={styles.filtersWrapper}>
-        {/* buscador */}
-        <View style={styles.searchContainer}>
-          <TextInput
-            placeholder="Buscar beneficio..."
-            value={search}
-            onChangeText={setSearch}
-            placeholderTextColor={t.colors.muted}
+    <SafeAreaView style={styles.safeArea}>
+      <View ref={containerRef} style={styles.container} onLayout={handleContainerLayout}>
+        
+        {/* Lista con posición absoluta que se extiende detrás de los filtros */}
+        {filtered.length > 0 && fadeArea && (
+          <MaskedView
             style={[
-              styles.searchInput,
+              styles.listContainerAbsolute,
               {
-                borderColor: t.colors.border,
-                backgroundColor: t.colors.surfaceAlt,
-                color: t.colors.onBackground,
-              },
+                position: 'absolute',
+                top: 0, // Empieza desde el top del container
+                bottom: 0,
+                left: -t.spacing.md,
+                right: -t.spacing.md,
+                zIndex: 1,
+              }
             ]}
-          />
-        </View>
-        {/* categorías */}
-        <View style={styles.filterSection}>
-          <AppText variant="body" color={t.colors.onBackground} style={styles.filterTitle}>
-            Categoría:
-          </AppText>
-          <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.filterScroll}>
-            {categorias.map(cat => {
-              const active = selectedCategoria === cat;
-              return (
-                <TouchableOpacity
-                  key={cat}
-                  style={[styles.filterButton, active && styles.filterButtonActive]}
-                  onPress={() => setSelectedCategoria(active ? null : cat)}
+            maskElement={
+              <View style={{ flex: 1 }}>
+                {/* Zona completamente transparente - hasta el bottom de los botones de provincia */}
+                <View style={{ height: fadeArea.top + fadeArea.height }} />
+                
+                {/* Zona de fade gradual después de los botones */}
+                <LinearGradient
+                  colors={['rgba(0,0,0,0)', 'rgba(0,0,0,0.3)', 'rgba(0,0,0,0.7)', 'rgba(0,0,0,1)']}
+                  locations={[0, 0.3, 0.7, 1]}
+                  style={{ height: 50 }} // Fade de 50px después de los botones
+                />
+                
+                {/* Resto completamente visible */}
+                <View style={{ flex: 1, backgroundColor: 'black' }} />
+              </View>
+            }
+          >
+            <FlatList
+              data={filtered}
+              keyExtractor={item => canonicalPath(item.url) || item.title}
+              renderItem={renderItem}
+              contentContainerStyle={[
+                styles.list,
+                { 
+                  paddingTop: fadeArea.top + fadeArea.height + 50, // El contenido empieza después del fade
+                  paddingHorizontal: t.spacing.md,
+                }
+              ]}
+              showsVerticalScrollIndicator={false}
+            />
+          </MaskedView>
+        )}
+
+        {/* Lista normal cuando no hay fadeArea */}
+        {filtered.length > 0 && !fadeArea && (
+          <View style={styles.listContainer}>
+            <FlatList
+              data={filtered}
+              keyExtractor={item => canonicalPath(item.url) || item.title}
+              renderItem={renderItem}
+              contentContainerStyle={styles.list}
+            />
+          </View>
+        )}
+
+        {/* Estado vacío */}
+        {filtered.length === 0 && (
+          <View style={styles.emptyState}>
+            <AppText variant="body" color={t.colors.onSurfaceMuted}>
+              No hay resultados con los filtros actuales.
+            </AppText>
+          </View>
+        )}
+
+        {/* Filtros con mayor z-index para estar encima */}
+        <View style={[styles.filtersWrapper, { position: 'absolute', top: t.spacing.md, left: t.spacing.md, right: t.spacing.md }]}>
+          {/* buscador */}
+          <View style={styles.searchContainer}>
+            <TextInput
+              placeholder="Buscar beneficio..."
+              value={search}
+              onChangeText={setSearch}
+              placeholderTextColor={t.colors.muted}
+              style={[
+                styles.searchInput,
+                {
+                  borderColor: t.colors.border,
+                  backgroundColor: t.colors.surfaceAlt,
+                  color: t.colors.onBackground,
+                },
+              ]}
+            />
+          </View>
+          
+          {/* categorías */}
+          <View ref={categoriesRef} style={styles.filterSection} onLayout={handleCategoriesLayout}>
+            <AppText variant="body" color={t.colors.onBackground} style={styles.filterTitle}>
+              Categoría:
+            </AppText>
+            <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.filterScroll}>
+              <TouchableOpacity
+                style={[styles.filterButton, !selectedCategoria && styles.filterButtonActive]}
+                onPress={() => setSelectedCategoria(null)}
+              >
+                <AppText
+                  variant="caption"
+                  color={!selectedCategoria ? t.colors.onPrimary : t.colors.onSurface}
+                  style={styles.filterText}
                 >
-                  <AppText
-                    variant="caption"
-                    color={active ? t.colors.onPrimary : t.colors.onSurface}
-                    style={styles.filterText}
+                  Todas
+                </AppText>
+              </TouchableOpacity>
+              {categorias.map(cat => {
+                const active = selectedCategoria === cat;
+                return (
+                  <TouchableOpacity
+                    key={cat}
+                    style={[styles.filterButton, active && styles.filterButtonActive]}
+                    onPress={() => setSelectedCategoria(active ? null : cat)}
                   >
-                    {cat}
-                  </AppText>
-                </TouchableOpacity>
-              );
-            })}
-          </ScrollView>
-        </View>
-        {/* provincias */}
-        <View style={styles.filterSection}>
-          <AppText variant="body" color={t.colors.onBackground} style={styles.filterTitle}>
-            Provincia:
-          </AppText>
-          <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.filterScroll}>
-            {provincias.map(prov => {
-              const active = selectedProvincia === prov;
-              return (
-                <TouchableOpacity
-                  key={prov}
-                  style={[styles.filterButton, active && styles.filterButtonActive]}
-                  onPress={() => setSelectedProvincia(active ? null : prov)}
+                    <AppText
+                      variant="caption"
+                      color={active ? t.colors.onPrimary : t.colors.onSurface}
+                      style={styles.filterText}
+                    >
+                      {cat}
+                    </AppText>
+                  </TouchableOpacity>
+                );
+              })}
+            </ScrollView>
+          </View>
+          
+          {/* provincias */}
+          <View ref={provinceFilterRef} style={styles.filterSection} onLayout={handleProvinceLayout}>
+            <AppText variant="body" color={t.colors.onBackground} style={styles.filterTitle}>
+              Provincia:
+            </AppText>
+            <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.filterScroll}>
+              <TouchableOpacity
+                style={[styles.filterButton, !selectedProvincia && styles.filterButtonActive]}
+                onPress={() => setSelectedProvincia(null)}
+              >
+                <AppText
+                  variant="caption"
+                  color={!selectedProvincia ? t.colors.onPrimary : t.colors.onSurface}
+                  style={styles.filterText}
                 >
-                  <AppText
-                    variant="caption"
-                    color={active ? t.colors.onPrimary : t.colors.onSurface}
-                    style={styles.filterText}
+                  Todas
+                </AppText>
+              </TouchableOpacity>
+              {provincias.map(prov => {
+                const active = selectedProvincia === prov;
+                return (
+                  <TouchableOpacity
+                    key={prov}
+                    style={[styles.filterButton, active && styles.filterButtonActive]}
+                    onPress={() => setSelectedProvincia(active ? null : prov)}
                   >
-                    {prov}
-                  </AppText>
-                </TouchableOpacity>
-              );
-            })}
-          </ScrollView>
+                    <AppText
+                      variant="caption"
+                      color={active ? t.colors.onPrimary : t.colors.onSurface}
+                      style={styles.filterText}
+                    >
+                      {prov}
+                    </AppText>
+                  </TouchableOpacity>
+                );
+              })}
+            </ScrollView>
+          </View>
         </View>
       </View>
-
-      {/* lista enmascarada con fade */}
-      <MaskedView
-        style={{ flex: 1 }}
-        maskElement={
-          <LinearGradient
-            colors={['transparent', 'black']}
-            locations={[0, 0.2]} // ajustá el 0.2 para que el fade termine a mitad de la fila provincia
-            style={{ flex: 1 }}
-          />
-        }
-      >
-        <FlatList
-          data={filtered}
-          keyExtractor={item => canonicalPath(item.url) || item.title}
-          renderItem={renderItem}
-          contentContainerStyle={styles.list}
-        />
-      </MaskedView>
     </SafeAreaView>
   );
 };
 
 const createStyles = (t: AppTheme) =>
   StyleSheet.create({
+    safeArea: {
+      flex: 1,
+      backgroundColor: 'transparent',
+    },
     container: {
       flex: 1,
       padding: t.spacing.md,
       backgroundColor: 'transparent',
+      position: 'relative',
     },
-    loadingContainer: { flex: 1, justifyContent: 'center', alignItems: 'center' },
+    loadingContainer: {
+      flex: 1,
+      justifyContent: 'center',
+      alignItems: 'center',
+      padding: t.spacing.lg,
+      backgroundColor: 'transparent',
+    },
     loadingText: { marginTop: t.spacing.md },
     errorText: { textAlign: 'center', marginTop: t.spacing.md },
-    filtersWrapper: { marginBottom: t.spacing.md },
-    searchContainer: { marginBottom: t.spacing.md },
+    filtersWrapper: {
+      zIndex: 10, // Los filtros siempre encima
+      backgroundColor: 'transparent',
+    },
+    searchContainer: { 
+      marginBottom: t.spacing.md,
+      backgroundColor: 'transparent',
+    },
     searchInput: {
       borderWidth: 1,
       borderRadius: t.radius.l,
       paddingHorizontal: t.spacing.md,
       height: 45,
     },
-    filterSection: { marginBottom: t.spacing.md },
-    filterTitle: { marginBottom: t.spacing.sm },
-    filterScroll: { paddingVertical: t.spacing.xs },
+    filterSection: { 
+      marginBottom: t.spacing.sm, // Reducido de md a sm
+      backgroundColor: 'transparent',
+    },
+    filterTitle: { marginBottom: t.spacing.xs }, // Reducido de sm a xs
+    filterScroll: { paddingVertical: 0 }, // Reducido de xs a 0
     filterButton: {
-      paddingVertical: t.spacing.sm,
-      paddingHorizontal: t.spacing.md,
+      paddingVertical: t.spacing.sm, // Mantener el tamaño original
+      paddingHorizontal: t.spacing.md, // Mantener el tamaño original
       borderWidth: 1,
       borderRadius: t.radius.xl,
-      marginRight: t.spacing.sm,
+      marginRight: t.spacing.xs, // Reducido de sm a xs (solo el espacio entre botones)
+      borderColor: t.colors.border,
+      backgroundColor: t.colors.surfaceAlt,
       alignItems: 'center',
       justifyContent: 'center',
     },
     filterButtonActive: { backgroundColor: t.colors.primary, borderColor: t.colors.primary },
-    filterText: {},
-    list: { paddingBottom: t.spacing.lg },
+    filterText: { textTransform: 'none' },
+    listContainer: {
+      flex: 1,
+      marginTop: 200, // Espacio aproximado para los filtros
+    },
+    listContainerAbsolute: {
+      position: 'absolute',
+      zIndex: 1, // Detrás de los filtros
+    },
+    list: { 
+      paddingBottom: t.spacing.lg,
+    },
+    emptyState: {
+      flex: 1,
+      alignItems: 'center',
+      justifyContent: 'center',
+      padding: t.spacing.lg,
+      marginTop: 200, // Para que aparezca debajo de los filtros
+      backgroundColor: 'transparent',
+    },
     card: { flexDirection: 'row', marginBottom: t.spacing.sm, padding: t.spacing.sm },
     cardImage: { width: 100, height: 100, borderRadius: t.radius.m, marginRight: t.spacing.md },
     cardContent: { flex: 1 },

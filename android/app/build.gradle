@@ -2,16 +2,6 @@ apply plugin: "com.android.application"
 apply plugin: "org.jetbrains.kotlin.android"
 apply plugin: "com.facebook.react"
 
-// Release signing: read from credentials/release-signing.properties if present
-def keystoreProps = new Properties()
-def keystorePropsFile = rootProject.file('credentials/release-signing.properties')
-if (keystorePropsFile.exists()) {
-    keystoreProps.load(new FileInputStream(keystorePropsFile))
-    println "Using release signing from credentials/release-signing.properties"
-} else {
-    println "Release keystore properties not found. Falling back to debug signing."
-}
-
 def projectRoot = rootDir.getAbsoluteFile().getParentFile().getAbsolutePath()
 
 /**
@@ -96,15 +86,13 @@ android {
     buildToolsVersion rootProject.ext.buildToolsVersion
     compileSdk rootProject.ext.compileSdkVersion
 
-    namespace 'com.labancaria.bancapp'
+    namespace "com.bancapp"
     defaultConfig {
-        applicationId 'com.labancaria.bancapp'
+        applicationId "com.bancapp"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1
-        versionName "1.0.0"
-        // Limitar recursos a español para reducir tamaño
-        resConfigs "es"
+        versionName "1.0"
     }
     signingConfigs {
         debug {
@@ -113,28 +101,17 @@ android {
             keyAlias 'androiddebugkey'
             keyPassword 'android'
         }
-        if (keystorePropsFile.exists()) {
-            release {
-                storeFile file(keystoreProps['storeFile'])
-                storePassword keystoreProps['storePassword']
-                keyAlias keystoreProps['keyAlias']
-                keyPassword keystoreProps['keyPassword']
-            }
-        }
     }
     buildTypes {
         debug {
             signingConfig signingConfigs.debug
         }
         release {
-            // Prefer release keystore if properties exist, otherwise fall back to debug.
-            if (keystorePropsFile.exists()) {
-                signingConfig signingConfigs.release
-            } else {
-                signingConfig signingConfigs.debug
-            }
-            shrinkResources true
-            minifyEnabled true
+            // Caution! In production, you need to generate your own keystore file.
+            // see https://reactnative.dev/docs/signed-apk-android.
+            signingConfig signingConfigs.debug
+            shrinkResources (findProperty('android.enableShrinkResourcesInReleaseBuilds')?.toBoolean() ?: false)
+            minifyEnabled enableProguardInReleaseBuilds
             proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"
             crunchPngs (findProperty('android.enablePngCrunchInReleaseBuilds')?.toBoolean() ?: true)
         }
@@ -197,5 +174,3 @@ dependencies {
         implementation jscFlavor
     }
 }
-
-apply plugin: 'com.google.gms.google-services'

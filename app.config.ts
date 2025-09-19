@@ -49,7 +49,13 @@ export default (_: ConfigContext): ExpoConfig => ({
   plugins: [
     // Incluí el dev client solo en builds de desarrollo (EAS)
     process.env.EAS_BUILD_PROFILE === 'development' && 'expo-dev-client',
-    '@react-native-firebase/app',
+    [
+      '@react-native-firebase/app',
+      {
+        // Solo configurar Android por ahora
+        ...(process.platform !== 'darwin' && { ios: false })
+      }
+    ],
     ['@react-native-firebase/messaging', { android: { enableHeadless: true } }],
     [
       'expo-build-properties',

@@ -1,5 +1,6 @@
 import { getFirestore, collection, getDocs } from '@react-native-firebase/firestore';
 import { chunkArray } from '../utils/chunkArray';
+import logger from '../utils/logger';
 
 interface Message {
   title: string;
@@ -31,7 +32,7 @@ export const sendPushToAdmins = async (msg: Message) => {
         body: JSON.stringify(messages),
       });
     } catch (err) {
-      console.error('Error enviando push', err);
+      logger.error('Error enviando push', err);
     }
   }
 };
