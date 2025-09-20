@@ -31,7 +31,8 @@ const TabNavigator = () => {
 
   return (
     <View style={styles.container}>
-      <Tab.Navigator screenOptions={screenOptions} sceneContainerStyle={styles.sceneContainer}>
+      {/* React Navigation v7 bottom-tabs no longer supports `sceneContainerStyle` as a prop */}
+      <Tab.Navigator screenOptions={screenOptions}>
         <Tab.Screen name="NewsList" component={NewsListScreen} options={{ title: 'Noticias' }} />
         <Tab.Screen name="Benefits" component={BenefitsListScreen} options={{ title: 'Beneficios' }} />
         <Tab.Screen name="Profile" component={ProfileScreen} options={{ title: 'Perfil' }} />
@@ -97,8 +98,5 @@ const createScreenOptions = (t: AppTheme, routeName: string) => ({
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-  },
-  sceneContainer: {
-    backgroundColor: 'transparent',
   },
 });

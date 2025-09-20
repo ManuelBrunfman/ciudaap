@@ -1,6 +1,7 @@
 import { getFirestore, collection, getDocs } from '@react-native-firebase/firestore';
 import { chunkArray } from '../utils/chunkArray';
 import logger from '../utils/logger';
+import { getFirebaseApp } from '../config/firebaseApp';
 
 interface Message {
   title: string;
@@ -8,7 +9,7 @@ interface Message {
 }
 
 export const sendPushToAdmins = async (msg: Message) => {
-  const db = getFirestore();
+  const db = getFirestore(getFirebaseApp());
   const snap = await getDocs(collection(db, 'adminPushTokens'));
   const tokens = snap.docs
     .map(d => d.data().expoPushToken as string)

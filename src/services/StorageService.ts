@@ -10,6 +10,7 @@ import {
   uploadBytes,
   getDownloadURL,
 } from '@react-native-firebase/storage';
+import { getFirebaseApp } from '../config/firebaseApp';
 
 class StorageService {
   /**
@@ -18,7 +19,7 @@ class StorageService {
    * @param file Objeto con propiedad `uri` apuntando al archivo local.
    */
   async uploadFile(path: string, file: { uri: string }) {
-    const storage = getStorage();
+    const storage = getStorage(getFirebaseApp());
     const storageRef = ref(storage, path);
 
     // fetch convierte URI en Blob para uploadBytes
@@ -37,7 +38,7 @@ class StorageService {
    * @param path Ruta en el bucket (misma que usaste en upload).
    */
   async getFileUrl(path: string) {
-    const storage = getStorage();
+    const storage = getStorage(getFirebaseApp());
     const storageRef = ref(storage, path);
     return getDownloadURL(storageRef);
   }

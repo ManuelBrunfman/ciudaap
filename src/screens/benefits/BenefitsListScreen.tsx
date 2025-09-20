@@ -15,7 +15,6 @@ import {
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { getFirestore, collection, getDocs } from '@react-native-firebase/firestore';
 import { getAuth, onAuthStateChanged } from '@react-native-firebase/auth';
-import { getApp } from '@react-native-firebase/app';
 import { useNavigation } from '@react-navigation/native';
 import type { StackNavigationProp } from '@react-navigation/stack';
 import type { RootStackParamList } from '../../types/RootStackParamList';
@@ -24,6 +23,7 @@ import AppText from '../../ui/AppText';
 import Card from '../../ui/Card';
 import { LinearGradient } from 'expo-linear-gradient';
 import MaskedView from '@react-native-masked-view/masked-view';
+import { getFirebaseApp } from '../../config/firebaseApp';
 
 // --------- ViewModel local ---------
 type BenefitVM = {
@@ -146,6 +146,7 @@ const BenefitsListScreen: React.FC = () => {
   const provinceBottomRef = useRef<number | null>(null);
   const [fadeArea, setFadeArea] = useState<{ top: number; height: number } | null>(null);
   const navigation = useNavigation<NavProp>();
+  const app = getFirebaseApp();
 
   const updateFadeArea = useCallback(() => {
     const categoriesBottom = categoriesBottomRef.current;
@@ -158,7 +159,7 @@ const BenefitsListScreen: React.FC = () => {
       }
     }
     setFadeArea(null);
-  }, []);
+  }, [app]);
 
   const measureRelativeToContainer = useCallback(
     (node: any, assign: (y: number, height: number) => void) => {
@@ -206,7 +207,6 @@ const BenefitsListScreen: React.FC = () => {
 
   useEffect(() => {
     setLoading(true);
-    const app = getApp();
     const auth = getAuth(app);
     const unsub = onAuthStateChanged(auth, async () => {
       try {

@@ -1,6 +1,6 @@
 // src/screens/videos/YouTubeChannelScreen.tsx
 
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import React, { memo, useCallback, useEffect, useMemo, useState } from 'react';
 import {
   ActivityIndicator,
   Alert,
@@ -18,6 +18,8 @@ import { XMLParser } from 'fast-xml-parser';
 import AppText from '../../ui/AppText';
 import Card from '../../ui/Card';
 import { useTheme, type AppTheme } from '../../theme';
+import MaskedView from '@react-native-masked-view/masked-view';
+import { LinearGradient } from 'expo-linear-gradient';
 
 // --------------------
 // Types & constants
@@ -84,6 +86,18 @@ export default function YouTubeChannelScreen() {
     fetchVideos();
   }, [fetchVideos]);
 
+  const onPressItem = useCallback(
+    (id: string) => navigation.navigate('YouTubeVideo', { videoId: id }),
+    [navigation],
+  );
+
+  const renderItem = useCallback(
+    ({ item }: { item: VideoItem }) => (
+      <VideoListItem item={item} styles={styles} onPressItem={onPressItem} titleColor={t.colors.onBackground} dateColor={t.colors.onSurfaceMuted} />
+    ),
+    [onPressItem, styles, t.colors.onBackground, t.colors.onSurfaceMuted],
+  );
+
   if (loading) {
     return (
       <View style={styles.loader}>
@@ -103,40 +117,67 @@ export default function YouTubeChannelScreen() {
   }
 
   return (
-    <FlatList
-      style={styles.list}
-      contentContainerStyle={styles.listContent}
-      data={videos}
-      keyExtractor={item => item.id}
-      refreshControl={
-        <RefreshControl
-          refreshing={refreshing}
-          onRefresh={fetchVideos}
-          colors={[t.colors.primary]}
-          tintColor={t.colors.primary}
-        />
+    <MaskedView
+      style={styles.maskContainer}
+      maskElement={
+        <View style={styles.maskWrapper}>
+          <LinearGradient
+            colors={['rgba(0,0,0,0)', 'rgba(0,0,0,1)']}
+            locations={[0, 0.4]}
+            style={styles.maskGradient}
+          />
+          <View style={styles.maskFill} />
+        </View>
       }
-      renderItem={({ item }) => (
-        <TouchableOpacity
-          style={styles.cardTouchable}
-          onPress={() => navigation.navigate('YouTubeVideo', { videoId: item.id })}
-        >
-          <Card style={styles.card}>
-            <Image source={{ uri: item.thumbnail }} style={styles.thumb} resizeMode="cover" />
-            <View style={styles.info}>
-              <AppText variant="subtitle" color={t.colors.onBackground}>
-                {item.title}
-              </AppText>
-              <AppText variant="caption" color={t.colors.onSurfaceMuted} style={styles.date}>
-                {new Date(item.published).toLocaleDateString()}
-              </AppText>
-            </View>
-          </Card>
-        </TouchableOpacity>
-      )}
-    />
+    >
+      <FlatList
+        style={styles.list}
+        contentContainerStyle={styles.listContent}
+        data={videos}
+        keyExtractor={item => item.id}
+        refreshing={refreshing}
+        onRefresh={fetchVideos}
+        renderItem={renderItem}
+        removeClippedSubviews
+        initialNumToRender={8}
+        maxToRenderPerBatch={8}
+        windowSize={5}
+      />
+    </MaskedView>
   );
 }
+
+// Item de lista memoizado para evitar re-renderizados innecesarios
+const VideoListItem = memo(function VideoListItem({
+  item,
+  styles,
+  onPressItem,
+  titleColor,
+  dateColor,
+}: {
+  item: VideoItem;
+  styles: ReturnType<typeof createStyles>;
+  onPressItem: (id: string) => void;
+  titleColor: string;
+  dateColor: string;
+}) {
+  const handlePress = useCallback(() => onPressItem(item.id), [onPressItem, item.id]);
+  return (
+    <TouchableOpacity style={styles.cardTouchable} onPress={handlePress}>
+      <Card style={styles.card}>
+        <Image source={{ uri: item.thumbnail }} style={styles.thumb} resizeMode="cover" />
+        <View style={styles.info}>
+          <AppText variant="subtitle" color={titleColor}>
+            {item.title}
+          </AppText>
+          <AppText variant="caption" color={dateColor} style={styles.date}>
+            {new Date(item.published).toLocaleDateString()}
+          </AppText>
+        </View>
+      </Card>
+    </TouchableOpacity>
+  );
+});
 
 const createStyles = (t: AppTheme) =>
   StyleSheet.create({
@@ -153,6 +194,13 @@ const createStyles = (t: AppTheme) =>
       padding: t.spacing.lg,
       backgroundColor: 'transparent',
     },
+    maskContainer: { flex: 1 },
+    maskWrapper: { flex: 1 },
+    maskGradient: {
+      width: '100%',
+      height: t.spacing.xl * 2,
+    },
+    maskFill: { flex: 1, backgroundColor: '#000' },
     list: {
       flex: 1,
       backgroundColor: 'transparent',

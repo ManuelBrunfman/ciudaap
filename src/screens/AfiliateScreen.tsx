@@ -3,13 +3,14 @@ import { View, TextInput, Alert, StyleSheet } from 'react-native';
 import { useForm, Controller } from 'react-hook-form';
 import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { getAuth } from '@react-native-firebase/auth';
 import { getFirestore, collection, addDoc, serverTimestamp } from '@react-native-firebase/firestore';
+import { getAuth } from '@react-native-firebase/auth';
 import { sendPushToAdmins } from '../services/sendPushToAdmins';
 import { useTheme } from '../theme';
 import { spacing } from '../theme/spacing';
 import AppText from '../ui/AppText';
 import AppButton from '../ui/AppButton';
+import { getFirebaseApp } from '../config/firebaseApp';
 
 type FormData = { nombreApellido: string; dni: string; sector: string; telefono: string };
 
@@ -25,10 +26,11 @@ export default function AfiliateScreen() {
   const { control, handleSubmit, formState: { errors }, reset } = useForm<FormData>({ resolver: yupResolver(schema) });
 
   const onSubmit = async (data: FormData) => {
-    const currentUser = getAuth().currentUser;
+    const app = getFirebaseApp();
+    const currentUser = getAuth(app).currentUser;
     if (!currentUser) { Alert.alert('Error', 'Debes iniciar sesión'); return; }
     try {
-      const db = getFirestore();
+      const db = getFirestore(app);
       await addDoc(collection(db, 'affiliateRequests'), { ...data, status: 'pending', createdAt: serverTimestamp(), userId: currentUser.uid });
       await sendPushToAdmins({ title: 'Nueva solicitud de afiliación', body: `De ${data.nombreApellido}` });
       Alert.alert('Listo', 'Solicitud enviada');

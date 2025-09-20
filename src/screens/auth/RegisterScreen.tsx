@@ -7,6 +7,7 @@ import { useTheme } from '../../theme';
 import { spacing } from '../../theme/spacing';
 import AppText from '../../ui/AppText';
 import AppButton from '../../ui/AppButton';
+import { getFirebaseApp } from '../../config/firebaseApp';
 
 const RegisterScreen: React.FC = () => {
   const navigation = useNavigation();
@@ -19,7 +20,7 @@ const RegisterScreen: React.FC = () => {
 
   const handleRegister = async () => {
     try {
-      const auth = getAuth();
+      const auth = getAuth(getFirebaseApp());
       const cred = await createUserWithEmailAndPassword(auth, email.trim(), password);
       await updateProfile(cred.user, { displayName });
       await signOut(auth);
@@ -91,4 +92,3 @@ const styles = StyleSheet.create({
   title: { textAlign: 'center', marginBottom: spacing.lg },
   input: { borderWidth: 1, borderRadius: 8, padding: spacing.md, marginBottom: spacing.sm },
 });
-

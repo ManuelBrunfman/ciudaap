@@ -8,13 +8,14 @@ import {
   orderBy,
   getDocs,
 } from '@react-native-firebase/firestore';
+import { getFirebaseApp } from '../config/firebaseApp';
 
 class NewsService {
   /**
    * Obtiene todas las noticias ordenadas por fecha de creación descendente.
    */
   async getAllNews() {
-    const db = getFirestore();
+    const db = getFirestore(getFirebaseApp());
     // Referencia a la colección “news”
     const newsCol = collection(db, 'news');
     // Creamos la query modular con orderBy

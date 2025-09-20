@@ -27,7 +27,8 @@ const AppNavigator: React.FC = () => {
           headerTintColor: t.colors.onPrimary,
           headerTitleStyle: { color: t.colors.onPrimary, fontWeight: '600' },
           headerShadowVisible: false,
-          contentStyle: { backgroundColor: 'transparent' },
+          // React Navigation v7 (@react-navigation/stack) uses `cardStyle` instead of `contentStyle`
+          cardStyle: { backgroundColor: 'transparent' },
           headerBackground: () => (
             <LinearGradient
               colors={[t.colors.overlayStrong, 'transparent']}

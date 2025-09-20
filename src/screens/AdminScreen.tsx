@@ -2,26 +2,27 @@
 
 import React, { useEffect, useState } from 'react';
 import { Alert, ActivityIndicator, FlatList, StyleSheet, View } from 'react-native';
-import { collection, getFirestore, onSnapshot, orderBy, query, where } from '@react-native-firebase/firestore';
-import { getApp } from '@react-native-firebase/app';
+import { getFirestore, collection, onSnapshot, orderBy, query, where } from '@react-native-firebase/firestore';
 import { useAuth } from '../context/AuthContext';
 import type { AffiliateRequest } from '../types/AffiliateRequest';
 import { useTheme } from '../theme';
 import { spacing } from '../theme/spacing';
 import AppText from '../ui/AppText';
+import { getFirebaseApp } from '../config/firebaseApp';
 
 interface RequestItem extends AffiliateRequest { id: string }
 
 const AdminScreen: React.FC = () => {
   const { user, isAdmin } = useAuth();
   const t = useTheme();
+  const app = getFirebaseApp();
   const [requests, setRequests] = useState<RequestItem[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     if (!user || !isAdmin) { setLoading(false); return; }
 
-    const db = getFirestore(getApp());
+    const db = getFirestore(app);
     const q = query(
       collection(db, 'affiliateRequests'),
       where('status', '==', 'pending'),
@@ -43,7 +44,7 @@ const AdminScreen: React.FC = () => {
     );
 
     return unsubscribe;
-  }, [user, isAdmin]);
+  }, [app, user, isAdmin]);
 
   if (!isAdmin) {
     return (

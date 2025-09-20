@@ -7,7 +7,6 @@ import RootNavigator from './src/navigation/RootNavigator';
 import { View, Text, Alert, Vibration } from 'react-native';
 import * as Notifications from 'expo-notifications';
 import { getFirestore, doc, setDoc, serverTimestamp } from '@react-native-firebase/firestore';
-import { getApp } from '@react-native-firebase/app';
 import {
   getMessaging,
   requestPermission as requestFcmPermission,
@@ -18,6 +17,9 @@ import {
 import { requestPushPermission } from './src/services/notifications';
 import { ThemeProvider, useTheme, getNavigationTheme } from './src/theme';
 import AppBackground from './src/ui/AppBackground';
+import { getFirebaseApp } from './src/config/firebaseApp';
+
+const firebaseApp = getFirebaseApp();
 
 Notifications.setNotificationHandler({
   handleNotification: async () => ({
@@ -38,7 +40,7 @@ function MainApp() {
       if (user && isAdmin) {
         try {
           const expoToken = await requestPushPermission();
-          const db = getFirestore(getApp());
+          const db = getFirestore(firebaseApp);
           await setDoc(
             doc(db, 'adminPushTokens', user.uid),
             { expoPushToken: expoToken, updatedAt: serverTimestamp() },
@@ -60,8 +62,7 @@ function MainApp() {
     didInitFcm.current = true;
     (async () => {
       try {
-        const app = getApp();
-        const msg = getMessaging(app);
+        const msg = getMessaging(firebaseApp);
         await requestFcmPermission(msg); // iOS / Android 13+
         await registerDeviceForRemoteMessages(msg);
         const fcmToken = await getFcmToken(msg);

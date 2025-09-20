@@ -19,6 +19,7 @@ import {
   doc,
   onSnapshot,
 } from '@react-native-firebase/firestore';
+import { getFirebaseApp } from '../config/firebaseApp';
 
 interface AuthContextData {
   user: FirebaseAuthTypes.User | null;
@@ -43,34 +44,35 @@ export const AuthContext = createContext<AuthContextData>({
 export const useAuth = () => useContext(AuthContext);
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
+  const app = getFirebaseApp();
   const [user, setUser] = useState<FirebaseAuthTypes.User | null>(null);
   const [loading, setLoading] = useState(true);
   const [isAdmin, setIsAdmin] = useState(false);
 
   useEffect(() => {
-    const auth = getAuth();
+    const auth = getAuth(app);
     const unsub = onAuthStateChanged(auth, (u) => {
       setUser(u);
       setLoading(false);
     });
     return unsub;
-  }, []);
+  }, [app]);
 
   useEffect(() => {
     if (!user) {
       setIsAdmin(false);
       return;
     }
-    const db = getFirestore();
+    const db = getFirestore(app);
     const ref = doc(db, 'users', user.uid);
     const unsub = onSnapshot(ref, snap => {
       setIsAdmin(!!snap.data()?.isAdmin);
     });
     return unsub;
-  }, [user]);
+  }, [app, user]);
 
   const signIn = (email: string, password: string) => {
-    const auth = getAuth();
+    const auth = getAuth(app);
     return signInWithEmailAndPassword(auth, email, password);
   };
 
@@ -78,12 +80,12 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const login = signIn;
 
   const signUp = (email: string, password: string) => {
-    const auth = getAuth();
+    const auth = getAuth(app);
     return createUserWithEmailAndPassword(auth, email, password);
   };
 
   const signOut = () => {
-    const auth = getAuth();
+    const auth = getAuth(app);
     return firebaseSignOut(auth);
   };
 

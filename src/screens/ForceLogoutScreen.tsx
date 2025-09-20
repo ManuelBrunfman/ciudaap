@@ -1,10 +1,11 @@
 // src/screens/ForceLogoutScreen.tsx
 import React, { useEffect } from "react";
 import { View, ActivityIndicator, StyleSheet } from "react-native";
-import { getAuth } from "@react-native-firebase/auth";
 import { useNavigation, StackActions } from "@react-navigation/native";
+import { getAuth } from "@react-native-firebase/auth";
 import { useTheme } from "../theme";
 import AppText from "../ui/AppText";
+import { getFirebaseApp } from "../config/firebaseApp";
 
 export default function ForceLogoutScreen() {
   const navigation = useNavigation();
@@ -13,7 +14,8 @@ export default function ForceLogoutScreen() {
   useEffect(() => {
     const doLogout = async () => {
       try {
-        await getAuth().signOut();
+        const auth = getAuth(getFirebaseApp());
+        await auth.signOut();
         navigation.dispatch(StackActions.popToTop());
       } catch (error) {
         console.error("Error al cerrar sesión", error);
