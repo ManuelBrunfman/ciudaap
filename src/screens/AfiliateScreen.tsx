@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, TextInput, Alert, StyleSheet } from 'react-native';
+import { View, TextInput, Alert, StyleSheet, ScrollView, KeyboardAvoidingView, Platform } from 'react-native';
 import { useForm, Controller } from 'react-hook-form';
 import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -42,7 +42,16 @@ export default function AfiliateScreen() {
   };
 
   return (
-    <View style={[styles.container, { backgroundColor: 'transparent' }]}>
+    <KeyboardAvoidingView
+      style={styles.keyboardAvoidingView}
+      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+    >
+      <ScrollView
+        contentContainerStyle={styles.scrollContainer}
+        showsVerticalScrollIndicator={false}
+        keyboardShouldPersistTaps="handled"
+      >
+        <View style={styles.formContainer}>
       <Controller control={control} name="nombreApellido" render={({ field: { onChange, value } }) => (
         <View style={styles.fieldContainer}>
           <AppText>Nombre y apellido</AppText>
@@ -79,7 +88,7 @@ export default function AfiliateScreen() {
             style={[styles.input, { borderColor: t.colors.border, color: t.colors.onBackground, backgroundColor: t.colors.surfaceAlt }]}
             value={value}
             onChangeText={onChange}
-            placeholder="Ejemplo: Ventas"
+            placeholder="Sucursal 63"
             placeholderTextColor={t.colors.muted}
           />
           {errors.sector && <AppText style={[styles.error, { color: t.colors.danger }]}>{errors.sector.message}</AppText>}
@@ -94,24 +103,57 @@ export default function AfiliateScreen() {
             value={value}
             onChangeText={onChange}
             keyboardType="phone-pad"
-            placeholder="Ejemplo: 11912345678"
+            placeholder="1151234561"
             placeholderTextColor={t.colors.muted}
           />
           {errors.telefono && <AppText style={[styles.error, { color: t.colors.danger }]}>{errors.telefono.message}</AppText>}
         </View>
       )} />
 
-      <View style={styles.buttonContainer}>
-        <AppButton title="Enviar solicitud" onPress={handleSubmit(onSubmit)} variant="filled" />
-      </View>
-    </View>
+          <View style={styles.buttonContainer}>
+            <AppButton title="Enviar solicitud" onPress={handleSubmit(onSubmit)} variant="filled" />
+          </View>
+        </View>
+      </ScrollView>
+    </KeyboardAvoidingView>
   );
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, padding: spacing.md },
-  fieldContainer: { marginBottom: spacing.md },
-  input: { borderWidth: 1, borderRadius: 4, padding: spacing.sm, marginTop: spacing.xs },
-  buttonContainer: { marginTop: spacing.md },
-  error: { marginTop: spacing.xs },
+  keyboardAvoidingView: {
+    flex: 1,
+    backgroundColor: 'transparent',
+  },
+  scrollContainer: {
+    flexGrow: 1,
+    justifyContent: 'center',
+    paddingHorizontal: spacing.lg,
+    paddingVertical: spacing.xl,
+  },
+  formContainer: {
+    maxWidth: 400,
+    width: '100%',
+    alignSelf: 'center',
+    paddingHorizontal: spacing.md,
+    paddingVertical: spacing.xl,
+  },
+  fieldContainer: {
+    marginBottom: spacing.lg,
+  },
+  input: {
+    borderWidth: 1,
+    borderRadius: 8,
+    padding: spacing.md,
+    marginTop: spacing.sm,
+    fontSize: 16,
+    minHeight: 48,
+  },
+  buttonContainer: {
+    marginTop: spacing.xl,
+    paddingHorizontal: spacing.xs,
+  },
+  error: {
+    marginTop: spacing.sm,
+    fontSize: 14,
+  },
 });
