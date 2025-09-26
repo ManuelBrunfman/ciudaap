@@ -1,7 +1,7 @@
 // src/navigation/TabNavigator.tsx
-
 import React, { useMemo } from 'react';
-import { View, StyleSheet } from 'react-native';
+import { View, StyleSheet, Image } from 'react-native';
+import type { ViewStyle } from 'react-native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { Ionicons } from '@expo/vector-icons';
 import BenefitsListScreen from '../screens/benefits/BenefitsListScreen';
@@ -16,9 +16,12 @@ import { useTheme, type AppTheme } from '../theme';
 import { LinearGradient } from 'expo-linear-gradient';
 
 const Tab = createBottomTabNavigator();
+const youtubeTabItemStyle: ViewStyle = {
+  justifyContent: 'center',
+  height: 72,
+};
 
 type RouteConfig = { name: string };
-
 type ScreenOptionsFactory = ({ route }: { route: RouteConfig }) => ReturnType<typeof createScreenOptions>;
 
 const TabNavigator = () => {
@@ -31,15 +34,14 @@ const TabNavigator = () => {
 
   return (
     <View style={styles.container}>
-      {/* React Navigation v7 bottom-tabs no longer supports `sceneContainerStyle` as a prop */}
       <Tab.Navigator screenOptions={screenOptions}>
-        <Tab.Screen name="NewsList" component={NewsListScreen} options={{ title: 'Noticias' }} />
-        <Tab.Screen name="Benefits" component={BenefitsListScreen} options={{ title: 'Beneficios' }} />
-        <Tab.Screen name="Profile" component={ProfileScreen} options={{ title: 'Perfil' }} />
-        <Tab.Screen name="YouTubeChannel" component={YouTubeChannelScreen} options={{ title: 'Videos' }} />
-        <Tab.Screen name="Afiliate" component={AfiliateScreen} options={{ title: 'Afíliate' }} />
-        <Tab.Screen name="Contact" component={ContactScreen} options={{ title: 'Contacto' }} />
-        {isAdmin && <Tab.Screen name="Admin" component={AdminScreen} options={{ title: 'Admin' }} />}
+        <Tab.Screen name="NewsList" component={NewsListScreen} options={{ title: 'Noticias', tabBarLabel: () => null }} />
+        <Tab.Screen name="Benefits" component={BenefitsListScreen} options={{ title: 'Beneficios', tabBarLabel: () => null }} />
+        <Tab.Screen name="Profile" component={ProfileScreen} options={{ title: 'Perfil', tabBarLabel: 'Perfil' }} />
+        <Tab.Screen name="YouTubeChannel" component={YouTubeChannelScreen} options={{ title: '' }} />
+        <Tab.Screen name="Afiliate" component={AfiliateScreen} options={{ title: 'Afiliate', tabBarLabel: () => null }} />
+        <Tab.Screen name="Contact" component={ContactScreen} options={{ title: 'Contacto', tabBarLabel: () => null }} />
+        {isAdmin && <Tab.Screen name="Admin" component={AdminScreen} options={{ title: 'Admin', tabBarLabel: 'Admin' }} />}
       </Tab.Navigator>
     </View>
   );
@@ -47,22 +49,30 @@ const TabNavigator = () => {
 
 export default TabNavigator;
 
+// ---------------- ICONOS ----------------
+
+// tamaño uniforme para todos los PNG
+const ICON_SIZE = 32;
+
+const renderIcon = (src: any, focused: boolean) => (
+  <View style={{ width: ICON_SIZE, height: ICON_SIZE, alignItems: 'center', justifyContent: 'center' }}>
+    <Image
+      source={src}
+      style={{
+        width: ICON_SIZE,
+        height: ICON_SIZE,
+        resizeMode: 'contain',
+        opacity: focused ? 1 : 0.85,
+        transform: focused ? [{ scale: 1.08 }] : [{ scale: 1 }],
+      }}
+    />
+  </View>
+);
+
 const iconForRoute = (routeName: string) => {
   switch (routeName) {
-    case 'NewsList':
-      return 'newspaper-outline';
-    case 'Benefits':
-      return 'gift-outline';
-    case 'Credential':
-      return 'card-outline';
     case 'Profile':
       return 'person-outline';
-    case 'Contact':
-      return 'logo-whatsapp';
-    case 'Afiliate':
-      return 'person-add-outline';
-    case 'YouTubeChannel':
-      return 'logo-youtube';
     case 'Admin':
       return 'settings-outline';
     default:
@@ -77,14 +87,43 @@ const createScreenOptions = (t: AppTheme, routeName: string) => ({
   tabBarStyle: {
     backgroundColor: 'transparent',
     borderTopColor: 'transparent',
+    height: 72,
+    paddingBottom: 10,
+    paddingTop: 6,
   },
-  tabBarIcon: ({ color, size }: { color: string; size: number }) => (
-    <Ionicons
-      name={iconForRoute(routeName) as keyof typeof Ionicons.glyphMap}
-      size={size}
-      color={color}
-    />
-  ),
+  tabBarShowLabel: false, // 👈 fuerza sin labels para todos
+
+  tabBarIcon: ({ focused, color, size }: { focused: boolean; color: string; size: number }) => {
+    if (routeName === 'NewsList') {
+      return renderIcon(require('../../assets/iconos/noticias.png'), focused);
+    }
+    if (routeName === 'YouTubeChannel') {
+      return renderIcon(require('../../assets/iconos/videos-logo.png'), focused);
+    }
+    if (routeName === 'Afiliate') {
+      return renderIcon(require('../../assets/iconos/afiliate-bancaria.png'), focused);
+    }
+    if (routeName === 'Benefits') {
+      return renderIcon(require('../../assets/iconos/beneficios.png'), focused);
+    }
+    if (routeName === 'Contact') {
+      return renderIcon(require('../../assets/iconos/contacto.png'), focused);
+    }
+
+    // resto usa Ionicons
+    return (
+      <Ionicons
+        name={iconForRoute(routeName) as keyof typeof Ionicons.glyphMap}
+        size={size}
+        color={color}
+      />
+    );
+  },
+
+  ...(routeName === 'YouTubeChannel' && {
+    tabBarItemStyle: youtubeTabItemStyle,
+  }),
+
   tabBarBackground: () => (
     <LinearGradient
       colors={[t.colors.overlayStrong, 'transparent']}

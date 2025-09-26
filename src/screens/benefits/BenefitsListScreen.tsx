@@ -12,6 +12,7 @@ import {
   TextInput,
   Dimensions,
 } from 'react-native';
+import type { ListRenderItem, StyleProp, ViewStyle, ImageStyle, TextStyle } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { getFirestore, collection, getDocs } from '@react-native-firebase/firestore';
 import { getAuth, onAuthStateChanged } from '@react-native-firebase/auth';
@@ -27,11 +28,28 @@ import { getFirebaseApp } from '../../config/firebaseApp';
 
 // --------- ViewModel local ---------
 type BenefitVM = {
+  id: string;
   title: string;
   url: string;
   imageUrl?: string | null;
   category: string | null;
   province: string | null;
+};
+
+type BenefitItemColors = {
+  onBackground: string;
+  onSurfaceMuted: string;
+  primary: string;
+  surfaceAlt: string;
+};
+
+type BenefitListStyles = {
+  card: StyleProp<ViewStyle>;
+  cardImage: StyleProp<ImageStyle>;
+  cardContent: StyleProp<ViewStyle>;
+  cardTitle: StyleProp<TextStyle>;
+  cardSubtitle: StyleProp<TextStyle>;
+  cardChip: StyleProp<ViewStyle>;
 };
 
 // ---------- Utils ----------
@@ -121,10 +139,59 @@ const mapDocToVM = (raw: any): BenefitVM => {
   const province = (raw?.province ?? raw?.provincia ?? null) as string | null;
   const imageUrlRaw: string = (raw?.imageUrl ?? raw?.imagen_url ?? '')?.toString().trim();
   const imageUrl = imageUrlRaw && /^https?:\/\//i.test(imageUrlRaw) ? imageUrlRaw : null;
-  return { title, url, imageUrl, category, province };
+  const key = canonicalPath(url) || url.toLowerCase() || title.toLowerCase();
+  const id = key || url;
+  return { id, title, url, imageUrl, category, province };
 };
 
 type NavProp = StackNavigationProp<RootStackParamList, 'BenefitDetail'>;
+
+type BenefitListItemProps = {
+  item: BenefitVM;
+  styles: BenefitListStyles;
+  colors: BenefitItemColors;
+  onPress: (url: string) => void;
+};
+
+const BenefitListItem = React.memo(
+  ({ item, styles, colors, onPress }: BenefitListItemProps) => {
+    const handlePress = useCallback(() => {
+      onPress(item.url);
+    }, [item.url, onPress]);
+
+    return (
+      <TouchableOpacity onPress={handlePress}>
+        <Card style={styles.card}>
+          <Image source={{ uri: item.imageUrl || PLACEHOLDER }} style={styles.cardImage} resizeMode="cover" />
+          <View style={styles.cardContent}>
+            <AppText variant="subtitle" color={colors.onBackground} style={styles.cardTitle}>
+              {item.title}
+            </AppText>
+            {item.category ? (
+              <AppText variant="caption" color={colors.onSurfaceMuted} style={styles.cardSubtitle}>
+                {item.category}
+              </AppText>
+            ) : null}
+            {item.province ? (
+              <AppText
+                variant="caption"
+                color={colors.primary}
+                style={[styles.cardChip, { backgroundColor: colors.surfaceAlt }]}
+              >
+                {item.province}
+              </AppText>
+            ) : null}
+          </View>
+        </Card>
+      </TouchableOpacity>
+    );
+  },
+  (prev, next) =>
+    prev.item === next.item &&
+    prev.styles === next.styles &&
+    prev.colors === next.colors &&
+    prev.onPress === next.onPress,
+);
 
 const BenefitsListScreen: React.FC = () => {
   const t = useTheme();
@@ -225,7 +292,7 @@ const BenefitsListScreen: React.FC = () => {
         for (const raw of mapped) {
           if (DISFRUTA_RE.test(raw.title)) continue;
           const it = fixProvinceIfBaguUshuaia(raw);
-          const key = canonicalPath(it.url) || it.title.toLowerCase();
+          const key = it.id;
           const prev = bestByKey.get(key);
           if (!prev || score(it) > score(prev)) bestByKey.set(key, it);
         }
@@ -264,35 +331,42 @@ const BenefitsListScreen: React.FC = () => {
     setFiltered(result);
   }, [search, selectedCategoria, selectedProvincia, items]);
 
-  const renderItem = useCallback(
-    ({ item }: { item: BenefitVM }) => (
-      <TouchableOpacity onPress={() => navigation.navigate('BenefitDetail', { url: item.url })}>
-        <Card style={styles.card}>
-          <Image source={{ uri: item.imageUrl || PLACEHOLDER }} style={styles.cardImage} resizeMode="cover" />
-          <View style={styles.cardContent}>
-            <AppText variant="subtitle" color={t.colors.onBackground} style={styles.cardTitle}>
-              {item.title}
-            </AppText>
-            {item.category ? (
-              <AppText variant="caption" color={t.colors.onSurfaceMuted} style={styles.cardSubtitle}>
-                {item.category}
-              </AppText>
-            ) : null}
-            {item.province ? (
-              <AppText
-                variant="caption"
-                color={t.colors.primary}
-                style={[styles.cardChip, { backgroundColor: t.colors.surfaceAlt }]}
-              >
-                {item.province}
-              </AppText>
-            ) : null}
-          </View>
-        </Card>
-      </TouchableOpacity>
-    ),
-    [navigation, styles, t.colors.onBackground, t.colors.onSurfaceMuted, t.colors.primary, t.colors.surfaceAlt],
+  const listItemColors = useMemo<BenefitItemColors>(
+    () => ({
+      onBackground: t.colors.onBackground,
+      onSurfaceMuted: t.colors.onSurfaceMuted,
+      primary: t.colors.primary,
+      surfaceAlt: t.colors.surfaceAlt,
+    }),
+    [t.colors.onBackground, t.colors.onSurfaceMuted, t.colors.primary, t.colors.surfaceAlt],
   );
+
+  const listItemStyles = useMemo<BenefitListStyles>(
+    () => ({
+      card: styles.card,
+      cardImage: styles.cardImage,
+      cardContent: styles.cardContent,
+      cardTitle: styles.cardTitle,
+      cardSubtitle: styles.cardSubtitle,
+      cardChip: styles.cardChip,
+    }),
+    [styles],
+  );
+
+  const handleOpenBenefit = useCallback(
+    (url: string) => {
+      navigation.navigate('BenefitDetail', { url });
+    },
+    [navigation],
+  );
+
+  const renderItem = useCallback<ListRenderItem<BenefitVM>>(
+    ({ item }) => (
+      <BenefitListItem item={item} styles={listItemStyles} colors={listItemColors} onPress={handleOpenBenefit} />
+    ),
+    [handleOpenBenefit, listItemColors, listItemStyles],
+  );
+
 
   if (loading) {
     return (
@@ -357,8 +431,12 @@ const BenefitsListScreen: React.FC = () => {
           >
             <FlatList
               data={filtered}
-              keyExtractor={item => canonicalPath(item.url) || item.title}
+              keyExtractor={item => item.id}
               renderItem={renderItem}
+              initialNumToRender={12}
+              maxToRenderPerBatch={12}
+              updateCellsBatchingPeriod={50}
+              windowSize={10}
               contentContainerStyle={[
                 styles.list,
                 { 
@@ -376,8 +454,12 @@ const BenefitsListScreen: React.FC = () => {
           <View style={styles.listContainer}>
             <FlatList
               data={filtered}
-              keyExtractor={item => canonicalPath(item.url) || item.title}
+              keyExtractor={item => item.id}
               renderItem={renderItem}
+              initialNumToRender={12}
+              maxToRenderPerBatch={12}
+              updateCellsBatchingPeriod={50}
+              windowSize={10}
               contentContainerStyle={styles.list}
             />
           </View>
