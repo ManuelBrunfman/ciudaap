@@ -11,6 +11,7 @@ import ContactScreen from '../screens/contact/ContactScreen';
 import AfiliateScreen from '../screens/AfiliateScreen';
 import AdminScreen from '../screens/AdminScreen';
 import YouTubeChannelScreen from '../screens/videos/YouTubeChannelScreen';
+import SergioPalazzoInterviewsScreen from '../screens/videos/SergioPalazzoInterviewsScreen';
 import { useAuth } from '../context/AuthContext';
 import { useTheme, type AppTheme } from '../theme';
 import { LinearGradient } from 'expo-linear-gradient';
@@ -39,6 +40,7 @@ const TabNavigator = () => {
         <Tab.Screen name="Benefits" component={BenefitsListScreen} options={{ title: 'Beneficios', tabBarLabel: () => null }} />
         <Tab.Screen name="Profile" component={ProfileScreen} options={{ title: 'Perfil', tabBarLabel: 'Perfil' }} />
         <Tab.Screen name="YouTubeChannel" component={YouTubeChannelScreen} options={{ title: '' }} />
+        <Tab.Screen name="SergioPalazzoInterviews" component={SergioPalazzoInterviewsScreen} options={{ title: 'Palazzo', tabBarLabel: () => null }} />
         <Tab.Screen name="Afiliate" component={AfiliateScreen} options={{ title: 'Afiliate', tabBarLabel: () => null }} />
         <Tab.Screen name="Contact" component={ContactScreen} options={{ title: 'Contacto', tabBarLabel: () => null }} />
         {isAdmin && <Tab.Screen name="Admin" component={AdminScreen} options={{ title: 'Admin', tabBarLabel: 'Admin' }} />}
@@ -100,6 +102,15 @@ const createScreenOptions = (t: AppTheme, routeName: string) => ({
     if (routeName === 'YouTubeChannel') {
       return renderIcon(require('../../assets/iconos/videos-logo.png'), focused);
     }
+    if (routeName === 'SergioPalazzoInterviews') {
+      return (
+        <Ionicons
+          name={(focused ? 'mic' : 'mic-outline') as keyof typeof Ionicons.glyphMap}
+          size={size}
+          color={color}
+        />
+      );
+    }
     if (routeName === 'Afiliate') {
       return renderIcon(require('../../assets/iconos/afiliate-bancaria.png'), focused);
     }
@@ -120,7 +131,7 @@ const createScreenOptions = (t: AppTheme, routeName: string) => ({
     );
   },
 
-  ...(routeName === 'YouTubeChannel' && {
+  ...((routeName === 'YouTubeChannel' || routeName === 'SergioPalazzoInterviews') && {
     tabBarItemStyle: youtubeTabItemStyle,
   }),
 

@@ -14,6 +14,7 @@ export type RootStackParamList = {
   BenefitDetail: { url: string };
   NewsDetail: { newsItem: NewsItem };
   YouTubeChannel: undefined;
+  SergioPalazzoInterviews: undefined;
   YouTubeVideo: { videoId: string };
   Profile: undefined;        // 👈 agregar esta línea
   ForceLogout: undefined;    // 👈 ya lo tenías
