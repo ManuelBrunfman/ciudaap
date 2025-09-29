@@ -11,6 +11,10 @@ import {
   Alert,
 } from 'react-native';
 import YoutubeIframe from 'react-native-youtube-iframe';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import MaskedView from '@react-native-masked-view/masked-view';
+import { LinearGradient } from 'expo-linear-gradient';
+import { spacing } from '../../theme/spacing';
 
 // Channel ID correcto para @sergioomarpalazzo503
 const CHANNEL_ID_SERGIO_PALAZZO = 'UCgb1ohZVSqOHGqe1kHi571g';
@@ -229,12 +233,32 @@ export default function SergioPalazzoInterviewsScreen() {
     }
   };
 
+  const wrapWithSafeArea = (content: React.ReactNode) => (
+    <SafeAreaView style={[styles.safeArea, { backgroundColor: 'transparent' }]}>
+      <MaskedView
+        style={styles.maskContainer}
+        maskElement={
+          <View style={styles.maskWrapper}>
+            <LinearGradient
+              colors={['rgba(0,0,0,0)', 'rgba(0,0,0,1)']}
+              locations={[0, 0.4]}
+              style={styles.maskGradient}
+            />
+            <View style={styles.maskFill} />
+          </View>
+        }
+      >
+        {content}
+      </MaskedView>
+    </SafeAreaView>
+  );
+
   useEffect(() => {
     void loadContent();
   }, []);
 
   if (loading) {
-    return (
+    return wrapWithSafeArea(
       <View style={styles.loadingContainer}>
         <ActivityIndicator size="large" color="#1976d2" />
         <Text style={styles.loadingText}>Cargando entrevistas de Sergio Palazzo...</Text>
@@ -243,7 +267,7 @@ export default function SergioPalazzoInterviewsScreen() {
   }
 
   if (error && !currentVideo) {
-    return (
+    return wrapWithSafeArea(
       <View style={styles.errorContainer}>
         <Text style={styles.errorText}>Error al cargar el contenido</Text>
         <Text style={styles.errorSubtext}>{error}</Text>
@@ -257,7 +281,7 @@ export default function SergioPalazzoInterviewsScreen() {
   const screenWidth = Dimensions.get('window').width;
   const playerHeight = Math.round((screenWidth * 9) / 16) + 50;
 
-  return (
+  return wrapWithSafeArea(
     <View style={styles.container}>
       <View style={[styles.playerContainer, { height: playerHeight }]}>
         {currentVideo ? (
@@ -344,6 +368,23 @@ export default function SergioPalazzoInterviewsScreen() {
 }
 
 const styles = StyleSheet.create({
+  safeArea: {
+    flex: 1,
+  },
+  maskContainer: {
+    flex: 1,
+  },
+  maskWrapper: {
+    flex: 1,
+  },
+  maskGradient: {
+    width: '100%',
+    height: spacing.xl * 2,
+  },
+  maskFill: {
+    flex: 1,
+    backgroundColor: '#000',
+  },
   container: {
     flex: 1,
     backgroundColor: '#fff',

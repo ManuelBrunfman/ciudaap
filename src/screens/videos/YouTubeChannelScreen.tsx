@@ -11,6 +11,10 @@ import {
   Alert,
 } from "react-native";
 import YoutubeIframe from "react-native-youtube-iframe";
+import { SafeAreaView } from "react-native-safe-area-context";
+import MaskedView from "@react-native-masked-view/masked-view";
+import { LinearGradient } from "expo-linear-gradient";
+import { spacing } from "../../theme/spacing";
 
 const CHANNEL_ID_BANCARIA = "UC7H5j0h7NgTqCV4qnLHsqfg"; // La Bancaria Prensa y Difusión
 const CHANNEL_ID_RADIOGRAFICA = "UCHJ-iCyE3kG7xcFkwbBT19A"; // Radio Gráfica
@@ -184,12 +188,32 @@ export default function YouTubeChannelScreen() {
     }
   };
 
+  const wrapWithSafeArea = (content: React.ReactNode) => (
+    <SafeAreaView style={[styles.safeArea, { backgroundColor: "transparent" }]}>
+      <MaskedView
+        style={styles.maskContainer}
+        maskElement={
+          <View style={styles.maskWrapper}>
+            <LinearGradient
+              colors={["rgba(0,0,0,0)", "rgba(0,0,0,1)"]}
+              locations={[0, 0.4]}
+              style={styles.maskGradient}
+            />
+            <View style={styles.maskFill} />
+          </View>
+        }
+      >
+        {content}
+      </MaskedView>
+    </SafeAreaView>
+  );
+
   useEffect(() => {
     loadContent();
   }, []);
 
   if (loading) {
-    return (
+    return wrapWithSafeArea(
       <View style={styles.loadingContainer}>
         <ActivityIndicator size="large" color="#1976d2" />
         <Text style={styles.loadingText}>Cargando videos...</Text>
@@ -198,7 +222,7 @@ export default function YouTubeChannelScreen() {
   }
 
   if (error && !currentVideoId) {
-    return (
+    return wrapWithSafeArea(
       <View style={styles.errorContainer}>
         <Text style={styles.errorText}>Error al cargar el contenido</Text>
         <Text style={styles.errorSubtext}>{error}</Text>
@@ -214,7 +238,7 @@ export default function YouTubeChannelScreen() {
   // Calculate player height based on 16:9 aspect ratio + space for title
   const playerHeight = Math.round((screenWidth * 9) / 16) + 50;
 
-  return (
+  return wrapWithSafeArea(
     <View style={styles.container}>
       {/* YouTube Player - Aspect Ratio Based */}
       <View style={[styles.playerContainer, { height: playerHeight }]}>
@@ -282,6 +306,23 @@ export default function YouTubeChannelScreen() {
 }
 
 const styles = StyleSheet.create({
+  safeArea: {
+    flex: 1,
+  },
+  maskContainer: {
+    flex: 1,
+  },
+  maskWrapper: {
+    flex: 1,
+  },
+  maskGradient: {
+    width: "100%",
+    height: spacing.xl * 2,
+  },
+  maskFill: {
+    flex: 1,
+    backgroundColor: "#000",
+  },
   container: {
     flex: 1,
     backgroundColor: "#fff",

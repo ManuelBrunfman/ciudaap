@@ -17,10 +17,6 @@ import { useTheme, type AppTheme } from '../theme';
 import { LinearGradient } from 'expo-linear-gradient';
 
 const Tab = createBottomTabNavigator();
-const youtubeTabItemStyle: ViewStyle = {
-  justifyContent: 'center',
-  height: 72,
-};
 
 type RouteConfig = { name: string };
 type ScreenOptionsFactory = ({ route }: { route: RouteConfig }) => ReturnType<typeof createScreenOptions>;
@@ -53,18 +49,24 @@ export default TabNavigator;
 
 // ---------------- ICONOS ----------------
 
-// tamaño uniforme para todos los PNG
-const ICON_SIZE = 32;
+// Tamaño máximo para los iconos
+const ICON_SIZE = 52; // Maximizado para usar todo el espacio
+const IONICON_SIZE = 40; // Tamaño proporcionalmente mayor para los Ionicons
 
 const renderIcon = (src: any, focused: boolean) => (
-  <View style={{ width: ICON_SIZE, height: ICON_SIZE, alignItems: 'center', justifyContent: 'center' }}>
+  <View style={{ 
+    width: ICON_SIZE, 
+    height: ICON_SIZE, 
+    alignItems: 'center', 
+    justifyContent: 'center' 
+  }}>
     <Image
       source={src}
       style={{
         width: ICON_SIZE,
         height: ICON_SIZE,
         resizeMode: 'contain',
-        opacity: focused ? 1 : 0.85,
+        opacity: focused ? 1 : 0.7,
         transform: focused ? [{ scale: 1.08 }] : [{ scale: 1 }],
       }}
     />
@@ -89,13 +91,21 @@ const createScreenOptions = (t: AppTheme, routeName: string) => ({
   tabBarStyle: {
     backgroundColor: 'transparent',
     borderTopColor: 'transparent',
-    height: 72,
-    paddingBottom: 10,
-    paddingTop: 6,
+    height: 80,
+    paddingBottom: 0,
+    paddingTop: 5,
   },
-  tabBarShowLabel: false, // 👈 fuerza sin labels para todos
+  tabBarShowLabel: false, // Sin labels para todos
+  tabBarLabelStyle: {
+    display: 'none' as const, // Elimina completamente el espacio reservado para labels
+  },
+  tabBarIconStyle: {
+    marginTop: 14,
+    marginBottom: 14,
+  },
 
   tabBarIcon: ({ focused, color, size }: { focused: boolean; color: string; size: number }) => {
+    // Iconos PNG personalizados
     if (routeName === 'NewsList') {
       return renderIcon(require('../../assets/iconos/noticias.png'), focused);
     }
@@ -106,7 +116,7 @@ const createScreenOptions = (t: AppTheme, routeName: string) => ({
       return (
         <Ionicons
           name={(focused ? 'mic' : 'mic-outline') as keyof typeof Ionicons.glyphMap}
-          size={size}
+          size={IONICON_SIZE}
           color={color}
         />
       );
@@ -121,19 +131,15 @@ const createScreenOptions = (t: AppTheme, routeName: string) => ({
       return renderIcon(require('../../assets/iconos/contacto.png'), focused);
     }
 
-    // resto usa Ionicons
+    // Resto usa Ionicons
     return (
       <Ionicons
         name={iconForRoute(routeName) as keyof typeof Ionicons.glyphMap}
-        size={size}
+        size={IONICON_SIZE}
         color={color}
       />
     );
   },
-
-  ...((routeName === 'YouTubeChannel' || routeName === 'SergioPalazzoInterviews') && {
-    tabBarItemStyle: youtubeTabItemStyle,
-  }),
 
   tabBarBackground: () => (
     <LinearGradient
