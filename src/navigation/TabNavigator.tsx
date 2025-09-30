@@ -34,11 +34,12 @@ const TabNavigator = () => {
       <Tab.Navigator screenOptions={screenOptions}>
         <Tab.Screen name="NewsList" component={NewsListScreen} options={{ title: 'Noticias', tabBarLabel: () => null }} />
         <Tab.Screen name="Benefits" component={BenefitsListScreen} options={{ title: 'Beneficios', tabBarLabel: () => null }} />
-        <Tab.Screen name="Profile" component={ProfileScreen} options={{ title: 'Perfil', tabBarLabel: 'Perfil' }} />
         <Tab.Screen name="YouTubeChannel" component={YouTubeChannelScreen} options={{ title: '' }} />
         <Tab.Screen name="SergioPalazzoInterviews" component={SergioPalazzoInterviewsScreen} options={{ title: 'Palazzo', tabBarLabel: () => null }} />
         <Tab.Screen name="Afiliate" component={AfiliateScreen} options={{ title: 'Afiliate', tabBarLabel: () => null }} />
         <Tab.Screen name="Contact" component={ContactScreen} options={{ title: 'Contacto', tabBarLabel: () => null }} />
+                  <Tab.Screen name="Profile" component={ProfileScreen} options={{ title: 'Perfil', tabBarLabel: 'Perfil' }} />
+
         {isAdmin && <Tab.Screen name="Admin" component={AdminScreen} options={{ title: 'Admin', tabBarLabel: 'Admin' }} />}
       </Tab.Navigator>
     </View>
@@ -49,9 +50,9 @@ export default TabNavigator;
 
 // ---------------- ICONOS ----------------
 
-// Tamaño máximo para los iconos
-const ICON_SIZE = 52; // Maximizado para usar todo el espacio
-const IONICON_SIZE = 40; // Tamaño proporcionalmente mayor para los Ionicons
+// Tamaño optimizado para los iconos
+const ICON_SIZE = 50; // Aumentado pero controlado
+const IONICON_SIZE = 38; // Tamaño proporcionalmente ajustado para los Ionicons
 
 const renderIcon = (src: any, focused: boolean) => (
   <View style={{ 
@@ -91,17 +92,18 @@ const createScreenOptions = (t: AppTheme, routeName: string) => ({
   tabBarStyle: {
     backgroundColor: 'transparent',
     borderTopColor: 'transparent',
-    height: 80,
+    height: 85,
     paddingBottom: 0,
     paddingTop: 5,
+    paddingHorizontal: 8, // Padding horizontal ajustado
   },
   tabBarShowLabel: false, // Sin labels para todos
   tabBarLabelStyle: {
     display: 'none' as const, // Elimina completamente el espacio reservado para labels
   },
   tabBarIconStyle: {
-    marginTop: 14,
-    marginBottom: 14,
+    marginTop: 12,
+    marginBottom: 12,
   },
 
   tabBarIcon: ({ focused, color, size }: { focused: boolean; color: string; size: number }) => {
@@ -113,13 +115,7 @@ const createScreenOptions = (t: AppTheme, routeName: string) => ({
       return renderIcon(require('../../assets/iconos/videos-logo.png'), focused);
     }
     if (routeName === 'SergioPalazzoInterviews') {
-      return (
-        <Ionicons
-          name={(focused ? 'mic' : 'mic-outline') as keyof typeof Ionicons.glyphMap}
-          size={IONICON_SIZE}
-          color={color}
-        />
-      );
+      return renderIcon(require('../../assets/iconos/video-palazzo.png'), focused);
     }
     if (routeName === 'Afiliate') {
       return renderIcon(require('../../assets/iconos/afiliate-bancaria.png'), focused);
@@ -129,6 +125,9 @@ const createScreenOptions = (t: AppTheme, routeName: string) => ({
     }
     if (routeName === 'Contact') {
       return renderIcon(require('../../assets/iconos/contacto.png'), focused);
+    }
+    if (routeName === 'Profile') {
+      return renderIcon(require('../../assets/iconos/cerrar-sesion.png'), focused);
     }
 
     // Resto usa Ionicons

@@ -6,25 +6,21 @@ import {
   StyleSheet,
   ActivityIndicator,
   Pressable,
+  Linking,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { getFirestore, collection, query, orderBy, onSnapshot } from '@react-native-firebase/firestore';
-import { useNavigation } from '@react-navigation/native';
-import { StackNavigationProp } from '@react-navigation/stack';
-import type { RootStackParamList, NewsItem } from '../../types/RootStackParamList';
 import { useTheme } from '../../theme';
 import { spacing } from '../../theme/spacing';
 import AppText from '../../ui/AppText';
 import MaskedView from '@react-native-masked-view/masked-view';
 import { LinearGradient } from 'expo-linear-gradient';
 import { getFirebaseApp } from '../../config/firebaseApp';
-
-type Nav = StackNavigationProp<RootStackParamList, 'NewsDetail'>;
+import type { NewsItem } from '../../types/RootStackParamList';
 
 const NewsListScreen: React.FC = () => {
   const [news, setNews] = useState<NewsItem[]>([]);
   const [loading, setLoading] = useState(true);
-  const navigation = useNavigation<Nav>();
   const t = useTheme();
   const listStyles = useMemo(
     () => ({ surface: t.colors.surface, title: t.colors.onBackground, muted: t.colors.muted }),
@@ -46,7 +42,17 @@ const NewsListScreen: React.FC = () => {
     return () => unsubscribe();
   }, []);
 
-  const openDetail = useCallback((item: NewsItem) => navigation.navigate('NewsDetail', { newsItem: item }), [navigation]);
+  const openDetail = useCallback((item: NewsItem) => {
+    const url = item.link || item.url; // ajustá según cómo guardes el campo en Firestore
+    if (url && /^https?:\/\//i.test(url)) {
+      Linking.openURL(url).catch(err => {
+        console.error('No se pudo abrir la noticia:', err);
+      });
+    } else {
+      console.warn('Noticia sin link válido:', item);
+    }
+  }, []);
+
   const renderItem = useCallback(
     ({ item }: { item: NewsItem }) => (
       <NewsListItem item={item} tColors={listStyles} onPress={openDetail} />

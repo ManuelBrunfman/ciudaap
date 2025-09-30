@@ -6,6 +6,7 @@ export interface NewsItem {
   content: string;
   img?: string;
   link?: string;
+  url?: string;
   createdAt: any;
 }
 

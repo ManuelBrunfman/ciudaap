@@ -1,4 +1,4 @@
-﻿import React, { useEffect, useState } from 'react';
+﻿import React, { useEffect, useState, useCallback } from 'react';
 import {
   View,
   Text,
@@ -9,6 +9,7 @@ import {
   Image,
   StyleSheet,
   Alert,
+  RefreshControl,
 } from 'react-native';
 import YoutubeIframe from 'react-native-youtube-iframe';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -19,7 +20,8 @@ import { spacing } from '../../theme/spacing';
 // Channel ID correcto para @sergioomarpalazzo503
 const CHANNEL_ID_SERGIO_PALAZZO = 'UCgb1ohZVSqOHGqe1kHi571g';
 const API_KEY = process.env.EXPO_PUBLIC_YT_API_KEY;
-const MAX_RESULTS = 50;
+const INITIAL_LOAD_COUNT = 20; // Cargar solo 20 videos inicialmente
+const LOAD_MORE_COUNT = 20; // Cargar 20 más cada vez
 
 interface VideoItem {
   videoId: string;
@@ -27,7 +29,7 @@ interface VideoItem {
   thumbnail: string;
   publishedAt: string;
   description?: string;
-  channelId: string; // Agregado para validación
+  channelId: string;
 }
 
 interface YouTubeApiItem {
@@ -39,7 +41,7 @@ interface YouTubeApiItem {
       default?: { url: string };
     };
     publishedAt: string;
-    channelId: string; // Importante para validar
+    channelId: string;
     resourceId?: { videoId?: string };
   };
 }
@@ -53,7 +55,6 @@ interface YouTubeApiResponse {
 }
 
 const toVideoItem = (item: YouTubeApiItem, expectedChannelId: string): VideoItem | null => {
-  // Validar que el video pertenece al canal correcto
   if (item.snippet.channelId !== expectedChannelId) {
     console.log(`Descartando video de otro canal: ${item.snippet.channelId}`);
     return null;
@@ -77,126 +78,108 @@ const toVideoItem = (item: YouTubeApiItem, expectedChannelId: string): VideoItem
   };
 };
 
-const sortByPublishedDateDesc = (videos: VideoItem[]): VideoItem[] =>
-  [...videos].sort((a, b) => {
-    const dateA = new Date(a.publishedAt).getTime();
-    const dateB = new Date(b.publishedAt).getTime();
-
-    if (isNaN(dateA) && isNaN(dateB)) return 0;
-    if (isNaN(dateA)) return 1;
-    if (isNaN(dateB)) return -1;
-
-    return dateB - dateA;
-  });
+// Ya no necesitamos ordenar porque la API devuelve los videos ordenados por fecha
+// const sortByPublishedDateDesc = (videos: VideoItem[]): VideoItem[] => { ... }
 
 export default function SergioPalazzoInterviewsScreen() {
   const [currentVideo, setCurrentVideo] = useState<VideoItem | null>(null);
   const [historyVideos, setHistoryVideos] = useState<VideoItem[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
+  const [loadingMore, setLoadingMore] = useState<boolean>(false);
+  const [refreshing, setRefreshing] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
-  const [totalVideosFound, setTotalVideosFound] = useState<number>(0);
+  const [uploadsPlaylistId, setUploadsPlaylistId] = useState<string>('');
+  const [nextPageToken, setNextPageToken] = useState<string>('');
+  const [hasMoreVideos, setHasMoreVideos] = useState<boolean>(true);
 
-  const loadContent = async (): Promise<void> => {
+  // Función para obtener el ID de la playlist una sola vez
+  const getUploadsPlaylistId = async (): Promise<string> => {
+    if (uploadsPlaylistId) return uploadsPlaylistId; // Usar cache si ya lo tenemos
+
+    if (!API_KEY) {
+      throw new Error(
+        'YouTube API key not found. Please check your environment variables.',
+      );
+    }
+
+    const channelUrl = `https://youtube.googleapis.com/youtube/v3/channels?part=contentDetails&id=${CHANNEL_ID_SERGIO_PALAZZO}&key=${API_KEY}`;
+    
+    console.log('Obteniendo información del canal...');
+    const channelResponse = await fetch(channelUrl);
+
+    if (!channelResponse.ok) {
+      throw new Error(`Error HTTP: ${channelResponse.status}`);
+    }
+
+    const channelData = await channelResponse.json();
+
+    if (channelData.error) {
+      throw new Error(channelData.error.message);
+    }
+
+    if (!channelData.items || channelData.items.length === 0) {
+      throw new Error('Canal no encontrado. Verifica el CHANNEL_ID.');
+    }
+
+    const playlistId = channelData.items[0]?.contentDetails?.relatedPlaylists?.uploads;
+
+    if (!playlistId) {
+      throw new Error('No se pudo obtener la lista de videos del canal.');
+    }
+
+    setUploadsPlaylistId(playlistId); // Guardar en cache
+    return playlistId;
+  };
+
+  // Cargar videos iniciales
+  const loadInitialContent = async (): Promise<void> => {
     try {
       setLoading(true);
       setError(null);
 
-      if (!API_KEY) {
-        throw new Error(
-          'YouTube API key not found. Please check your environment variables.',
-        );
-      }
+      const playlistId = await getUploadsPlaylistId();
+      console.log(`Playlist ID de uploads: ${playlistId}`);
 
-      // Primero, obtener el uploads playlist ID del canal
-      const channelUrl = `https://youtube.googleapis.com/youtube/v3/channels?part=contentDetails&id=${CHANNEL_ID_SERGIO_PALAZZO}&key=${API_KEY}`;
+      // Cargar solo la primera página de videos
+      const playlistUrl = `https://youtube.googleapis.com/youtube/v3/playlistItems?part=snippet&playlistId=${playlistId}&maxResults=${INITIAL_LOAD_COUNT}&key=${API_KEY}`;
       
-      console.log('Obteniendo información del canal...');
-      const channelResponse = await fetch(channelUrl);
+      console.log(`Cargando primeros ${INITIAL_LOAD_COUNT} videos...`);
+      const response = await fetch(playlistUrl);
 
-      if (!channelResponse.ok) {
-        throw new Error(`Error HTTP: ${channelResponse.status}`);
+      if (!response.ok) {
+        throw new Error(`Error obteniendo videos: ${response.status}`);
       }
 
-      const channelData = await channelResponse.json();
+      const data: YouTubeApiResponse = await response.json();
 
-      if (channelData.error) {
-        throw new Error(channelData.error.message);
+      if (data.error) {
+        throw new Error(data.error.message);
       }
 
-      if (!channelData.items || channelData.items.length === 0) {
-        throw new Error('Canal no encontrado. Verifica el CHANNEL_ID.');
-      }
+      // Convertir y validar videos
+      const videos = data.items
+        ?.map((item) => toVideoItem(item, CHANNEL_ID_SERGIO_PALAZZO))
+        .filter((item): item is VideoItem => item !== null) ?? [];
 
-      const uploadsPlaylistId = channelData.items[0]?.contentDetails?.relatedPlaylists?.uploads;
+      console.log(`${videos.length} videos cargados inicialmente`);
 
-      if (!uploadsPlaylistId) {
-        throw new Error('No se pudo obtener la lista de videos del canal.');
-      }
-
-      console.log(`Playlist ID de uploads: ${uploadsPlaylistId}`);
-
-      // Obtener TODOS los videos de la playlist de uploads
-      let allVideos: VideoItem[] = [];
-      let nextPageToken = '';
-      let pageCount = 0;
-      const maxPages = 10; // Limitar a 10 páginas (500 videos máximo)
-
-      while (pageCount < maxPages) {
-        const playlistUrl = `https://youtube.googleapis.com/youtube/v3/playlistItems?part=snippet&playlistId=${uploadsPlaylistId}&maxResults=${MAX_RESULTS}&pageToken=${nextPageToken}&key=${API_KEY}`;
-        
-        console.log(`Obteniendo página ${pageCount + 1} de videos...`);
-        const response = await fetch(playlistUrl);
-
-        if (!response.ok) {
-          console.error(`Error obteniendo página ${pageCount + 1}: ${response.status}`);
-          break;
-        }
-
-        const data: YouTubeApiResponse = await response.json();
-
-        if (data.error) {
-          console.error(`Error en API: ${data.error.message}`);
-          break;
-        }
-
-        // Convertir y validar que los videos son del canal correcto
-        const pageVideos = data.items
-          ?.map((item) => toVideoItem(item, CHANNEL_ID_SERGIO_PALAZZO))
-          .filter((item): item is VideoItem => item !== null) ?? [];
-
-        console.log(`Página ${pageCount + 1}: ${pageVideos.length} videos válidos encontrados`);
-        
-        allVideos = [...allVideos, ...pageVideos];
-        
-        nextPageToken = data.nextPageToken || '';
-        pageCount++;
-        
-        // Si no hay más páginas, salir del loop
-        if (!nextPageToken) {
-          console.log('No hay más páginas de videos');
-          break;
-        }
-      }
-
-      console.log(`Total de videos encontrados: ${allVideos.length}`);
-      setTotalVideosFound(allVideos.length);
-
-      // Ordenar videos por fecha (más reciente primero)
-      const sortedVideos = sortByPublishedDateDesc(allVideos);
-
-      if (sortedVideos.length === 0) {
+      if (videos.length === 0) {
         setCurrentVideo(null);
         setHistoryVideos([]);
         setError('No se encontraron videos en el canal.');
         return;
       }
 
-      // Establecer el video más reciente como actual y el resto como historial
-      const [latest, ...rest] = sortedVideos;
+      // El primer video es el más reciente (la API los devuelve ordenados)
+      const [latest, ...rest] = videos;
       setCurrentVideo(latest);
       setHistoryVideos(rest);
       
-      console.log(`Video más reciente: ${latest.title} (${latest.publishedAt})`);
+      // Guardar token para cargar más videos después
+      setNextPageToken(data.nextPageToken || '');
+      setHasMoreVideos(!!data.nextPageToken);
+      
+      console.log(`Video más reciente: ${latest.title}`);
     } catch (err) {
       const message =
         err instanceof Error
@@ -210,8 +193,61 @@ export default function SergioPalazzoInterviewsScreen() {
     }
   };
 
+  // Cargar más videos cuando el usuario hace scroll
+  const loadMoreVideos = useCallback(async () => {
+    if (loadingMore || !hasMoreVideos || !nextPageToken) return;
+
+    try {
+      setLoadingMore(true);
+      
+      const playlistId = await getUploadsPlaylistId();
+      const playlistUrl = `https://youtube.googleapis.com/youtube/v3/playlistItems?part=snippet&playlistId=${playlistId}&maxResults=${LOAD_MORE_COUNT}&pageToken=${nextPageToken}&key=${API_KEY}`;
+      
+      console.log(`Cargando ${LOAD_MORE_COUNT} videos más...`);
+      const response = await fetch(playlistUrl);
+
+      if (!response.ok) {
+        console.error(`Error cargando más videos: ${response.status}`);
+        return;
+      }
+
+      const data: YouTubeApiResponse = await response.json();
+
+      if (data.error) {
+        console.error(`Error en API: ${data.error.message}`);
+        return;
+      }
+
+      const newVideos = data.items
+        ?.map((item) => toVideoItem(item, CHANNEL_ID_SERGIO_PALAZZO))
+        .filter((item): item is VideoItem => item !== null) ?? [];
+
+      console.log(`${newVideos.length} videos adicionales cargados`);
+      
+      // Agregar nuevos videos al historial
+      setHistoryVideos(prev => [...prev, ...newVideos]);
+      
+      // Actualizar token para siguiente página
+      setNextPageToken(data.nextPageToken || '');
+      setHasMoreVideos(!!data.nextPageToken);
+      
+    } catch (err) {
+      console.error('Error cargando más videos:', err);
+    } finally {
+      setLoadingMore(false);
+    }
+  }, [nextPageToken, loadingMore, hasMoreVideos, uploadsPlaylistId]);
+
+  // Refrescar contenido (pull to refresh)
+  const onRefresh = useCallback(async () => {
+    setRefreshing(true);
+    setNextPageToken('');
+    setHasMoreVideos(true);
+    await loadInitialContent();
+    setRefreshing(false);
+  }, []);
+
   const handleVideoSelection = (video: VideoItem): void => {
-    // Mover el video actual al historial y establecer el nuevo video como actual
     setHistoryVideos((prevHistory) => {
       const filtered = prevHistory.filter(
         (item) => item.videoId !== video.videoId,
@@ -231,6 +267,16 @@ export default function SergioPalazzoInterviewsScreen() {
     } catch {
       return 'Fecha no disponible';
     }
+  };
+
+  const renderFooter = () => {
+    if (!loadingMore) return null;
+    return (
+      <View style={styles.footerLoader}>
+        <ActivityIndicator size="small" color="#1976d2" />
+        <Text style={styles.footerText}>Cargando más videos...</Text>
+      </View>
+    );
   };
 
   const wrapWithSafeArea = (content: React.ReactNode) => (
@@ -254,7 +300,7 @@ export default function SergioPalazzoInterviewsScreen() {
   );
 
   useEffect(() => {
-    void loadContent();
+    void loadInitialContent();
   }, []);
 
   if (loading) {
@@ -271,7 +317,7 @@ export default function SergioPalazzoInterviewsScreen() {
       <View style={styles.errorContainer}>
         <Text style={styles.errorText}>Error al cargar el contenido</Text>
         <Text style={styles.errorSubtext}>{error}</Text>
-        <TouchableOpacity style={styles.retryButton} onPress={loadContent}>
+        <TouchableOpacity style={styles.retryButton} onPress={loadInitialContent}>
           <Text style={styles.retryButtonText}>Reintentar</Text>
         </TouchableOpacity>
       </View>
@@ -312,27 +358,30 @@ export default function SergioPalazzoInterviewsScreen() {
         <View style={styles.historyHeader}>
           <View>
             <Text style={styles.historyTitle}>Entrevistas anteriores</Text>
-            {totalVideosFound > 0 && (
+            {historyVideos.length > 0 && (
               <Text style={styles.videoCount}>
-                {totalVideosFound} videos encontrados
+                {historyVideos.length} videos cargados
+                {hasMoreVideos && ' (desliza para ver más)'}
               </Text>
             )}
           </View>
-          <TouchableOpacity
-            style={styles.refreshButton}
-            onPress={loadContent}
-            disabled={loading}
-          >
-            <Text style={styles.refreshButtonText}>
-              {loading ? 'Actualizando...' : 'Actualizar'}
-            </Text>
-          </TouchableOpacity>
         </View>
         {historyVideos.length > 0 ? (
           <FlatList
             data={historyVideos}
             keyExtractor={(item) => item.videoId}
             showsVerticalScrollIndicator={false}
+            refreshControl={
+              <RefreshControl
+                refreshing={refreshing}
+                onRefresh={onRefresh}
+                colors={['#1976d2']}
+                tintColor="#1976d2"
+              />
+            }
+            onEndReached={loadMoreVideos}
+            onEndReachedThreshold={0.5}
+            ListFooterComponent={renderFooter}
             renderItem={({ item }) => (
               <TouchableOpacity
                 style={styles.videoItem}
@@ -485,17 +534,6 @@ const styles = StyleSheet.create({
     color: '#666',
     marginTop: 2,
   },
-  refreshButton: {
-    backgroundColor: '#1976d2',
-    paddingHorizontal: 12,
-    paddingVertical: 6,
-    borderRadius: 4,
-  },
-  refreshButtonText: {
-    color: '#fff',
-    fontSize: 14,
-    fontWeight: '600',
-  },
   videoItem: {
     flexDirection: 'row',
     padding: 12,
@@ -535,5 +573,15 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: '#666',
     textAlign: 'center',
+  },
+  footerLoader: {
+    paddingVertical: 20,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  footerText: {
+    marginTop: 8,
+    fontSize: 12,
+    color: '#666',
   },
 });

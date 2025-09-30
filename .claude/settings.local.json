@@ -10,7 +10,16 @@
       "Bash(chmod:*)",
       "Bash(npx expo prebuild:*)",
       "Bash(npm run start:*)",
-      "Bash(npx expo start:*)"
+      "Bash(npx expo start:*)",
+      "Bash(cp:*)",
+      "Bash(python3:*)",
+      "Bash(pip install:*)",
+      "Bash(apt:*)",
+      "Bash(apt install:*)",
+      "Bash(node:*)",
+      "Bash(npm:*)",
+      "Bash(npx expo r:*)",
+      "Bash(./gradlew:*)"
     ],
     "deny": [],
     "ask": []
