@@ -4,6 +4,7 @@ import { View, StyleSheet, Image } from 'react-native';
 import type { ViewStyle } from 'react-native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { Ionicons } from '@expo/vector-icons';
+import AnnouncementsScreen from '../screens/announcements/AnnouncementsScreen';
 import BenefitsListScreen from '../screens/benefits/BenefitsListScreen';
 import NewsListScreen from '../screens/news/NewsListScreen';
 import ProfileScreen from '../screens/profile/ProfileScreen';
@@ -32,13 +33,22 @@ const TabNavigator = () => {
   return (
     <View style={styles.container}>
       <Tab.Navigator screenOptions={screenOptions}>
+        <Tab.Screen
+          name="Announcements"
+          component={AnnouncementsScreen}
+          options={{ title: 'Comunicados', tabBarLabel: () => null }}
+        />
         <Tab.Screen name="NewsList" component={NewsListScreen} options={{ title: 'Noticias', tabBarLabel: () => null }} />
         <Tab.Screen name="Benefits" component={BenefitsListScreen} options={{ title: 'Beneficios', tabBarLabel: () => null }} />
         <Tab.Screen name="YouTubeChannel" component={YouTubeChannelScreen} options={{ title: '' }} />
-        <Tab.Screen name="SergioPalazzoInterviews" component={SergioPalazzoInterviewsScreen} options={{ title: 'Palazzo', tabBarLabel: () => null }} />
+        <Tab.Screen
+          name="SergioPalazzoInterviews"
+          component={SergioPalazzoInterviewsScreen}
+          options={{ title: 'Palazzo', tabBarLabel: () => null }}
+        />
         <Tab.Screen name="Afiliate" component={AfiliateScreen} options={{ title: 'Afiliate', tabBarLabel: () => null }} />
         <Tab.Screen name="Contact" component={ContactScreen} options={{ title: 'Contacto', tabBarLabel: () => null }} />
-                  <Tab.Screen name="Profile" component={ProfileScreen} options={{ title: 'Perfil', tabBarLabel: 'Perfil' }} />
+        <Tab.Screen name="Profile" component={ProfileScreen} options={{ title: 'Perfil', tabBarLabel: 'Perfil' }} />
 
         {isAdmin && <Tab.Screen name="Admin" component={AdminScreen} options={{ title: 'Admin', tabBarLabel: 'Admin' }} />}
       </Tab.Navigator>
@@ -76,6 +86,8 @@ const renderIcon = (src: any, focused: boolean) => (
 
 const iconForRoute = (routeName: string) => {
   switch (routeName) {
+    case 'Announcements':
+      return 'megaphone-outline';
     case 'Profile':
       return 'person-outline';
     case 'Admin':

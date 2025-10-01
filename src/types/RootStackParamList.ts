@@ -10,6 +10,19 @@ export interface NewsItem {
   createdAt: any;
 }
 
+export interface Announcement {
+  id: string;
+  title: string;
+  description?: string;
+  imageUrl?: string;
+  img?: string;
+  image?: string;
+  link?: string;
+  url?: string;
+  fileUrl?: string;
+  createdAt: any;
+}
+
 export type RootStackParamList = {
   Main: undefined;
   BenefitDetail: { url: string };
