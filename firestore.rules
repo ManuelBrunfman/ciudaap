@@ -1,13 +1,54 @@
 rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
-    match /affiliateRequests/{docId} {
+    /* ---------- REQUESTS DE AFILIACION ---------- */
+    match /affiliateRequests/{requestId} {
+      // Cualquier usuario autenticado puede crear una solicitud
       allow create: if request.auth != null;
-      allow read, update, delete: if get(/databases/$(database)/documents/users/$(request.auth.uid)).data.isAdmin == true;
+      // Solo admins pueden leer, actualizar o eliminar solicitudes
+      allow read, update, delete:
+        if get(/databases/$(database)/documents/users/$(request.auth.uid)).data.isAdmin == true;
     }
+
+    /* ---------- TOKENS DE PUSH DE ADMIN ---------- */
     match /adminPushTokens/{uid} {
+      // Cada admin escribe su propio token
       allow write: if request.auth != null && request.auth.uid == uid;
-      allow read: if get(/databases/$(database)/documents/users/$(request.auth.uid)).data.isAdmin == true;
+      // Todos los usuarios autenticados pueden leer los tokens para enviar notificaciones
+      allow read: if request.auth != null;
+    }
+
+    /* ---------- USUARIOS ---------- */
+    match /users/{uid} {
+      // Cada usuario solo ve/escribe su propio doc
+      allow read, write: if request.auth != null && request.auth.uid == uid;
+      // Admin global (UID fijo) puede ver y modificar cualquier user
+      allow read, write: if request.auth.uid == "R8FmyhkvzfRIdmBEMyJIBI4V9Lt1";
+    }
+
+    /* ---------- NEWS ---------- */
+    match /news/{docId} {
+      allow read: if true;
+      allow write: if request.auth.uid == "R8FmyhkvzfRIdmBEMyJIBI4V9Lt1";
+    }
+
+    /* ---------- BENEFICIOS ---------- */
+    match /beneficios/{docId} {
+      allow read: if true;
+      allow write: if request.auth.uid == "R8FmyhkvzfRIdmBEMyJIBI4V9Lt1";
+    }
+
+    /* ---------- ANNOUNCEMENTS ---------- */
+    match /announcements/{docId} {
+      allow read: if true;
+      allow write:
+        if request.auth != null
+          && get(/databases/$(database)/documents/users/$(request.auth.uid)).data.isAdmin == true;
+    }
+
+    /* ---------- DEFAULT DENY ---------- */
+    match /{document=**} {
+      allow read, write: if false;
     }
   }
 }

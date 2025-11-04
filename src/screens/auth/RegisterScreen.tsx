@@ -1,20 +1,29 @@
 import React, { useState } from 'react';
 import { View, TextInput, StyleSheet, Alert, ActivityIndicator } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import auth from '@react-native-firebase/auth';
+import {
+  getAuth,
+  createUserWithEmailAndPassword,
+  updateProfile,
+  signOut as firebaseSignOut,
+} from '@react-native-firebase/auth';
+import { getFirestore, doc, setDoc, serverTimestamp } from '@react-native-firebase/firestore';
 import { useTheme } from '../../theme';
 import { spacing } from '../../theme/spacing';
 import AppText from '../../ui/AppText';
 import AppButton from '../../ui/AppButton';
+import { getFirebaseApp } from '../../config/firebaseApp';
 
 const RegisterScreen: React.FC = () => {
   const navigation = useNavigation();
   const t = useTheme();
+  const app = getFirebaseApp();
   const [email, setEmail] = useState('');
   const [confirmEmail, setConfirmEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
-  const [displayName, setDisplayName] = useState('');
+  const [firstName, setFirstName] = useState('');
+  const [lastName, setLastName] = useState('');
   const [localidad, setLocalidad] = useState('');
   const [telefono, setTelefono] = useState('');
   const [loading, setLoading] = useState(false);
@@ -36,8 +45,12 @@ const RegisterScreen: React.FC = () => {
       Alert.alert('Error', 'Las contraseñas no coinciden.');
       return false;
     }
-    if (!displayName.trim()) {
-      Alert.alert('Error', 'El nombre completo es obligatorio.');
+    if (!firstName.trim()) {
+      Alert.alert('Error', 'El nombre es obligatorio.');
+      return false;
+    }
+    if (!lastName.trim()) {
+      Alert.alert('Error', 'El apellido es obligatorio.');
       return false;
     }
     return true;
@@ -48,12 +61,38 @@ const RegisterScreen: React.FC = () => {
 
     try {
       setLoading(true);
-      const cred = await auth().createUserWithEmailAndPassword(email.trim(), password);
-      await cred.user.updateProfile({ displayName });
-      await auth().signOut();
+      const authInstance = getAuth(app);
+      const cred = await createUserWithEmailAndPassword(authInstance, email.trim(), password);
+      const trimmedFirst = firstName.trim();
+      const trimmedLast = lastName.trim();
+      const fullName = `${trimmedFirst} ${trimmedLast}`.replace(/\s+/g, ' ').trim();
+
+      await updateProfile(cred.user, { displayName: fullName });
+
+      const db = getFirestore(app);
+      const userDocRef = doc(db, 'users', cred.user.uid);
+      const normalizedEmail = email.trim().toLowerCase();
+      const sanitizedLocalidad = localidad.trim();
+      const sanitizedTelefono = telefono.trim();
+
+      await setDoc(
+        userDocRef,
+        {
+          firstName: trimmedFirst,
+          lastName: trimmedLast,
+          fullName,
+          email: normalizedEmail,
+          localidad: sanitizedLocalidad || null,
+          telefono: sanitizedTelefono || null,
+          createdAt: serverTimestamp(),
+        },
+        { merge: true },
+      );
+      await firebaseSignOut(authInstance);
       Alert.alert('Registro exitoso', 'Ahora puedes iniciar sesión.');
-      // @ts-ignore
-      navigation.navigate('Login');
+      if (navigation.canGoBack()) {
+        navigation.goBack();
+      }
     } catch (err: any) {
       console.error(err);
       Alert.alert('Error', err.message ?? 'No se pudo registrar.');
@@ -114,12 +153,23 @@ const RegisterScreen: React.FC = () => {
         placeholderTextColor={t.colors.muted}
       />
 
-      {/* Nombre completo */}
+      {/* Nombre */}
       <TextInput
         style={[styles.input, { borderColor: t.colors.border, color: t.colors.onBackground }]}
-        placeholder="Nombre completo"
-        value={displayName}
-        onChangeText={setDisplayName}
+        placeholder="Nombre"
+        value={firstName}
+        onChangeText={setFirstName}
+        autoCapitalize="words"
+        returnKeyType="next"
+        placeholderTextColor={t.colors.muted}
+      />
+
+      {/* Apellido */}
+      <TextInput
+        style={[styles.input, { borderColor: t.colors.border, color: t.colors.onBackground }]}
+        placeholder="Apellido"
+        value={lastName}
+        onChangeText={setLastName}
         autoCapitalize="words"
         returnKeyType="next"
         placeholderTextColor={t.colors.muted}

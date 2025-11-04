@@ -1,7 +1,7 @@
 // src/navigation/TabNavigator.tsx
 import React, { useMemo } from 'react';
 import { View, StyleSheet, Image } from 'react-native';
-import type { ViewStyle } from 'react-native';
+import type { ImageSourcePropType, ImageStyle, StyleProp, ViewStyle } from 'react-native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { Ionicons } from '@expo/vector-icons';
 import AnnouncementsScreen from '../screens/announcements/AnnouncementsScreen';
@@ -64,22 +64,24 @@ export default TabNavigator;
 const ICON_SIZE = 50; // Aumentado pero controlado
 const IONICON_SIZE = 38; // TamaÃ±o proporcionalmente ajustado para los Ionicons
 
-const renderIcon = (src: any, focused: boolean) => (
-  <View style={{ 
-    width: ICON_SIZE, 
-    height: ICON_SIZE, 
-    alignItems: 'center', 
-    justifyContent: 'center' 
-  }}>
+// Permite ajustar estilos por ícono sin tocar el layout global (imageOverrides/containerOverrides).
+const renderIcon = (
+  src: ImageSourcePropType,
+  focused: boolean,
+  imageOverrides?: StyleProp<ImageStyle>,
+  containerOverrides?: StyleProp<ViewStyle>,
+) => (
+  <View style={[styles.iconContainer, containerOverrides]}>
     <Image
       source={src}
-      style={{
-        width: ICON_SIZE,
-        height: ICON_SIZE,
-        resizeMode: 'contain',
-        opacity: focused ? 1 : 0.7,
-        transform: focused ? [{ scale: 1.08 }] : [{ scale: 1 }],
-      }}
+      style={[
+        styles.iconImage,
+        imageOverrides,
+        {
+          opacity: focused ? 1 : 0.7,
+          transform: focused ? [{ scale: 1.08 }] : [{ scale: 1 }],
+        },
+      ]}
     />
   </View>
 );
@@ -120,6 +122,9 @@ const createScreenOptions = (t: AppTheme, routeName: string) => ({
 
   tabBarIcon: ({ focused, color, size }: { focused: boolean; color: string; size: number }) => {
     // Iconos PNG personalizados
+    if (routeName === 'Announcements') {
+      return renderIcon(require('../../assets/iconos/comunicados.png'), focused);
+    }
     if (routeName === 'NewsList') {
       return renderIcon(require('../../assets/iconos/noticias.png'), focused);
     }
@@ -136,7 +141,8 @@ const createScreenOptions = (t: AppTheme, routeName: string) => ({
       return renderIcon(require('../../assets/iconos/beneficios.png'), focused);
     }
     if (routeName === 'Contact') {
-      return renderIcon(require('../../assets/iconos/contacto.png'), focused);
+      // Ajustá marginLeft si querés mover el ícono de Contacto horizontalmente.
+      return renderIcon(require('../../assets/iconos/contacto.png'), focused, undefined, { marginLeft: -3 });
     }
     if (routeName === 'Profile') {
       return renderIcon(require('../../assets/iconos/cerrar-sesion.png'), focused);
@@ -166,4 +172,16 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
+  iconContainer: {
+    width: ICON_SIZE,
+    height: ICON_SIZE,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  iconImage: {
+    width: ICON_SIZE,
+    height: ICON_SIZE,
+    resizeMode: 'contain',
+  },
 });
+

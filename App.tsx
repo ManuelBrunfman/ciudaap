@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { StatusBar } from 'expo-status-bar';
@@ -33,27 +33,75 @@ function MainApp() {
   const notificationListener = useRef<any>();
   const responseListener = useRef<any>();
   const { user, isAdmin } = useAuth();
+  const [expoPushToken, setExpoPushToken] = useState<string | null>(null);
 
-  // 1) Expo token para admins (depende de user/isAdmin)
+  // 1) Expo token para todos los usuarios
   useEffect(() => {
-    const saveAdminExpoToken = async () => {
-      if (user && isAdmin) {
-        try {
-          const expoToken = await requestPushPermission();
-          const db = getFirestore(firebaseApp);
-          await setDoc(
-            doc(db, 'adminPushTokens', user.uid),
-            { expoPushToken: expoToken, updatedAt: serverTimestamp() },
-            { merge: true },
-          );
-          console.log('Expo Push Token guardado:', expoToken);
-        } catch (err) {
-          Alert.alert('Permiso denegado', 'No se concedieron permisos para notificaciones push (Expo)');
+    if (!user?.uid) {
+      setExpoPushToken(null);
+      return;
+    }
+
+    let cancelled = false;
+
+    const registerExpoToken = async () => {
+      try {
+        const token = await requestPushPermission();
+        if (!token) {
+          throw new Error('Expo push token vacio');
+        }
+        if (cancelled) return;
+
+        setExpoPushToken(token);
+
+        const db = getFirestore(firebaseApp);
+        await setDoc(
+          doc(db, 'users', user.uid),
+          { expoPushToken: token, expoPushTokenUpdatedAt: serverTimestamp() },
+          { merge: true },
+        );
+
+        console.log('Expo Push Token guardado para usuario:', token);
+      } catch (err) {
+        console.warn('No se pudo registrar el token de notificaciones', err);
+        if (!cancelled) {
+          const isPermissionDenied = err instanceof Error && err.message === 'Permiso denegado';
+          const title = isPermissionDenied ? 'Permiso denegado' : 'Notificaciones';
+          const message = isPermissionDenied
+            ? 'No se concedieron permisos para notificaciones push (Expo)'
+            : 'No se pudieron activar las notificaciones push. Puedes habilitarlas desde la configuracion del dispositivo.';
+          Alert.alert(title, message);
         }
       }
     };
-    saveAdminExpoToken();
-  }, [user, isAdmin]);
+
+    registerExpoToken();
+
+    return () => {
+      cancelled = true;
+    };
+  }, [user?.uid]);
+
+  useEffect(() => {
+    if (!user?.uid || !isAdmin || !expoPushToken) {
+      return;
+    }
+
+    const saveAdminToken = async () => {
+      try {
+        const db = getFirestore(firebaseApp);
+        await setDoc(
+          doc(db, 'adminPushTokens', user.uid),
+          { expoPushToken, updatedAt: serverTimestamp() },
+          { merge: true },
+        );
+      } catch (err) {
+        console.warn('No se pudo guardar el token de admin', err);
+      }
+    };
+
+    saveAdminToken();
+  }, [user?.uid, isAdmin, expoPushToken]);
 
   // 2) FCM token + topic "news" (solo una vez)
   const didInitFcm = useRef(false);
@@ -130,3 +178,7 @@ function ThemedNavigation() {
     </View>
   );
 }
+
+
+
+

@@ -4,16 +4,16 @@ import { ExpoConfig, ConfigContext } from '@expo/config';
 
 export default (_: ConfigContext): ExpoConfig => ({
   /* ──────────── Basic app info ──────────── */
-  name: 'BancApp',
-  slug: 'ciudaapp',
+  name: 'Ciudapp Gremial',
+  slug: 'ciudappgremial',
   owner: 'manubrunfman',
   description: 'Aplicación de lxs trabajadorxs del Banco Ciudad.',
   version: '1.0.0',
   orientation: 'portrait',
   userInterfaceStyle: 'light',
 
-  /* 👇 Agregá este scheme (lo usaremos en el deep link exp+ciudaapp://...) */
-  scheme: 'ciudaapp',
+  /* 👇 Agregá este scheme (lo usaremos en el deep link exp+ciudappgremial://...) */
+  scheme: 'ciudappgremial',
 
   /* ───────── Expo / React Native ───────── */
   newArchEnabled: false,
@@ -30,19 +30,25 @@ export default (_: ConfigContext): ExpoConfig => ({
   /* ─────────────────── iOS ───────────────── */
   ios: {
     supportsTablet: true,
-    bundleIdentifier: 'com.labancaria.bancapp',
+    bundleIdentifier: 'com.bancaria.ciudad',
     // ⚠️ Si algún día hacés iOS, este archivo es el de iOS, no el de Android:
     // googleServicesFile: './credentials/GoogleService-Info.plist',
   },
 
   /* ──────────────── Android ─────────────── */
   android: {
-    package: 'com.labancaria.bancapp',
+    package: 'com.bancaria.ciudad',
     adaptiveIcon: {
       foregroundImage: './assets/adaptive-icon.png',
       backgroundColor: '#ffffff',
     },
     googleServicesFile: './credentials/google-services.json',
+  },
+
+  notification: {
+    icon: './assets/notification-icon.png',
+    color: '#0A4C96',
+    androidMode: 'default',
   },
 
   /* ───────────── Plugins ───────────── */
@@ -81,3 +87,4 @@ export default (_: ConfigContext): ExpoConfig => ({
     EXPO_PUBLIC_FIREBASE_APP_ID: process.env.EXPO_PUBLIC_FIREBASE_APP_ID,
   },
 });
+

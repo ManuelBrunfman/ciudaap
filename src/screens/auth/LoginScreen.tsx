@@ -48,7 +48,7 @@ const LoginScreen: React.FC = () => {
         <View style={styles.container}>
           <ImageBackground source={require('../../../assets/splash-icon.png')} style={styles.logo} resizeMode="contain" />
           <AppText variant="heading1" color={t.colors.onBackground} style={styles.title}>
-            Bancaap Ciudad
+            Ciudapp Gremial
           </AppText>
           <View style={styles.form}>
             <View style={styles.inputGroup}>

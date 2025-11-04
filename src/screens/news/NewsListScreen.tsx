@@ -42,22 +42,37 @@ const NewsListScreen: React.FC = () => {
     return () => unsubscribe();
   }, []);
 
-  const openDetail = useCallback((item: NewsItem) => {
-    const url = item.link || item.url; // ajustá según cómo guardes el campo en Firestore
-    if (url && /^https?:\/\//i.test(url)) {
-      Linking.openURL(url).catch(err => {
-        console.error('No se pudo abrir la noticia:', err);
-      });
-    } else {
-      console.warn('Noticia sin link válido:', item);
+  const openNewsExternally = useCallback(async (item: NewsItem) => {
+    const rawUrl = (item.link ?? item.url ?? '').trim();
+    if (!rawUrl) {
+      console.warn('Noticia sin enlace disponible:', item);
+      return;
+    }
+
+    const normalizedUrl = /^[a-z][a-z0-9+.-]*:\/{2}/i.test(rawUrl)
+      ? rawUrl
+      : rawUrl.startsWith('//')
+      ? `https:${rawUrl}`
+      : `https://${rawUrl}`;
+
+    try {
+      const canOpen = await Linking.canOpenURL(normalizedUrl);
+      if (!canOpen) {
+        console.warn('No se pudo abrir la noticia, esquema no soportado:', normalizedUrl);
+        return;
+      }
+
+      await Linking.openURL(normalizedUrl);
+    } catch (err) {
+      console.error('No se pudo abrir la noticia:', err);
     }
   }, []);
 
   const renderItem = useCallback(
     ({ item }: { item: NewsItem }) => (
-      <NewsListItem item={item} tColors={listStyles} onPress={openDetail} />
+      <NewsListItem item={item} tColors={listStyles} onPress={openNewsExternally} />
     ),
-    [listStyles, openDetail],
+    [listStyles, openNewsExternally],
   );
 
   if (loading) {

@@ -11,7 +11,7 @@ export default function HomeScreen() {
   return (
     <SafeAreaView style={[styles.container, { backgroundColor: 'transparent' }]}>
       <ScrollView contentContainerStyle={styles.content}>
-        <AppText style={[styles.title, { color: t.colors.onBackground }]}>Bienvenido a Bancapp</AppText>
+        <AppText style={[styles.title, { color: t.colors.onBackground }]}>Bienvenido a Ciudapp Gremial</AppText>
         <AppText style={[styles.subtitle, { color: t.colors.muted }]}>Información Relevante</AppText>
         <AppText style={[styles.info, { color: t.colors.onBackground }]}>Aquí puedes mostrar la información más relevante de la aplicación, noticias, estadísticas o cualquier dato importante que desees destacar para el usuario.</AppText>
       </ScrollView>
@@ -26,3 +26,4 @@ const styles = StyleSheet.create({
   subtitle: { ...typography.subtitle, marginBottom: spacing.md },
   info: { ...typography.body, textAlign: 'center' },
 });
+

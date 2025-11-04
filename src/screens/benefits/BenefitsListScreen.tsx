@@ -305,10 +305,13 @@ const BenefitsListScreen: React.FC = () => {
           if (isNonEmptyString(it.province)) provs.add(it.province!);
         }
 
+        const provList = Array.from(provs);
+        if (!provList.some(p => eqNorm(p, 'Brasil'))) provList.push('Brasil');
+
         setItems(cleaned);
         setFiltered(cleaned);
         setCategorias(Array.from(cats).sort(sortByCategoryOrder));
-        setProvincias(sortProvinces(Array.from(provs)));
+        setProvincias(sortProvinces(provList));
         setError(null);
       } catch (e: any) {
         console.error(e);
@@ -533,10 +536,10 @@ const BenefitsListScreen: React.FC = () => {
             </ScrollView>
           </View>
           
-          {/* provincias */}
+          {/* ubicaciones */}
           <View ref={provinceFilterRef} style={styles.filterSection} onLayout={handleProvinceLayout}>
             <AppText variant="body" color={t.colors.onBackground} style={styles.filterTitle}>
-              Provincia:
+              Ubicación:
             </AppText>
             <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.filterScroll}>
               <TouchableOpacity

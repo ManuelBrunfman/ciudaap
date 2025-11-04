@@ -24,9 +24,9 @@
         <action android:name="android.intent.action.VIEW"/>
         <category android:name="android.intent.category.DEFAULT"/>
         <category android:name="android.intent.category.BROWSABLE"/>
-        <data android:scheme="ciudaapp"/>
-        <data android:scheme="com.labancaria.bancapp"/>
-        <data android:scheme="exp+ciudaapp"/>
+        <data android:scheme="ciudappgremial"/>
+        <data android:scheme="com.bancaria.ciudad"/>
+        <data android:scheme="exp+ciudappgremial"/>
       </intent-filter>
     </activity>
   </application>

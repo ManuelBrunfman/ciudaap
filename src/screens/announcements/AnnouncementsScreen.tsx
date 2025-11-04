@@ -4,6 +4,7 @@ import {
   FlatList,
   Image,
   Linking,
+  Modal,
   Pressable,
   StyleSheet,
   View,
@@ -15,19 +16,81 @@ import {
   onSnapshot,
   orderBy,
   query,
-  type QuerySnapshot,
-  type DocumentData,
 } from '@react-native-firebase/firestore';
+import type { FirebaseFirestoreTypes } from '@react-native-firebase/firestore';
 import { LinearGradient } from 'expo-linear-gradient';
+import { WebView } from 'react-native-webview';
 import { getFirebaseApp } from '../../config/firebaseApp';
 import { useTheme } from '../../theme';
 import { spacing } from '../../theme/spacing';
 import AppText from '../../ui/AppText';
 import type { Announcement } from '../../types/RootStackParamList';
 
+const getCreatedAtMillis = (value: Announcement['createdAt']): number => {
+  if (!value) {
+    return 0;
+  }
+
+  if (value instanceof Date) {
+    return value.getTime();
+  }
+
+  if (typeof value === 'number') {
+    return value;
+  }
+
+  if (typeof value === 'string') {
+    const trimmed = value.trim().replace(/\s?(hs|hrs)$/i, '');
+    const parsed = Date.parse(trimmed);
+    if (!Number.isNaN(parsed)) {
+      return parsed;
+    }
+
+    const numeric = Number(trimmed);
+    if (!Number.isNaN(numeric)) {
+      return numeric;
+    }
+
+    const localeMatch =
+      /^(\d{1,2})[/-](\d{1,2})[/-](\d{2,4})(?:[ T](\d{1,2}):(\d{2})(?::(\d{2}))?)?$/.exec(trimmed);
+
+    if (localeMatch) {
+      const [, dd, mm, yyyy, hh = '0', min = '0', ss = '0'] = localeMatch;
+      const year = Number(yyyy.length === 2 ? `20${yyyy}` : yyyy);
+      const month = Number(mm) - 1;
+      const day = Number(dd);
+      const hours = Number(hh);
+      const minutes = Number(min);
+      const seconds = Number(ss);
+
+      const date = new Date(Date.UTC(year, month, day, hours, minutes, seconds));
+      return date.getTime();
+    }
+  }
+
+  if (typeof value === 'object') {
+    const potentialTimestamp = value as FirebaseFirestoreTypes.Timestamp;
+
+    if (typeof potentialTimestamp.toDate === 'function') {
+      return potentialTimestamp.toDate().getTime();
+    }
+
+    if (
+      typeof potentialTimestamp.seconds === 'number' &&
+      typeof potentialTimestamp.nanoseconds === 'number'
+    ) {
+      return potentialTimestamp.seconds * 1000 + potentialTimestamp.nanoseconds / 1e6;
+    }
+  }
+
+  return 0;
+};
+
 const AnnouncementsScreen: React.FC = () => {
   const [announcements, setAnnouncements] = useState<Announcement[]>([]);
   const [loading, setLoading] = useState(true);
+  const [activeAnnouncement, setActiveAnnouncement] = useState<Announcement | null>(null);
+  const [webViewError, setWebViewError] = useState<string | null>(null);
   const t = useTheme();
 
   const palette = useMemo(
@@ -54,12 +117,15 @@ const AnnouncementsScreen: React.FC = () => {
     const announcementsRef = collection(db, 'announcements');
     const announcementsQuery = query(announcementsRef, orderBy('createdAt', 'desc'));
 
-    const handleSnapshot = (snap: QuerySnapshot<DocumentData>) => {
+    const handleSnapshot = (snap: FirebaseFirestoreTypes.QuerySnapshot<FirebaseFirestoreTypes.DocumentData>) => {
       const items = snap.docs.map(doc => ({
         id: doc.id,
         ...(doc.data() as Omit<Announcement, 'id'>),
       }));
-      setAnnouncements(items as Announcement[]);
+      const sortedItems = [...items].sort(
+        (a, b) => getCreatedAtMillis(b.createdAt) - getCreatedAtMillis(a.createdAt),
+      );
+      setAnnouncements(sortedItems as Announcement[]);
       setLoading(false);
     };
 
@@ -112,22 +178,26 @@ const AnnouncementsScreen: React.FC = () => {
     (item: Announcement) => {
       const url = getAnnouncementUrl(item);
       if (!url) {
-        console.warn('Comunicado sin URL válido:', item);
+        console.warn('Comunicado sin URL valido:', item);
         return;
       }
 
-      Linking.openURL(url).catch(err => {
-        console.error('No se pudo abrir el comunicado:', err);
-      });
+      setWebViewError(null);
+      setActiveAnnouncement(item);
     },
-    [getAnnouncementUrl],
+    [getAnnouncementUrl, setActiveAnnouncement, setWebViewError],
   );
-
   const latestAnnouncement = announcements[0];
   const previousAnnouncements = useMemo(
     () => (announcements.length > 1 ? announcements.slice(1) : []),
     [announcements],
   );
+  const handleCloseViewer = useCallback(() => {
+    setActiveAnnouncement(null);
+    setWebViewError(null);
+  }, [setActiveAnnouncement, setWebViewError]);
+
+  const activeUrl = activeAnnouncement ? getAnnouncementUrl(activeAnnouncement) : null;
 
   const header = useMemo(() => {
     if (!latestAnnouncement) {
@@ -245,17 +315,73 @@ const AnnouncementsScreen: React.FC = () => {
   }
 
   return (
-    <SafeAreaView style={[styles.container, { backgroundColor: 'transparent' }]}>
-      <FlatList
-        data={previousAnnouncements}
-        renderItem={renderItem}
-        keyExtractor={item => item.id}
-        ListHeaderComponent={header}
-        ListEmptyComponent={emptyComponent}
-        contentContainerStyle={styles.listContent}
-        showsVerticalScrollIndicator={false}
-      />
-    </SafeAreaView>
+    <>
+      <SafeAreaView style={[styles.container, { backgroundColor: 'transparent' }]}>
+        <FlatList
+          data={previousAnnouncements}
+          renderItem={renderItem}
+          keyExtractor={item => item.id}
+          ListHeaderComponent={header}
+          ListEmptyComponent={emptyComponent}
+          contentContainerStyle={styles.listContent}
+          showsVerticalScrollIndicator={false}
+        />
+      </SafeAreaView>
+
+      <Modal visible={!!activeUrl} animationType="slide" onRequestClose={handleCloseViewer}>
+        <SafeAreaView style={[styles.modalContainer, { backgroundColor: palette.surface }]}>
+          <View style={styles.modalHeader}>
+            <AppText style={[styles.modalTitle, { color: palette.title }]} numberOfLines={2}>
+              {activeAnnouncement?.title ?? 'Comunicado'}
+            </AppText>
+            <Pressable onPress={handleCloseViewer} style={styles.modalClose}>
+              <AppText style={[styles.modalCloseText, { color: palette.accent }]}>Cerrar</AppText>
+            </Pressable>
+          </View>
+
+          {activeUrl && !webViewError ? (
+            <WebView
+              key={activeUrl}
+              source={{ uri: activeUrl }}
+              style={styles.webView}
+              startInLoadingState
+              renderLoading={() => (
+                <ActivityIndicator style={styles.webViewLoader} color={palette.accent} />
+              )}
+              onError={() => setWebViewError('No se pudo cargar el comunicado.')}
+            />
+          ) : (
+            <View style={styles.webViewFallback}>
+              <AppText style={[styles.webViewFallbackText, { color: palette.muted }]}>
+                {webViewError || 'No se pudo cargar el comunicado.'}
+              </AppText>
+              {activeUrl ? (
+                <>
+                  <Pressable style={styles.webViewFallbackButton} onPress={() => setWebViewError(null)}>
+                    <AppText style={[styles.webViewFallbackButtonText, { color: palette.accent }]}>
+                      Reintentar
+                    </AppText>
+                  </Pressable>
+                  <Pressable
+                    style={styles.webViewFallbackButton}
+                    onPress={() => {
+                      handleCloseViewer();
+                      Linking.openURL(activeUrl).catch(error => {
+                        console.error('No se pudo abrir el comunicado en el navegador:', error);
+                      });
+                    }}
+                  >
+                    <AppText style={[styles.webViewFallbackButtonText, { color: palette.accent }]}>
+                      Abrir en el navegador
+                    </AppText>
+                  </Pressable>
+                </>
+              ) : null}
+            </View>
+          )}
+        </SafeAreaView>
+      </Modal>
+    </>
   );
 };
 
@@ -427,6 +553,60 @@ const styles = StyleSheet.create({
   },
   cardLink: {
     marginTop: spacing.sm,
+    fontSize: 14,
+    fontWeight: '600',
+  },
+  modalContainer: {
+    flex: 1,
+  },
+  modalHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingHorizontal: spacing.md,
+    paddingVertical: spacing.sm,
+  },
+  modalTitle: {
+    flex: 1,
+    fontSize: 18,
+    fontWeight: '600',
+    marginRight: spacing.sm,
+  },
+  modalClose: {
+    paddingHorizontal: spacing.xs,
+    paddingVertical: spacing.xs,
+  },
+  modalCloseText: {
+    fontSize: 14,
+    fontWeight: '600',
+  },
+  webView: {
+    flex: 1,
+  },
+  webViewLoader: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  webViewFallback: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    padding: spacing.lg,
+  },
+  webViewFallbackText: {
+    textAlign: 'center',
+    fontSize: 14,
+  },
+  webViewFallbackButton: {
+    paddingHorizontal: spacing.md,
+    paddingVertical: spacing.xs,
+    borderRadius: 999,
+    borderWidth: 1,
+    borderColor: 'rgba(255, 255, 255, 0.2)',
+    marginTop: spacing.sm,
+  },
+  webViewFallbackButtonText: {
     fontSize: 14,
     fontWeight: '600',
   },
