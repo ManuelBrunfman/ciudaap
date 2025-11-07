@@ -65,9 +65,22 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     }
     const db = getFirestore(app);
     const ref = doc(db, 'users', user.uid);
-    const unsub = onSnapshot(ref, snap => {
-      setIsAdmin(!!snap.data()?.isAdmin);
-    });
+    const unsub = onSnapshot(
+      ref,
+      snap => {
+        const data = snap.data();
+        console.log('[AuthContext] users doc snapshot', {
+          path: ref.path,
+          exists: snap.exists,
+          data,
+        });
+        setIsAdmin(!!data?.isAdmin);
+      },
+      error => {
+        console.error('[AuthContext] error reading users doc', error);
+        setIsAdmin(false);
+      },
+    );
     return unsub;
   }, [app, user]);
 

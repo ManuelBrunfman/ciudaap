@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Solicitud de eliminación de cuenta - Ciudapp</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        line-height: 1.6;
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 24px;
+        color: #1c1c1c;
+      }
+      h1,
+      h2 {
+        color: #0a4a73;
+      }
+      ol {
+        padding-left: 20px;
+      }
+      .highlight {
+        background: #f4f8fb;
+        border-left: 4px solid #0a7aca;
+        padding: 12px 16px;
+        margin: 16px 0;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Cómo solicitar la eliminación de tu cuenta</h1>
+    <p>
+      Este procedimiento aplica a la aplicación <strong>Ciudapp</strong> (desarrollador: <em>Ciudapp Gremial</em>).
+      Puedes iniciarlo en cualquier momento si ya no deseas que conservemos tus datos.
+    </p>
+
+    <h2>Datos que se eliminarán</h2>
+    <ul>
+      <li>Perfil de usuario almacenado en Firestore (nombre, apellido, correo, localidad y teléfono).</li>
+      <li>Solicitudes de afiliación asociadas a tu cuenta (nombre completo, DNI, sector, teléfono y estado del trámite).</li>
+      <li>Tokens de notificaciones push (Expo/FCM) vinculados a tu dispositivo.</li>
+    </ul>
+    <p>
+      Conservaremos únicamente los registros estrictamente necesarios para cumplir obligaciones legales o auditorías
+      internas (por ejemplo, comprobantes contables). Dichos datos se eliminan automáticamente al cumplirse el plazo
+      exigido por la normativa aplicable.
+    </p>
+
+    <h2>Pasos para completar la solicitud</h2>
+    <ol>
+      <li>
+        Envía un correo a <strong>dev.brunma@gmail.com</strong> utilizando el asunto
+        <em>“Eliminar cuenta Ciudapp”</em>.
+      </li>
+      <li>
+        Incluye en el mensaje: nombre y apellido, correo con el que inicias sesión y (opcional) tu DNI para confirmar la
+        identidad.
+      </li>
+      <li>
+        Recibirás una confirmación automática y, dentro de los próximos 5 días hábiles, un correo indicando que la cuenta
+        fue eliminada o solicitando información adicional si fuera necesaria.
+      </li>
+      <li>
+        Una vez completado el proceso, los datos detallados arriba se borrarán de nuestros sistemas y no podrás iniciar
+        sesión nuevamente con esa cuenta.
+      </li>
+    </ol>
+
+    <div class="highlight">
+      <p>
+        Si usaste la app desde más de un dispositivo, no es necesario repetir la solicitud. Eliminaremos los datos
+        vinculados al UID de Firebase asociado a tu correo.
+      </p>
+    </div>
+
+    <h2>Ayuda adicional</h2>
+    <p>
+      Ante cualquier duda sobre el proceso o si no recibiste confirmación en el plazo indicado, escribe nuevamente a
+      <strong>dev.brunma@gmail.com</strong> especificando la fecha de tu solicitud previa.
+    </p>
+
+    <p>Última actualización: 7 de noviembre de 2025.</p>
+  </body>
+</html>

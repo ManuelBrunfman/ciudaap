@@ -1,45 +1,107 @@
-Política de Privacidad de Ciudapp
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Política de Privacidad de Ciudapp</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        line-height: 1.6;
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 24px;
+        color: #1c1c1c;
+      }
+      h1,
+      h2 {
+        color: #0a4a73;
+      }
+      ul {
+        padding-left: 20px;
+      }
+      a {
+        color: #0a7aca;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Política de Privacidad de Ciudapp</h1>
+    <p><strong>Última actualización:</strong> 7 de noviembre de 2025.</p>
+    <p>
+      Ciudapp respeta y protege la privacidad de todas las personas que utilizan sus servicios. En este documento
+      describimos qué información recopilamos, con qué finalidad la usamos y qué opciones tienen los usuarios para
+      gestionar sus datos.
+    </p>
 
-Última actualización: [fecha actual]
+    <h2>1. Información que recopilamos</h2>
+    <ul>
+      <li>
+        <strong>Datos de registro:</strong> nombre, apellido, correo electrónico, contraseña (administrada por Firebase),
+        localidad y teléfono. Estos datos crean tu perfil interno y permiten identificarte dentro del sindicato.
+      </li>
+      <li>
+        <strong>Solicitudes de afiliación:</strong> nombre completo, DNI, sector y teléfono recopilados desde la pantalla
+        “Afiliate”. Se guardan junto al identificador de tu cuenta para que los administradores gestionen el trámite.
+      </li>
+      <li>
+        <strong>Tokens de notificaciones:</strong> Expo Push Token y FCM Token se registran únicamente cuando otorgas el
+        permiso para recibir avisos. Se almacenan en tu documento de usuario y, si eres administrador, también en
+        <code>adminPushTokens</code>.
+      </li>
+      <li>
+        <strong>Logs técnicos mínimos:</strong> información anónima sobre errores y rendimiento (React Native Firebase y
+        Expo) que nos ayuda a diagnosticar fallos.
+      </li>
+    </ul>
 
-La aplicación Ciudapp respeta y protege la privacidad de sus usuarios.
-Esta política explica qué datos se recopilan y cómo se utilizan.
+    <h2>2. Uso de la información</h2>
+    <p>Utilizamos los datos para:</p>
+    <ul>
+      <li>Verificar tu identidad y mostrar el contenido adecuado dentro de la app.</li>
+      <li>Procesar solicitudes de afiliación y permitir que los administradores las revisen.</li>
+      <li>Enviar notificaciones push sobre comunicados, noticias y avisos internos.</li>
+      <li>Mejorar la estabilidad del servicio corrigiendo errores técnicos.</li>
+    </ul>
 
-1. Información recopilada
+    <h2>3. Almacenamiento y seguridad</h2>
+    <p>
+      Toda la información se guarda en Google Firebase (Firestore, Authentication y Cloud Messaging), servicios que
+      operan con cifrado en tránsito y en reposo. Solo el personal autorizado accede a los datos necesarios para cumplir
+      con sus funciones.
+    </p>
 
-Datos básicos de uso: Se recopila información anónima sobre el uso general de la aplicación (por ejemplo, errores o estadísticas), a través de servicios como Firebase Analytics.
+    <h2>4. Compartir información</h2>
+    <p>
+      No vendemos ni cedemos datos personales a terceros. Únicamente compartimos la información con los proveedores
+      tecnológicos indispensables (Firebase/Expo) y siempre bajo contratos y políticas de confidencialidad.
+    </p>
 
-Autenticación (si aplica): Si el usuario inicia sesión, se almacenan únicamente los datos necesarios para identificar su cuenta (correo electrónico o identificador de Google).
+    <h2>5. Derechos del usuario</h2>
+    <p>Puedes ejercer tus derechos de acceso, rectificación, portabilidad u oposición enviando un correo a:</p>
+    <p><strong>dev.brunma@gmail.com</strong></p>
 
-No se recopilan datos sensibles, financieros ni de ubicación exacta.
+    <h2 id="eliminacion">6. Solicitud de eliminación de cuenta y datos</h2>
+    <p>
+      Los usuarios pueden solicitar la eliminación total de su cuenta y de los datos asociados siguiendo las instrucciones
+      publicadas en:
+    </p>
+    <p>
+      <a href="./eliminar-cuenta.html" target="_blank" rel="noopener">https://ciudapp.app/eliminar-cuenta.html</a>
+    </p>
+    <p>
+      En ese vínculo detallamos los pasos a seguir, los datos que se eliminarán (perfil, solicitudes de afiliación y tokens
+      de notificaciones) y los plazos estimados de respuesta.
+    </p>
 
-2. Uso de la información
+    <h2>7. Cambios en esta política</h2>
+    <p>
+      Podemos actualizar esta política para reflejar cambios legales o mejoras del servicio. Cualquier modificación se
+      publicará en esta misma URL con la fecha de vigencia correspondiente.
+    </p>
 
-La información se utiliza únicamente para:
-
-Mejorar el funcionamiento y rendimiento de la app.
-
-Corregir errores o mejorar la experiencia del usuario.
-
-3. Almacenamiento de datos
-
-Los datos se almacenan de forma segura en los servidores de Google Firebase, con sus propias medidas de seguridad y cifrado.
-
-4. Compartir información
-
-No se comparte información personal con terceros, salvo cuando sea estrictamente necesario para el funcionamiento técnico de la app (por ejemplo, servicios de Google).
-
-5. Derechos del usuario
-
-El usuario puede solicitar la eliminación de su cuenta o de los datos asociados escribiendo a:
-📧 dev.brunma@gmail.com
-
-
-6. Cambios en esta política
-
-Podremos actualizar esta política en el futuro. Las modificaciones se publicarán en esta misma dirección web.
-
-Contacto:
-dev.brunma@gmail.com
-
-Buenos Aires, Argentina
+    <h2>Contacto</h2>
+    <p>Correo: <strong>dev.brunma@gmail.com</strong></p>
+    <p>Desarrollador: Ciudapp Gremial</p>
+    <p>Ubicación: Buenos Aires, Argentina</p>
+  </body>
+</html>
