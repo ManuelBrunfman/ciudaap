@@ -1,7 +1,7 @@
-import { getFirestore, collection, getDocs } from '@react-native-firebase/firestore';
+﻿import { getFirestore, collection, getDocs } from '@react-native-firebase/firestore';
 import { chunkArray } from '../utils/chunkArray';
 import logger from '../utils/logger';
-import { getFirebaseApp } from '../config/firebaseApp';
+import { getFirebaseApp } from '@/config/firebaseApp';
 
 interface Message {
   title: string;

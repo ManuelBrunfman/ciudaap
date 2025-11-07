@@ -1,4 +1,4 @@
-import React, {
+﻿import React, {
   createContext,
   useState,
   useEffect,
@@ -19,7 +19,7 @@ import {
   doc,
   onSnapshot,
 } from '@react-native-firebase/firestore';
-import { getFirebaseApp } from '../config/firebaseApp';
+import { getFirebaseApp } from '@/config/firebaseApp';
 
 interface AuthContextData {
   user: FirebaseAuthTypes.User | null;
@@ -76,7 +76,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     return signInWithEmailAndPassword(auth, email, password);
   };
 
-  // Alias para login() → signIn()
+  // Alias para login() â†’ signIn()
   const login = signIn;
 
   const signUp = (email: string, password: string) => {

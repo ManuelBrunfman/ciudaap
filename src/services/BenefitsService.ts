@@ -1,8 +1,8 @@
-// src/services/BenefitsService.ts
+﻿// src/services/BenefitsService.ts
 
-// 👉 Importamos la API modular de Firestore
+// ðŸ‘‰ Importamos la API modular de Firestore
 import { getFirestore, collection, getDocs } from '@react-native-firebase/firestore';
-import { getFirebaseApp } from '../config/firebaseApp';
+import { getFirebaseApp } from '@/config/firebaseApp';
 
 class BenefitsService {
   /**

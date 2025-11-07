@@ -1,4 +1,4 @@
-import React from 'react';
+﻿import React from 'react';
 import { View, TextInput, Alert, StyleSheet, ScrollView, KeyboardAvoidingView, Platform } from 'react-native';
 import { useForm, Controller } from 'react-hook-form';
 import * as yup from 'yup';
@@ -10,15 +10,15 @@ import { useTheme } from '../theme';
 import { spacing } from '../theme/spacing';
 import AppText from '../ui/AppText';
 import AppButton from '../ui/AppButton';
-import { getFirebaseApp } from '../config/firebaseApp';
+import { getFirebaseApp } from '@/config/firebaseApp';
 
 type FormData = { nombreApellido: string; dni: string; sector: string; telefono: string };
 
 const schema = yup.object({
-  nombreApellido: yup.string().required('Requerido').min(3, 'Mínimo 3 caracteres'),
-  dni: yup.string().required('Requerido').matches(/^\d{7,8}$/, '7-8 dígitos'),
+  nombreApellido: yup.string().required('Requerido').min(3, 'MÃ­nimo 3 caracteres'),
+  dni: yup.string().required('Requerido').matches(/^\d{7,8}$/, '7-8 dÃ­gitos'),
   sector: yup.string().required('Requerido'),
-  telefono: yup.string().required('Requerido').matches(/^\d{8,15}$/, 'Teléfono inválido (solo dígitos, 8-15)'),
+  telefono: yup.string().required('Requerido').matches(/^\d{8,15}$/, 'TelÃ©fono invÃ¡lido (solo dÃ­gitos, 8-15)'),
 });
 
 export default function AfiliateScreen() {
@@ -28,11 +28,11 @@ export default function AfiliateScreen() {
   const onSubmit = async (data: FormData) => {
     const app = getFirebaseApp();
     const currentUser = getAuth(app).currentUser;
-    if (!currentUser) { Alert.alert('Error', 'Debes iniciar sesión'); return; }
+    if (!currentUser) { Alert.alert('Error', 'Debes iniciar sesiÃ³n'); return; }
     try {
       const db = getFirestore(app);
       await addDoc(collection(db, 'affiliateRequests'), { ...data, status: 'pending', createdAt: serverTimestamp(), userId: currentUser.uid });
-      await sendPushToAdmins({ title: 'Nueva solicitud de afiliación', body: `De ${data.nombreApellido}` });
+      await sendPushToAdmins({ title: 'Nueva solicitud de afiliaciÃ³n', body: `De ${data.nombreApellido}` });
       Alert.alert('Listo', 'Solicitud enviada');
       reset();
     } catch (err) {
@@ -59,7 +59,7 @@ export default function AfiliateScreen() {
             style={[styles.input, { borderColor: t.colors.border, color: t.colors.onBackground, backgroundColor: t.colors.surfaceAlt }]}
             value={value}
             onChangeText={onChange}
-            placeholder="Ejemplo: Juan Pérez"
+            placeholder="Ejemplo: Juan PÃ©rez"
             placeholderTextColor={t.colors.muted}
           />
           {errors.nombreApellido && <AppText style={[styles.error, { color: t.colors.danger }]}>{errors.nombreApellido.message}</AppText>}
@@ -74,7 +74,7 @@ export default function AfiliateScreen() {
             value={value}
             onChangeText={onChange}
             keyboardType="numeric"
-            placeholder="Solo dígitos"
+            placeholder="Solo dÃ­gitos"
             placeholderTextColor={t.colors.muted}
           />
           {errors.dni && <AppText style={[styles.error, { color: t.colors.danger }]}>{errors.dni.message}</AppText>}
@@ -97,7 +97,7 @@ export default function AfiliateScreen() {
 
       <Controller control={control} name="telefono" render={({ field: { onChange, value } }) => (
         <View style={styles.fieldContainer}>
-          <AppText>Teléfono</AppText>
+          <AppText>TelÃ©fono</AppText>
           <TextInput
             style={[styles.input, { borderColor: t.colors.border, color: t.colors.onBackground, backgroundColor: t.colors.surfaceAlt }]}
             value={value}

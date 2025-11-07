@@ -1,4 +1,4 @@
-// src/services/StorageService.ts
+﻿// src/services/StorageService.ts
 
 /**
  * Servicio de almacenamiento usando la API modular de React Native Firebase Storage.
@@ -10,7 +10,7 @@ import {
   uploadBytes,
   getDownloadURL,
 } from '@react-native-firebase/storage';
-import { getFirebaseApp } from '../config/firebaseApp';
+import { getFirebaseApp } from '@/config/firebaseApp';
 
 class StorageService {
   /**
@@ -29,7 +29,7 @@ class StorageService {
     // Subimos el blob
     await uploadBytes(storageRef, blob);
 
-    // Devolvemos la URL pública
+    // Devolvemos la URL pÃºblica
     return getDownloadURL(storageRef);
   }
 

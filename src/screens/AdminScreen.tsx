@@ -1,4 +1,4 @@
-// src/screens/AdminScreen.tsx
+﻿// src/screens/AdminScreen.tsx
 
 import React, { useEffect, useState } from 'react';
 import { Alert, ActivityIndicator, FlatList, StyleSheet, View } from 'react-native';
@@ -8,7 +8,7 @@ import type { AffiliateRequest } from '../types/AffiliateRequest';
 import { useTheme } from '../theme';
 import { spacing } from '../theme/spacing';
 import AppText from '../ui/AppText';
-import { getFirebaseApp } from '../config/firebaseApp';
+import { getFirebaseApp } from '@/config/firebaseApp';
 
 interface RequestItem extends AffiliateRequest { id: string }
 
@@ -38,7 +38,7 @@ const AdminScreen: React.FC = () => {
       },
       (error) => {
         console.error('[AdminScreen] Firestore error:', error);
-        Alert.alert('Error', 'Ocurrió un error al leer las solicitudes. ¿Tenés isAdmin: true?');
+        Alert.alert('Error', 'OcurriÃ³ un error al leer las solicitudes. Â¿TenÃ©s isAdmin: true?');
         setLoading(false);
       }
     );
@@ -49,7 +49,7 @@ const AdminScreen: React.FC = () => {
   if (!isAdmin) {
     return (
       <View style={[styles.center, { backgroundColor: 'transparent' }]}>
-        <AppText style={{ color: t.colors.muted }}>No tenés permisos para ver esta sección.</AppText>
+        <AppText style={{ color: t.colors.muted }}>No tenÃ©s permisos para ver esta secciÃ³n.</AppText>
       </View>
     );
   }
@@ -77,7 +77,7 @@ const AdminScreen: React.FC = () => {
         <AppText style={styles.name}>{item.nombreApellido}</AppText>
         <AppText style={[styles.meta, { color: t.colors.muted }]}>DNI: {item.dni}</AppText>
         <AppText style={[styles.meta, { color: t.colors.muted }]}>Sector: {item.sector}</AppText>
-        <AppText style={[styles.meta, { color: t.colors.muted }]}>Teléfono: {item.telefono}</AppText>
+        <AppText style={[styles.meta, { color: t.colors.muted }]}>TelÃ©fono: {item.telefono}</AppText>
         <AppText style={[styles.date, { color: t.colors.muted }]}>{dateObj.toLocaleString('es-AR')}</AppText>
       </View>
     );

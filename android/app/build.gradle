@@ -4,6 +4,16 @@ apply plugin: "com.facebook.react"
 
 def projectRoot = rootDir.getAbsoluteFile().getParentFile().getAbsolutePath()
 
+// Load optional keystore properties from android/gradle.properties.local
+def releasePropsFile = rootProject.file("gradle.properties.local")
+if (releasePropsFile.exists()) {
+    def releaseProps = new Properties()
+    releasePropsFile.withInputStream { releaseProps.load(it) }
+    releaseProps.each { key, value ->
+        project.ext.set(key, value)
+    }
+}
+
 /**
  * This is the configuration block to customize your React Native Android app.
  * By default you don't need to apply any configuration, just uncomment the lines you need.
@@ -101,6 +111,28 @@ android {
             keyAlias 'androiddebugkey'
             keyPassword 'android'
         }
+        release {
+            def keystoreFile = findProperty('android.keystore.file')
+            def keystorePassword = findProperty('android.keystore.password')
+            def keystoreAlias = findProperty('android.keystore.alias')
+            def keystoreKeyPassword = findProperty('android.keystore.keyPassword')
+
+            if (
+                keystoreFile &&
+                keystorePassword &&
+                keystoreAlias &&
+                keystoreKeyPassword &&
+                file(keystoreFile).exists()
+            ) {
+                storeFile file(keystoreFile)
+                storePassword keystorePassword
+                keyAlias keystoreAlias
+                keyPassword keystoreKeyPassword
+            } else {
+                initWith signingConfigs.debug
+                println "Warning: Using debug keystore to sign release build. Provide android.keystore.* properties in gradle.properties."
+            }
+        }
     }
     buildTypes {
         debug {
@@ -109,7 +141,7 @@ android {
         release {
             // Caution! In production, you need to generate your own keystore file.
             // see https://reactnative.dev/docs/signed-apk-android.
-            signingConfig signingConfigs.debug
+            signingConfig signingConfigs.release
             shrinkResources (findProperty('android.enableShrinkResourcesInReleaseBuilds')?.toBoolean() ?: false)
             minifyEnabled enableProguardInReleaseBuilds
             proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"

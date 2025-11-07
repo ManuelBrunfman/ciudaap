@@ -1,5 +1,5 @@
-###############################################################################
-# ⏩ Node y dependencias
+﻿###############################################################################
+# â© Node y dependencias
 ###############################################################################
 node_modules/
 package-lock.json
@@ -10,17 +10,17 @@ yarn-error.log*
 pnpm-lock.yaml
 
 ###############################################################################
-# ⏩ Expo / React Native
+# â© Expo / React Native
 ###############################################################################
 .expo/
 .expo-shared/
 # Directorios nativos generados por `npx expo prebuild`
 android/
 ios/
-# Si mantienes carpetas nativas en el repo, comenta las dos líneas anteriores ↑
+# Si mantienes carpetas nativas en el repo, comenta las dos lÃ­neas anteriores â†‘
 
 ###############################################################################
-# ⏩ Logs y archivos temporales
+# â© Logs y archivos temporales
 ###############################################################################
 *.log
 *.tmp
@@ -30,15 +30,15 @@ ios/
 *~
 
 ###############################################################################
-# ⏩ Archivos de entorno
+# â© Archivos de entorno
 ###############################################################################
 .env
 .env.*
 
 ###############################################################################
-# ⏩ Firebase y secretos
+# â© Firebase y secretos
 ###############################################################################
-# Se ignoran por defecto…
+# Se ignoran por defectoâ€¦
 google-services.json
 google-services.json.*
 GoogleService-Info.plist
@@ -49,12 +49,13 @@ scripts/firebase-admin-key.json
 *.json.*
 credentials/release-signing.properties
 credentials/*.keystore
+android/gradle.properties.local
 
-# …pero **incluimos** el que necesita Gradle para los builds release
+# â€¦pero **incluimos** el que necesita Gradle para los builds release
 !android/app/google-services.json
 
 ###############################################################################
-# ⏩ IDEs y editores
+# â© IDEs y editores
 ###############################################################################
 .idea/
 .vscode/
@@ -66,7 +67,7 @@ credentials/*.keystore
 Thumbs.db
 
 ###############################################################################
-# ⏩ Salidas de build y artefactos
+# â© Salidas de build y artefactos
 ###############################################################################
 build/
 dist/
@@ -77,21 +78,22 @@ web-build/
 *.app
 
 ###############################################################################
-# ⏩ Scripts (opcional)
+# â© Scripts (opcional)
 ###############################################################################
 scripts/
 
 ###############################################################################
-# ⏩ Otros proyectos / pruebas
+# â© Otros proyectos / pruebas
 ###############################################################################
 BancaApp-clean.git/
 test.json
 
-# Librerías y binarios externos
+# LibrerÃ­as y binarios externos
 libwebp-1.3.2-linux-x86-64*
 oxipng*
 *.tar.gz
 *.tar.xz
+
 
 
 

@@ -1,4 +1,4 @@
-import React, { memo, useCallback, useEffect, useMemo, useState } from 'react';
+﻿import React, { memo, useCallback, useEffect, useMemo, useState } from 'react';
 import {
   View,
   Image,
@@ -15,7 +15,7 @@ import { spacing } from '../../theme/spacing';
 import AppText from '../../ui/AppText';
 import MaskedView from '@react-native-masked-view/masked-view';
 import { LinearGradient } from 'expo-linear-gradient';
-import { getFirebaseApp } from '../../config/firebaseApp';
+import { getFirebaseApp } from '@/config/firebaseApp';
 import type { NewsItem } from '../../types/RootStackParamList';
 
 const NewsListScreen: React.FC = () => {

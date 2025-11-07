@@ -14,7 +14,6 @@
     "production": {
       "autoIncrement": true,
       "android": {
-        // Generar App Bundle (AAB) para que Play distribuya APKs más pequeños
         "gradleCommand": ":app:bundleRelease"
       }
     }

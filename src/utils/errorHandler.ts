@@ -41,7 +41,9 @@ class ErrorHandler {
       case 'auth/user-not-found':
         return 'Usuario no encontrado';
       case 'auth/wrong-password':
-        return 'Contraseña incorrecta';
+      case 'auth/invalid-credential':
+      case 'auth/invalid-login-credentials':
+        return 'Usuario o clave incorrecta';
       case 'auth/email-already-in-use':
         return 'El email ya está en uso';
       case 'auth/weak-password':

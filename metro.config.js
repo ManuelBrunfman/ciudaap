@@ -1,3 +1,4 @@
+const path = require('path');
 // Habilita inlineRequires para mejorar arranque y potencialmente reducir trabajo inicial
 const { getDefaultConfig } = require('expo/metro-config');
 
@@ -12,5 +13,14 @@ config.transformer.getTransformOptions = async () => ({
   },
 });
 
-module.exports = config;
+config.resolver = config.resolver || {};
+config.resolver.alias = {
+  ...(config.resolver.alias || {}),
+  '@': path.resolve(__dirname, 'src'),
+};
+config.resolver.extraNodeModules = {
+  ...(config.resolver.extraNodeModules || {}),
+  '@': path.resolve(__dirname, 'src'),
+};
 
+module.exports = config;

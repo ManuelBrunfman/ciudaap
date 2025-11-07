@@ -1,8 +1,8 @@
-// src/services/authService.ts
+﻿// src/services/authService.ts
 
 /**
- * Servicio de autenticación usando la API modular de React Native Firebase.
- * Migrado desde auth().signInWith… y firestore().collection().
+ * Servicio de autenticaciÃ³n usando la API modular de React Native Firebase.
+ * Migrado desde auth().signInWithâ€¦ y firestore().collection().
  */
 
 import {
@@ -16,11 +16,11 @@ import {
   doc,
   setDoc,
 } from '@react-native-firebase/firestore';
-import { getFirebaseApp } from '../config/firebaseApp';
+import { getFirebaseApp } from '@/config/firebaseApp';
 
 class AuthService {
   /**
-   * Inicia sesión con email y contraseña.
+   * Inicia sesiÃ³n con email y contraseÃ±a.
    */
   async signIn(email: string, password: string) {
     const auth = getAuth(getFirebaseApp());
@@ -46,7 +46,7 @@ class AuthService {
   }
 
   /**
-   * Cierra la sesión del usuario actual.
+   * Cierra la sesiÃ³n del usuario actual.
    */
   async signOut() {
     const auth = getAuth(getFirebaseApp());

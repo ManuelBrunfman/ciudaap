@@ -5,7 +5,7 @@ import { useNavigation, StackActions } from "@react-navigation/native";
 import { getAuth, signOut as firebaseSignOut } from "@react-native-firebase/auth";
 import { useTheme } from "../theme";
 import AppText from "../ui/AppText";
-import { getFirebaseApp } from "../config/firebaseApp";
+import { getFirebaseApp } from "@/config/firebaseApp";
 
 export default function ForceLogoutScreen() {
   const navigation = useNavigation();

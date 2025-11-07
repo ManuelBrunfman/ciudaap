@@ -1,6 +1,6 @@
-// src/services/NewsService.ts
+﻿// src/services/NewsService.ts
 
-// 👉 Importación de la API modular de Firestore
+// ðŸ‘‰ ImportaciÃ³n de la API modular de Firestore
 import {
   getFirestore,
   collection,
@@ -8,15 +8,15 @@ import {
   orderBy,
   getDocs,
 } from '@react-native-firebase/firestore';
-import { getFirebaseApp } from '../config/firebaseApp';
+import { getFirebaseApp } from '@/config/firebaseApp';
 
 class NewsService {
   /**
-   * Obtiene todas las noticias ordenadas por fecha de creación descendente.
+   * Obtiene todas las noticias ordenadas por fecha de creaciÃ³n descendente.
    */
   async getAllNews() {
     const db = getFirestore(getFirebaseApp());
-    // Referencia a la colección “news”
+    // Referencia a la colecciÃ³n â€œnewsâ€
     const newsCol = collection(db, 'news');
     // Creamos la query modular con orderBy
     const q = query(newsCol, orderBy('createdAt', 'desc'));

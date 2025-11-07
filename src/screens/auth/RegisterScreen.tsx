@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+﻿import React, { useState } from 'react';
 import { View, TextInput, StyleSheet, Alert, ActivityIndicator } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import {
@@ -12,7 +12,7 @@ import { useTheme } from '../../theme';
 import { spacing } from '../../theme/spacing';
 import AppText from '../../ui/AppText';
 import AppButton from '../../ui/AppButton';
-import { getFirebaseApp } from '../../config/firebaseApp';
+import { getFirebaseApp } from '@/config/firebaseApp';
 
 const RegisterScreen: React.FC = () => {
   const navigation = useNavigation();

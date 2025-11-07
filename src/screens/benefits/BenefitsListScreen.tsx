@@ -1,4 +1,4 @@
-// PATH: BenefitsListScreen.tsx
+﻿// PATH: BenefitsListScreen.tsx
 
 import React, { useState, useEffect, useMemo, useCallback, useRef } from 'react';
 import {
@@ -24,7 +24,7 @@ import AppText from '../../ui/AppText';
 import Card from '../../ui/Card';
 import { LinearGradient } from 'expo-linear-gradient';
 import MaskedView from '@react-native-masked-view/masked-view';
-import { getFirebaseApp } from '../../config/firebaseApp';
+import { getFirebaseApp } from '@/config/firebaseApp';
 
 // --------- ViewModel local ---------
 type BenefitVM = {
@@ -64,7 +64,7 @@ const eqNorm = (a: unknown, b: unknown) => normalizeStr(a) === normalizeStr(b);
 
 const CATEGORY_ORDER: readonly string[] = [
   'Alojamiento',
-  'GastronomÃ­a',
+  'Gastronomía',
   'Excursiones y Actividades',
   'Transporte',
   'Retail',
@@ -77,18 +77,18 @@ const canonicalCategory = (raw?: string | null, title?: string | null): string =
   const s = normalizeStr(raw);
   const t = normalizeStr(title);
   if (s.includes('aloj')) return 'Alojamiento';
-  if (s.includes('gastro')) return 'GastronomÃ­a';
+  if (s.includes('gastro')) return 'Gastronomía';
   if (s.includes('excurs') || s.includes('actividad')) return 'Excursiones y Actividades';
   if (s.includes('transp')) return 'Transporte';
   if (s.includes('retail')) return 'Retail';
   if (s.includes('comerc')) return 'Comercio';
   if (s.includes('deporte') || s.includes('gimnas')) return 'Deportes';
   if (s.includes('salud') || s.includes('educac') || s.includes('serv')) return 'Servicios';
-  if (/(hotel|hosteri|hosterÃ­a|apart|cabaÃ±|departamento|hostel|resort|spa)/i.test(t)) return 'Alojamiento';
-  if (/(resto|restaurant|parrilla|gastro|cervec|cocina|bar)/i.test(t)) return 'GastronomÃ­a';
+  if (/(hotel|hosteri|hosteria|apart|cabana|departamento|hostel|resort|spa)/i.test(t)) return 'Alojamiento';
+  if (/(resto|restaurant|parrilla|gastro|cervec|cocina|bar)/i.test(t)) return 'Gastronomía';
   if (/(termas|excurs|actividad|paseo|catamara|reserva|rafting|trekking|delta|ballena)/i.test(t))
     return 'Excursiones y Actividades';
-  if (/(micro|bus|chevalier|rutatl|crucero del norte|hertz|rent ?car|avion|a[eÃ©]reo|cochera)/i.test(t))
+  if (/(micro|bus|chevalier|rutatl|crucero del norte|hertz|rent ?car|avion|a[eé]reo|cochera)/i.test(t))
     return 'Transporte';
   if (/(megatlon|gimnas|gym|deporte)/i.test(t)) return 'Deportes';
   if (/(indumentaria|tienda|local|retail)/i.test(t)) return 'Retail';
@@ -107,7 +107,7 @@ const sortProvinces = (arr: string[]) =>
     return a.localeCompare(b);
   });
 
-const DISFRUTA_RE = /^disfrut[aÃ¡]\b/i;
+const DISFRUTA_RE = /^disfrut[áa]\b/i;
 
 const canonicalPath = (u: string) => {
   try {
@@ -125,7 +125,7 @@ const score = (it: BenefitVM) =>
   (it.imageUrl ? 1 : 0) + (it.province && it.province !== 'Nacional' ? 1 : 0) + (it.category ? 1 : 0);
 
 const fixProvinceIfBaguUshuaia = (it: BenefitVM): BenefitVM =>
-  /bag[uÃº]\s+ushuaia/i.test(it.title)
+  /bag[uú]\s+ushuaia/i.test(it.title)
     ? { ...it, province: it.province === 'Nacional' ? 'Tierra del Fuego' : it.province }
     : it;
 
@@ -442,7 +442,7 @@ const BenefitsListScreen: React.FC = () => {
               windowSize={10}
               contentContainerStyle={[
                 styles.list,
-                { 
+                {
                   paddingTop: fadeArea.top + fadeArea.height + 50, // El contenido empieza después del fade
                   paddingHorizontal: t.spacing.md,
                 }

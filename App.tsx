@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+﻿import React, { useEffect, useRef, useState } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { StatusBar } from 'expo-status-bar';
@@ -17,7 +17,7 @@ import {
 import { requestPushPermission } from './src/services/notifications';
 import { ThemeProvider, useTheme, getNavigationTheme } from './src/theme';
 import AppBackground from './src/ui/AppBackground';
-import { getFirebaseApp } from './src/config/firebaseApp';
+import { getFirebaseApp } from '@/config/firebaseApp';
 
 const firebaseApp = getFirebaseApp();
 
@@ -122,14 +122,14 @@ function MainApp() {
     })();
   }, []);
 
-  // Vibrar dispositivo al recibir una notificación en foreground
+  // Vibrar dispositivo al recibir una notificaciÃ³n en foreground
   useEffect(() => {
     notificationListener.current = Notifications.addNotificationReceivedListener(() => {
       Vibration.vibrate();
     });
 
     responseListener.current = Notifications.addNotificationResponseReceivedListener(() => {
-      // lógica al tocar la notificación (si hace falta)
+      // lÃ³gica al tocar la notificaciÃ³n (si hace falta)
     });
 
     return () => {
@@ -159,7 +159,7 @@ export default function App() {
     return (
       <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
         <Text style={{ color: 'red', fontSize: 20, textAlign: 'center' }}>
-          Ocurrió un error inesperado en la aplicación.
+          OcurriÃ³ un error inesperado en la aplicaciÃ³n.
         </Text>
       </View>
     );

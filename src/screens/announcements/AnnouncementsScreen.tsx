@@ -1,4 +1,4 @@
-import React, { memo, useCallback, useEffect, useMemo, useState } from 'react';
+﻿import React, { memo, useCallback, useEffect, useMemo, useState } from 'react';
 import {
   ActivityIndicator,
   FlatList,
@@ -20,7 +20,7 @@ import {
 import type { FirebaseFirestoreTypes } from '@react-native-firebase/firestore';
 import { LinearGradient } from 'expo-linear-gradient';
 import { WebView } from 'react-native-webview';
-import { getFirebaseApp } from '../../config/firebaseApp';
+import { getFirebaseApp } from '@/config/firebaseApp';
 import { useTheme } from '../../theme';
 import { spacing } from '../../theme/spacing';
 import AppText from '../../ui/AppText';
@@ -228,7 +228,7 @@ const AnnouncementsScreen: React.FC = () => {
                 style={styles.heroGradient}
               />
               <View style={styles.heroOverlay}>
-                <AppText style={[styles.heroLabel, { color: palette.accentOn }]}>Último comunicado</AppText>
+                <AppText style={[styles.heroLabel, { color: palette.accentOn }]}> Último comunicado</AppText>
                 <AppText style={[styles.heroTitle, { color: palette.accentOn }]} numberOfLines={2}>
                   {latestAnnouncement.title}
                 </AppText>
@@ -286,7 +286,7 @@ const AnnouncementsScreen: React.FC = () => {
       <View style={styles.emptyState}>
         <AppText style={[styles.emptyTitle, { color: palette.title }]}>Sin comunicados</AppText>
         <AppText style={[styles.emptyDescription, { color: palette.muted }]}>
-          Cuando publiquemos un nuevo comunicado, lo vas a ver automáticamente en esta pantalla.
+          Cuando publiquemos un nuevo comunicado, lo vas a ver automÃ¡ticamente en esta pantalla.
         </AppText>
       </View>
     );
