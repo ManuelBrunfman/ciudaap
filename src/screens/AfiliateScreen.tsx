@@ -1,4 +1,4 @@
-﻿import React from 'react';
+import React from 'react';
 import { View, TextInput, Alert, StyleSheet, ScrollView, KeyboardAvoidingView, Platform } from 'react-native';
 import { useForm, Controller } from 'react-hook-form';
 import * as yup from 'yup';
@@ -15,24 +15,37 @@ import { getFirebaseApp } from '@/config/firebaseApp';
 type FormData = { nombreApellido: string; dni: string; sector: string; telefono: string };
 
 const schema = yup.object({
-  nombreApellido: yup.string().required('Requerido').min(3, 'MÃ­nimo 3 caracteres'),
-  dni: yup.string().required('Requerido').matches(/^\d{7,8}$/, '7-8 dÃ­gitos'),
+  nombreApellido: yup.string().required('Requerido').min(3, 'Mínimo 3 caracteres'),
+  dni: yup.string().required('Requerido').matches(/^\d{7,8}$/, '7-8 dígitos'),
   sector: yup.string().required('Requerido'),
-  telefono: yup.string().required('Requerido').matches(/^\d{8,15}$/, 'TelÃ©fono invÃ¡lido (solo dÃ­gitos, 8-15)'),
+  telefono: yup.string().required('Requerido').matches(/^\d{8,15}$/, 'Teléfono inválido (solo dígitos, 8-15)'),
 });
 
 export default function AfiliateScreen() {
   const t = useTheme();
-  const { control, handleSubmit, formState: { errors }, reset } = useForm<FormData>({ resolver: yupResolver(schema) });
+  const {
+    control,
+    handleSubmit,
+    formState: { errors },
+    reset,
+  } = useForm<FormData>({ resolver: yupResolver(schema) });
 
   const onSubmit = async (data: FormData) => {
     const app = getFirebaseApp();
     const currentUser = getAuth(app).currentUser;
-    if (!currentUser) { Alert.alert('Error', 'Debes iniciar sesiÃ³n'); return; }
+    if (!currentUser) {
+      Alert.alert('Error', 'Debes iniciar sesión');
+      return;
+    }
     try {
       const db = getFirestore(app);
-      await addDoc(collection(db, 'affiliateRequests'), { ...data, status: 'pending', createdAt: serverTimestamp(), userId: currentUser.uid });
-      await sendPushToAdmins({ title: 'Nueva solicitud de afiliaciÃ³n', body: `De ${data.nombreApellido}` });
+      await addDoc(collection(db, 'affiliateRequests'), {
+        ...data,
+        status: 'pending',
+        createdAt: serverTimestamp(),
+        userId: currentUser.uid,
+      });
+      await sendPushToAdmins({ title: 'Nueva solicitud de afiliación', body: `De ${data.nombreApellido}` });
       Alert.alert('Listo', 'Solicitud enviada');
       reset();
     } catch (err) {
@@ -42,73 +55,104 @@ export default function AfiliateScreen() {
   };
 
   return (
-    <KeyboardAvoidingView
-      style={styles.keyboardAvoidingView}
-      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-    >
+    <KeyboardAvoidingView style={styles.keyboardAvoidingView} behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
       <ScrollView
         contentContainerStyle={styles.scrollContainer}
         showsVerticalScrollIndicator={false}
         keyboardShouldPersistTaps="handled"
       >
         <View style={styles.formContainer}>
-      <Controller control={control} name="nombreApellido" render={({ field: { onChange, value } }) => (
-        <View style={styles.fieldContainer}>
-          <AppText>Nombre y apellido</AppText>
-          <TextInput
-            style={[styles.input, { borderColor: t.colors.border, color: t.colors.onBackground, backgroundColor: t.colors.surfaceAlt }]}
-            value={value}
-            onChangeText={onChange}
-            placeholder="Ejemplo: Juan PÃ©rez"
-            placeholderTextColor={t.colors.muted}
+          <Controller
+            control={control}
+            name="nombreApellido"
+            render={({ field: { onChange, value } }) => (
+              <View style={styles.fieldContainer}>
+                <AppText>Nombre y apellido</AppText>
+                <TextInput
+                  style={[
+                    styles.input,
+                    { borderColor: t.colors.border, color: t.colors.onBackground, backgroundColor: t.colors.surfaceAlt },
+                  ]}
+                  value={value}
+                  onChangeText={onChange}
+                  placeholder="Ejemplo: Juan Pérez"
+                  placeholderTextColor={t.colors.muted}
+                />
+                {errors.nombreApellido && (
+                  <AppText style={[styles.error, { color: t.colors.danger }]}>{errors.nombreApellido.message}</AppText>
+                )}
+              </View>
+            )}
           />
-          {errors.nombreApellido && <AppText style={[styles.error, { color: t.colors.danger }]}>{errors.nombreApellido.message}</AppText>}
-        </View>
-      )} />
 
-      <Controller control={control} name="dni" render={({ field: { onChange, value } }) => (
-        <View style={styles.fieldContainer}>
-          <AppText>DNI</AppText>
-          <TextInput
-            style={[styles.input, { borderColor: t.colors.border, color: t.colors.onBackground, backgroundColor: t.colors.surfaceAlt }]}
-            value={value}
-            onChangeText={onChange}
-            keyboardType="numeric"
-            placeholder="Solo dÃ­gitos"
-            placeholderTextColor={t.colors.muted}
+          <Controller
+            control={control}
+            name="dni"
+            render={({ field: { onChange, value } }) => (
+              <View style={styles.fieldContainer}>
+                <AppText>DNI</AppText>
+                <TextInput
+                  style={[
+                    styles.input,
+                    { borderColor: t.colors.border, color: t.colors.onBackground, backgroundColor: t.colors.surfaceAlt },
+                  ]}
+                  value={value}
+                  onChangeText={onChange}
+                  keyboardType="numeric"
+                  placeholder="Solo dígitos"
+                  placeholderTextColor={t.colors.muted}
+                />
+                {errors.dni && <AppText style={[styles.error, { color: t.colors.danger }]}>{errors.dni.message}</AppText>}
+              </View>
+            )}
           />
-          {errors.dni && <AppText style={[styles.error, { color: t.colors.danger }]}>{errors.dni.message}</AppText>}
-        </View>
-      )} />
 
-      <Controller control={control} name="sector" render={({ field: { onChange, value } }) => (
-        <View style={styles.fieldContainer}>
-          <AppText>Sector</AppText>
-          <TextInput
-            style={[styles.input, { borderColor: t.colors.border, color: t.colors.onBackground, backgroundColor: t.colors.surfaceAlt }]}
-            value={value}
-            onChangeText={onChange}
-            placeholder="Sucursal 63"
-            placeholderTextColor={t.colors.muted}
+          <Controller
+            control={control}
+            name="sector"
+            render={({ field: { onChange, value } }) => (
+              <View style={styles.fieldContainer}>
+                <AppText>Sector</AppText>
+                <TextInput
+                  style={[
+                    styles.input,
+                    { borderColor: t.colors.border, color: t.colors.onBackground, backgroundColor: t.colors.surfaceAlt },
+                  ]}
+                  value={value}
+                  onChangeText={onChange}
+                  placeholder="Sucursal 63"
+                  placeholderTextColor={t.colors.muted}
+                />
+                {errors.sector && (
+                  <AppText style={[styles.error, { color: t.colors.danger }]}>{errors.sector.message}</AppText>
+                )}
+              </View>
+            )}
           />
-          {errors.sector && <AppText style={[styles.error, { color: t.colors.danger }]}>{errors.sector.message}</AppText>}
-        </View>
-      )} />
 
-      <Controller control={control} name="telefono" render={({ field: { onChange, value } }) => (
-        <View style={styles.fieldContainer}>
-          <AppText>TelÃ©fono</AppText>
-          <TextInput
-            style={[styles.input, { borderColor: t.colors.border, color: t.colors.onBackground, backgroundColor: t.colors.surfaceAlt }]}
-            value={value}
-            onChangeText={onChange}
-            keyboardType="phone-pad"
-            placeholder="1151234561"
-            placeholderTextColor={t.colors.muted}
+          <Controller
+            control={control}
+            name="telefono"
+            render={({ field: { onChange, value } }) => (
+              <View style={styles.fieldContainer}>
+                <AppText>Teléfono</AppText>
+                <TextInput
+                  style={[
+                    styles.input,
+                    { borderColor: t.colors.border, color: t.colors.onBackground, backgroundColor: t.colors.surfaceAlt },
+                  ]}
+                  value={value}
+                  onChangeText={onChange}
+                  keyboardType="phone-pad"
+                  placeholder="1151234561"
+                  placeholderTextColor={t.colors.muted}
+                />
+                {errors.telefono && (
+                  <AppText style={[styles.error, { color: t.colors.danger }]}>{errors.telefono.message}</AppText>
+                )}
+              </View>
+            )}
           />
-          {errors.telefono && <AppText style={[styles.error, { color: t.colors.danger }]}>{errors.telefono.message}</AppText>}
-        </View>
-      )} />
 
           <View style={styles.buttonContainer}>
             <AppButton title="Enviar solicitud" onPress={handleSubmit(onSubmit)} variant="filled" />

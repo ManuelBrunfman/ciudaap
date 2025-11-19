@@ -1,6 +1,6 @@
 ﻿// src/services/NewsService.ts
 
-// ðŸ‘‰ ImportaciÃ³n de la API modular de Firestore
+// 👉 Importación de la API modular de Firestore
 import {
   getFirestore,
   collection,
@@ -12,11 +12,11 @@ import { getFirebaseApp } from '@/config/firebaseApp';
 
 class NewsService {
   /**
-   * Obtiene todas las noticias ordenadas por fecha de creaciÃ³n descendente.
+   * Obtiene todas las noticias ordenadas por fecha de creación descendente.
    */
   async getAllNews() {
     const db = getFirestore(getFirebaseApp());
-    // Referencia a la colecciÃ³n â€œnewsâ€
+    // Referencia a la colección "news"
     const newsCol = collection(db, 'news');
     // Creamos la query modular con orderBy
     const q = query(newsCol, orderBy('createdAt', 'desc'));

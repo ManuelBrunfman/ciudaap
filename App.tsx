@@ -122,14 +122,14 @@ function MainApp() {
     })();
   }, []);
 
-  // Vibrar dispositivo al recibir una notificaciÃ³n en foreground
+  // Vibrar dispositivo al recibir una notificación en foreground
   useEffect(() => {
     notificationListener.current = Notifications.addNotificationReceivedListener(() => {
       Vibration.vibrate();
     });
 
     responseListener.current = Notifications.addNotificationResponseReceivedListener(() => {
-      // lÃ³gica al tocar la notificaciÃ³n (si hace falta)
+      // Lógica al tocar la notificación (si hace falta)
     });
 
     return () => {
@@ -159,7 +159,7 @@ export default function App() {
     return (
       <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
         <Text style={{ color: 'red', fontSize: 20, textAlign: 'center' }}>
-          OcurriÃ³ un error inesperado en la aplicaciÃ³n.
+          Ocurrió un error inesperado en la aplicación.
         </Text>
       </View>
     );

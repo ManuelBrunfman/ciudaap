@@ -286,7 +286,7 @@ const AnnouncementsScreen: React.FC = () => {
       <View style={styles.emptyState}>
         <AppText style={[styles.emptyTitle, { color: palette.title }]}>Sin comunicados</AppText>
         <AppText style={[styles.emptyDescription, { color: palette.muted }]}>
-          Cuando publiquemos un nuevo comunicado, lo vas a ver automÃ¡ticamente en esta pantalla.
+          Cuando publiquemos un nuevo comunicado, lo vas a ver automáticamente en esta pantalla.
         </AppText>
       </View>
     );

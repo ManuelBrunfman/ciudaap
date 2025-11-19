@@ -29,7 +29,7 @@ class StorageService {
     // Subimos el blob
     await uploadBytes(storageRef, blob);
 
-    // Devolvemos la URL pÃºblica
+    // Devolvemos la URL pública
     return getDownloadURL(storageRef);
   }
 
